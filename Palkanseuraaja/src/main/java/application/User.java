@@ -10,6 +10,7 @@ public class User {
     private String firstname;
     private String lastname;
     private String password;
+    private byte[] salt;
     private String gmail;
     
     public User() {

@@ -10,7 +10,7 @@ public class RegisterController {
     private RegisterModel registerModel;
     private ViewChanger viewChanger;
 
-    public RegisterController(RegisterView registerView, RegisterModel registerModel, ViewChanger viewChanger) throws NoSuchAlgorithmException {
+    public RegisterController(RegisterView registerView, RegisterModel registerModel, ViewChanger viewChanger) {
 
     	dao = new UserDAO();
         this.registerView = registerView;
@@ -87,7 +87,5 @@ public class RegisterController {
 			}
 		}
     }
-
-
 
 }

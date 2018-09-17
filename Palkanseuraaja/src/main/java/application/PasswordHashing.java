@@ -22,10 +22,7 @@ public class PasswordHashing {
         
         try {
 
-        byte[] salt = getSalt();
-
         MessageDigest md = MessageDigest.getInstance("SHA-256");
-        md.update(salt);
         byte[] bytes = md.digest(password.getBytes());
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < bytes.length; i++) {
@@ -39,15 +36,6 @@ public class PasswordHashing {
         }
 
         return generatedPassword;
-
-    }
-
-    public byte[] getSalt() throws NoSuchAlgorithmException {
-
-        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-        byte[] salt = new byte[16];
-        sr.nextBytes(salt);
-        return salt;
 
     }
 

@@ -45,7 +45,7 @@ public class LoginController {
 			if(loginModel.loginFieldValidation(loginView.getUsernameField(), loginView.getPasswordField())) {
 				
 				//Yritetään sisäänkirjaumista ottamalla yhteys tietokantaan
-				if(dao.login(loginView.getUsernameField(), loginView.getPasswordField())) {
+				if(dao.login(loginView.getUsernameField(), new PasswordHashing(loginView.getPasswordField()).get_SHA_256_SecurePassword())) {
 					//Kirjautuminen onnistui ja luodaan ilmoitus siitä. 
 					loginView.showAlert(dao.getAlert());
 					
