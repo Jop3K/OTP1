@@ -59,7 +59,7 @@ public class LoginController {
                     /*Tähän sitten luodaan ohjaus itse ohjelmaan sekä passataan jollain tavalla 
 					 * sessionUser eteenpäin sinne
                      */
-                    viewChanger.switchStage("mainView", viewChanger);
+                    viewChanger.switchStage("kalenteriView", viewChanger);
                     dao.closeConnection();
                 } else {
                     //Kirjautuminen epäonnistui. Ilmoitetaan siitä
