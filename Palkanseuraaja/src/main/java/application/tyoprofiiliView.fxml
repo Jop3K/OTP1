@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TabPane prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
+         <tabs>
+            <Tab text="Kalenteri">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+               </content>
+            </Tab>
+            <Tab text="Työprofiili">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <GridPane gridLinesVisible="true" prefHeight="600.0" prefWidth="800.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="270.0" minHeight="10.0" prefHeight="44.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="395.0" minHeight="10.0" prefHeight="376.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <TextField prefHeight="25.0" prefWidth="267.0" promptText="tuntipalkkasi määrä" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="280.0" left="10.0" right="200.0" />
+                                 </GridPane.margin>
+                              </TextField>
+                              <Label alignment="CENTER" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Työsi tiedot" textAlignment="CENTER" wrapText="false">
+                                 <font>
+                                    <Font size="18.0" fx:id="x12" />
+                                 </font>
+                                 <textFill>
+                                    <Color blue="0.624" green="0.624" red="0.624" fx:id="x22" />
+                                 </textFill>
+                                 <GridPane.margin>
+                                    <Insets left="20.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <TextField GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="50.0" left="10.0" right="200.0" />
+                                 </GridPane.margin>
+                              </TextField>
+                              <Label text="Lauantailisä" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="110.0" left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Button mnemonicParsing="false" text="Luo lisä" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="160.0" top="270.0" />
+                                 </GridPane.margin>
+                              </Button>
+                              <TextField GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="160.0" left="10.0" right="200.0" />
+                                 </GridPane.margin>
+                              </TextField>
+                              <Label text="Yölisä" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="220.0" left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label text="Tuntipalkka" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="340.0" left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label layoutX="20.0" layoutY="182.0" text="Muut lisät" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="10.0" top="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <ComboBox prefHeight="25.0" prefWidth="169.0" promptText="Sunnuntailisä" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="10.0" top="70.0" />
+                                 </GridPane.margin>
+                              </ComboBox>
+                              <TextField layoutX="20.0" layoutY="208.0" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="10.0" right="200.0" top="140.0" />
+                                 </GridPane.margin>
+                              </TextField>
+                              <Button layoutX="440.0" layoutY="258.0" mnemonicParsing="false" text="Tallenna" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="65.0" top="270.0" />
+                                 </GridPane.margin>
+                              </Button>
+                              <Label layoutX="20.0" layoutY="127.0" text="Lisän nimi" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="260.0" left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <TextField layoutX="20.0" layoutY="153.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="200.0" left="10.0" right="150.0" />
+                                 </GridPane.margin>
+                              </TextField>
+                              <Label alignment="CENTER" layoutX="30.0" layoutY="20.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Luo uusi lisä" textAlignment="CENTER" wrapText="false" GridPane.columnIndex="1">
+                                 <font>
+                                    <Font size="18.0" fx:id="x121" />
+                                 </font>
+                                 <textFill>
+                                    <Color blue="0.624" green="0.624" red="0.624" fx:id="x221" />
+                                 </textFill>
+                                 <GridPane.margin>
+                                    <Insets left="20.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <ComboBox editable="true" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="200.0" />
+                                 </GridPane.margin>
+                              </ComboBox>
+                              <Label text="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="50.0" left="290.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label text="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="50.0" left="220.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label text="Aikaväli(tunnit)" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="100.0" left="10.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <ComboBox editable="true" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="50.0" />
+                                 </GridPane.margin>
+                              </ComboBox>
+                              <ComboBox editable="true" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="270.0" />
+                                 </GridPane.margin>
+                              </ComboBox>
+                              <Label text="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="50.0" left="75.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label text="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="50.0" left="140.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <ComboBox editable="true" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="120.0" />
+                                 </GridPane.margin>
+                              </ComboBox>
+                              <Label text="-" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="185.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <ComboBox layoutX="20.0" layoutY="269.0" prefHeight="25.0" prefWidth="111.0" promptText="Maanantai" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="200.0" left="250.0" />
+                                 </GridPane.margin>
+                              </ComboBox>
+                              <Label layoutX="578.0" layoutY="238.0" text=":" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="262.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label layoutX="390.0" layoutY="236.0" text=":" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="112.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label layoutX="400.0" layoutY="106.0" text="Valitse profiili :" GridPane.columnIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="188.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <ComboBox layoutX="630.0" layoutY="132.0" prefHeight="25.0" prefWidth="87.0" promptText="Profile1" GridPane.columnIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="270.0" />
+                                 </GridPane.margin>
+                              </ComboBox>
+                           </children>
+                        </GridPane>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </children>
+</VBox>
