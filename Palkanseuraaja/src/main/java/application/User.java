@@ -22,19 +22,19 @@ public class User {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     private String username;
     
-    @Column(name = "firstname")
+    @Column(name = "firstname", nullable = false)
     private String firstname;
     
-    @Column(name = "lastname")
+    @Column(name = "lastname", nullable = false)
     private String lastname;
     
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
     
-    @Column(name = "salt")
+    @Column(name = "salt", nullable = false)
     private byte[] salt;
     
     @Column(name = "gmail")

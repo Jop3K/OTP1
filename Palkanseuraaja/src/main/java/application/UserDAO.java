@@ -11,7 +11,6 @@ public class UserDAO extends DatabaseConnection {
     private PreparedStatement preparedStatement = null;
     private String sql;
     private Alert alert;
-    private SessionUser sessionUser;
 
     public UserDAO() {
 
@@ -39,8 +38,6 @@ public class UserDAO extends DatabaseConnection {
                         resultSet.getString("lastname"),
                         resultSet.getString("gmail")
                 );
-                //tekee uuden sessionUserin, jonka LoginController pystyy hakemaan
-                this.sessionUser = new SessionUser(user, resultSet.getInt("userID"));
 
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -138,8 +135,5 @@ public class UserDAO extends DatabaseConnection {
         return this.alert;
     }
 
-    public SessionUser getSessionUser() {
-        return sessionUser;
-    }
 
 }

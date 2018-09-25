@@ -21,7 +21,7 @@ public class Tyoprofiili {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "nimi")
+    @Column(name = "nimi", nullable = false)
     private String nimi;
 
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
@@ -29,7 +29,7 @@ public class Tyoprofiili {
     private User user;
 
     @OneToOne
-    @JoinColumn(name = "palkka_id")
+    @JoinColumn(name = "palkka_id", nullable = false)
     private Palkka palkka;
 
     public Tyoprofiili() {
