@@ -35,11 +35,6 @@
             <version>5.3.6.Final</version>
         </dependency>
         <dependency>
-            <groupId>unknown.binary</groupId>
-            <artifactId>mysql-connector-java-5.1.23-bin</artifactId>
-            <version>SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.hibernate.common</groupId>
             <artifactId>hibernate-commons-annotations</artifactId>
             <version>5.0.4.Final</version>
@@ -48,6 +43,11 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-jpamodelgen</artifactId>
             <version>5.3.6.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.12</version>
         </dependency>
     </dependencies>
 

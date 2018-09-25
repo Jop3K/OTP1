@@ -75,7 +75,7 @@ public class RegisterController {
                     LoginView loginView = new LoginView();
                     LoginModel loginModel = new LoginModel();
                     LoginController loginViewController = new LoginController(loginView, loginModel, viewChanger);
-                    viewChanger.viewBuilder(loginView.getView());
+                    
                     //Suljetaan tietokantayhteys
                     dao.closeConnection();
                 } else {
