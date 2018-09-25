@@ -1,40 +1,62 @@
 package application;
 
-import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "users")
 
 public class User {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
 
+    @Column(name = "username")
     private String username;
+    
+    @Column(name = "firstname")
     private String firstname;
+    
+    @Column(name = "lastname")
     private String lastname;
+    
+    @Column(name = "password")
     private String password;
+    
+    @Column(name = "salt")
     private byte[] salt;
+    
+    @Column(name = "gmail")
     private String gmail;
+    
+    @OneToMany(mappedBy = "user")
+    private Set<Tyoprofiili> profiilit;
+
+    @OneToOne
+    @JoinColumn(name = "google_id")
+    private GoogleAccount google;
 
     public User() {
-        this.username = username;
+        profiilit = new HashSet<>();
+    }
+    
+    public int getId() {
+        return id;
     }
 
-    public User(User user) {
-        this.username = user.getUsername();
-        this.firstname = user.getFirstname();
-        this.lastname = user.getLastname();
-        this.gmail = user.getGmail();
-    }
-
-    public User(String username, String password, String firstname, String lastname) {
-        this.username = username;
-        this.password = password;
-        this.firstname = firstname;
-        this.lastname = lastname;
-    }
-
-    public User(String username, String password, String firstname, String lastname, String gmail) {
-        this.username = username;
-        this.password = password;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.gmail = gmail;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -83,29 +105,5 @@ public class User {
         return "Käyttäjä: " + username + "\nEtunimi: " + firstname + "\nSukunimi: " + lastname;
     }
 
-    // equals metodi jotta listat/hashmapit löytää käyttäjän käyttäjätunnuksen perusteella
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final User other = (User) obj;
-        if (!Objects.equals(this.username, other.username)) {
-            return false;
-        }
-        return true;
-    }
 
 }
