@@ -42,14 +42,14 @@ Contributor(s):
 <hibernate-configuration>
   <session-factory>
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://localhost:2250/hibernateExample?createDatabaseIfNotExist=true</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:2250/tietokanta?createDatabaseIfNotExist=true</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password">palkanseuraaja</property>
     <property name="hibernate.dialect">org.hibernate.dialect.MariaDB53Dialect</property>
     <property name="hibernate.hbm2ddl.auto">update</property>
     <property name="hibernate.current_session_context_class">thread</property>
     <property name="show_sql">true</property>
- <!--   <property name="hbm2ddl.auto">update</property> -->
+    <!--   <property name="hbm2ddl.auto">update</property> -->
     <mapping class="application.User"/>
     <mapping class="application.Tyoprofiili"/>
     <mapping class="application.Palkka"/>

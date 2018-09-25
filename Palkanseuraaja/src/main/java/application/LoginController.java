@@ -7,14 +7,12 @@ import javafx.stage.Stage;
 public class LoginController {
 
     private ViewChanger viewChanger;
-    private UserDAO dao;
     private LoginView loginView;
     private LoginModel loginModel;
 
     public LoginController(LoginView loginView, LoginModel loginModel, ViewChanger viewChanger) {
 
         this.viewChanger = viewChanger;
-        this.dao = new UserDAO();
         this.loginModel = loginModel;
         this.loginView = loginView;
         //Lisätään listenerit loginViewin buttoneille
@@ -34,7 +32,6 @@ public class LoginController {
             RegisterController registerViewController = new RegisterController(registerView, registerModel, viewChanger);
             viewChanger.viewBuilder(registerView.getView());
             //sulkee tietokantayhteyden
-            dao.closeConnection();
         }
 
     }
@@ -48,26 +45,23 @@ public class LoginController {
             if (loginModel.loginFieldValidation(loginView.getUsernameField(), loginView.getPasswordField())) {
 
                 //Yritetään sisäänkirjaumista ottamalla yhteys tietokantaan
-                if (dao.login(loginView.getUsernameField(), new PasswordHashing(loginView.getPasswordField()).get_SHA_256_SecurePassword())) {
+//                if (dao.login(loginView.getUsernameField(), new PasswordHashing(loginView.getPasswordField()).get_SHA_256_SecurePassword())) {
                     //Kirjautuminen onnistui ja luodaan ilmoitus siitä. 
-                    loginView.showAlert(dao.getAlert());
+//                    loginView.showAlert(dao.getAlert());
 
                     //Luodaan sessionUser, joka pitää tallessaan uuden istunnon käyttäjätiedot.
-                    SessionUser sessionUser = new SessionUser();
-                    sessionUser = dao.getSessionUser();
 
                     /*Tähän sitten luodaan ohjaus itse ohjelmaan sekä passataan jollain tavalla 
 					 * sessionUser eteenpäin sinne
                      */
                     viewChanger.switchStage("kalenteriView", viewChanger);
-                    dao.closeConnection();
-                } else {
-                    //Kirjautuminen epäonnistui. Ilmoitetaan siitä
-                    loginView.showAlert(dao.getAlert());
-                }
-            } else {
-                //Jompikumpi tai molemmat kentät ovat tyhjät. Ilmoitetaan siitä
-                loginView.showAlert(loginModel.getAlert());
+//                } else {
+//                    //Kirjautuminen epäonnistui. Ilmoitetaan siitä
+//                    loginView.showAlert(dao.getAlert());
+//                }
+//            } else {
+//                //Jompikumpi tai molemmat kentät ovat tyhjät. Ilmoitetaan siitä
+//                loginView.showAlert(loginModel.getAlert());
             }
         }
 

@@ -4,17 +4,29 @@ import java.security.NoSuchAlgorithmException;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 
 public class RegisterController {
 
-    private UserDAO dao;
+    private Session session;
     private RegisterView registerView;
     private RegisterModel registerModel;
     private ViewChanger viewChanger;
+    private Transaction tx;
 
     public RegisterController(RegisterView registerView, RegisterModel registerModel, ViewChanger viewChanger) {
 
-        dao = new UserDAO();
+        Configuration con = new Configuration().configure().addAnnotatedClass(User.class);
+        ServiceRegistry reg = new StandardServiceRegistryBuilder().applySettings(con.getProperties()).build();
+        SessionFactory sf = con.buildSessionFactory();
+        session = sf.getCurrentSession();
+        tx = session.beginTransaction();
+        
         this.registerView = registerView;
         this.registerModel = registerModel;
         this.viewChanger = viewChanger;
@@ -60,32 +72,38 @@ public class RegisterController {
                 User user = new User();
                 user.setFirstname(tmpRegisterModel.getfName());
                 user.setLastname(tmpRegisterModel.getlName());
-                user.setPassword(new PasswordHashing(tmpRegisterModel.getPw1()).get_SHA_256_SecurePassword());
+                user.setPassword(tmpRegisterModel.getPw1());
                 user.setUsername(tmpRegisterModel.getuName());
                 user.setGmail(tmpRegisterModel.getGmail());
 
                 //luodaan käyttäjä tietokantaan, jos käyttäjänimeä ei ole varattu.
-                if (dao.addUserDB(user)) {
+//                if (dao.addUserDB(user)) {
                     //ilmoitetaan onnistumisesta
-                    registerView.showAlert(dao.getAlert());
+//                    registerView.showAlert(dao.getAlert());
                     //Ohjataan takaisin loginiin
                     /*
 				         * TODO: Joku builderi, jolla saadaan luotua controllerit yhdellä rivillä koodia nätisti.
                      */
+                    
+                    session.save(user);
+                    tx.commit();
+                    
                     LoginView loginView = new LoginView();
                     LoginModel loginModel = new LoginModel();
                     LoginController loginViewController = new LoginController(loginView, loginModel, viewChanger);
                     
                     //Suljetaan tietokantayhteys
-                    dao.closeConnection();
-                } else {
-                    //Ilmoitetaan käyttäjätunnuksen olevan varattu
-                    registerView.showAlert(dao.getAlert());
-                }
-            } else {//ilmoitetaan formin validaatiosta tapahtuneesta virheestä
+//                    dao.closeConnection();
+//                } else {
+//                    //Ilmoitetaan käyttäjätunnuksen olevan varattu
+//                    registerView.showAlert(dao.getAlert());
+//                }
+//            } else {//ilmoitetaan formin validaatiosta tapahtuneesta virheestä
                 registerView.showAlert(tmpRegisterModel.getAlert());
-            }
+//            }
+        }
+//    }
         }
     }
-
 }
+//}

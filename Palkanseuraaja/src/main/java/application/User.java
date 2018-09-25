@@ -34,8 +34,7 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
     
-    @Column(name = "salt", nullable = false)
-    private byte[] salt;
+//    private byte[] salt;
     
     @Column(name = "gmail")
     private String gmail;
