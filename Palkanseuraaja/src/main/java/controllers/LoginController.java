@@ -1,11 +1,19 @@
-package application;
+package controllers;
 
+import application.PasswordHashing;
+import application.ViewChanger;
+import dataAccessObjects.UserDAO;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import models.LoginModel;
+import models.RegisterModel;
+import views.LoginView;
+import views.RegisterView;
 
 public class LoginController {
-
+	
+	private UserDAO dao;
     private ViewChanger viewChanger;
     private LoginView loginView;
     private LoginModel loginModel;
@@ -45,26 +53,26 @@ public class LoginController {
             if (loginModel.loginFieldValidation(loginView.getUsernameField(), loginView.getPasswordField())) {
 
                 //Yritetään sisäänkirjaumista ottamalla yhteys tietokantaan
-//                if (dao.login(loginView.getUsernameField(), new PasswordHashing(loginView.getPasswordField()).get_SHA_256_SecurePassword())) {
+               if (dao.login(loginView.getUsernameField(), new PasswordHashing(loginView.getPasswordField()).get_SHA_256_SecurePassword())) {
                     //Kirjautuminen onnistui ja luodaan ilmoitus siitä. 
-//                    loginView.showAlert(dao.getAlert());
-
-                    //Luodaan sessionUser, joka pitää tallessaan uuden istunnon käyttäjätiedot.
-
-                    /*Tähän sitten luodaan ohjaus itse ohjelmaan sekä passataan jollain tavalla 
-					 * sessionUser eteenpäin sinne
-                     */
+                   loginView.showAlert(dao.getAlert());
+                   //Ohjataan ohjelmaan
                     viewChanger.switchStage("kalenteriView", viewChanger);
-//                } else {
-//                    //Kirjautuminen epäonnistui. Ilmoitetaan siitä
-//                    loginView.showAlert(dao.getAlert());
-//                }
-//            } else {
-//                //Jompikumpi tai molemmat kentät ovat tyhjät. Ilmoitetaan siitä
-//                loginView.showAlert(loginModel.getAlert());
+                    
+                  
+               }
+               else {
+                    //Kirjautuminen epäonnistui. Ilmoitetaan siitä
+                   loginView.showAlert(dao.getAlert());
+               		}
             }
+            else {
+                //Jompikumpi tai molemmat kentät ovat tyhjät. Ilmoitetaan siitä
+                loginView.showAlert(loginModel.getAlert());
+            }
+        
+
         }
 
     }
-
 }

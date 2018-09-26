@@ -1,4 +1,5 @@
-package application;
+
+package models;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -8,31 +9,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tyoprofiilit")
+@Table(name = "palkkalisat")
 
-public class Tyoprofiili {
 
+public class Palkkalisa {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-
-    @Column(name = "nimi", nullable = false)
-    private String nimi;
-
+    
+    @Column(name = "palkkalisa")
+    private double palkkalisa;
+    
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @OneToOne
     @JoinColumn(name = "palkka_id", nullable = false)
     private Palkka palkka;
 
-    public Tyoprofiili() {
+    public Palkkalisa() {
     }
 
     public int getId() {
@@ -43,28 +40,21 @@ public class Tyoprofiili {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public double getPalkkalisa() {
+        return palkkalisa;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getNimi() {
-        return nimi;
-    }
-
-    public void setNimi(String nimi) {
-        this.nimi = nimi;
+    public void setPalkkalisa(double palkkalisa) {
+        this.palkkalisa = palkkalisa;
     }
 
     public Palkka getPalkka() {
         return palkka;
     }
 
-    public void setPalkka(Palkka palkat) {
-        this.palkka = palkat;
+    public void setPalkka(Palkka palkka) {
+        this.palkka = palkka;
     }
-
+    
+    
 }

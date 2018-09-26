@@ -1,8 +1,11 @@
 package application;
 
+import controllers.LoginController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import models.LoginModel;
+import views.LoginView;
 
 public class Main extends Application {
 
