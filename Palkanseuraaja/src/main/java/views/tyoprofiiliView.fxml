@@ -15,7 +15,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TabPane prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
          <tabs>
@@ -196,7 +196,7 @@
                                     <Insets left="188.0" />
                                  </GridPane.margin>
                               </Label>
-                              <ComboBox layoutX="630.0" layoutY="132.0" prefHeight="25.0" prefWidth="87.0" promptText="Profile1" GridPane.columnIndex="1">
+                              <ComboBox editable="true" layoutX="630.0" layoutY="132.0" prefHeight="25.0" prefWidth="87.0" promptText="Profile1" GridPane.columnIndex="1">
                                  <GridPane.margin>
                                     <Insets left="270.0" />
                                  </GridPane.margin>
