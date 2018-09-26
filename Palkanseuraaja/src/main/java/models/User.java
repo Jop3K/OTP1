@@ -40,7 +40,7 @@ public class User {
     private String gmail;
     
     @OneToMany(mappedBy = "user")
-    private Set<Tyoprofiili> profiilit;
+    private Set<WorkProfile> profiilit;
 
     @OneToOne
     @JoinColumn(name = "google_id")

@@ -30,7 +30,7 @@ public class Palkka {
 
     @OneToOne
     @JoinColumn(name = "profiili_id")
-    private Tyoprofiili tyoprofiili;
+    private WorkProfile tyoprofiili;
     
     @OneToMany
     @JoinColumn(name = "palkkalisa_id")
@@ -64,11 +64,11 @@ public class Palkka {
         this.palkkalisa = palkkalisa;
     }
 
-    public Tyoprofiili getTyoprofiili() {
+    public WorkProfile getTyoprofiili() {
         return tyoprofiili;
     }
 
-    public void setTyoprofiili(Tyoprofiili tyoprofiili) {
+    public void setTyoprofiili(WorkProfile tyoprofiili) {
         this.tyoprofiili = tyoprofiili;
     }
     

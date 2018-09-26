@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tyoprofiilit")
 
-public class Tyoprofiili {
+public class WorkProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class Tyoprofiili {
     @JoinColumn(name = "palkka_id", nullable = false)
     private Palkka palkka;
 
-    public Tyoprofiili() {
+    public WorkProfile() {
     }
 
     public int getId() {
