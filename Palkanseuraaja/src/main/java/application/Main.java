@@ -19,9 +19,9 @@ public class Main extends Application {
         //Valjastetaan ensinmäin MVC-hommeli käyttöön. stage kulkee kokoajan mukana kirjautumisen
         //ja rekisteröinnin välissä
         ViewChanger viewChanger = new ViewChanger(stage);
-        LoginView loginView = new LoginView();
-        LoginModel loginModel = new LoginModel();
-        LoginController loginViewController = new LoginController(loginView, loginModel, viewChanger); // Tarvitaanko tätä tässä?
+//        LoginView loginView = new LoginView();
+  //      LoginModel loginModel = new LoginModel();
+    //    LoginController loginViewController = new LoginController(loginView, loginModel, viewChanger); // Tarvitaanko tätä tässä?
 
 //        Scene window = new Scene(loginView.getView(), 800, 800);
 //
