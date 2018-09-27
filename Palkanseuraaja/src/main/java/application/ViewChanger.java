@@ -28,7 +28,7 @@ public class ViewChanger {
         Stage stage = new Stage();
 
         try {
-            root = FXMLLoader.load(getClass().getResource(name + ".fxml"));
+            root = FXMLLoader.load(Main.class.getResource(name));
             Scene window = new Scene(root);
             stage.setScene(window);
             stage.show();

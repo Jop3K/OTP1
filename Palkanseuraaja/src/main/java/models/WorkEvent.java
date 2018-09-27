@@ -32,9 +32,11 @@ public class WorkEvent {
     @JoinColumn(name = "tyoprofiili_id")
     private WorkProfile tyoprofiili;
     
-    private Timestamp timestampStart; // not sure about timestamp, must check
+    @Column(name = "startTime", nullable = false)
+    private DateTime dateTimeStart; // not sure about timestamp, must check
     
-    private Timestamp timestampEnd;   // not sure about timestamp, must check
+    @Column(name = "endTime", nullable = false)
+    private DateTime dateTimeEnd;   // not sure about timestamp, must check
 
     public WorkEvent() {
     }
@@ -63,22 +65,21 @@ public class WorkEvent {
         this.tyoprofiili = tyoprofiili;
     }
 
-    public Timestamp getTimestampStart() {
-        return timestampStart;
+    public DateTime getDateTimeStart() {
+        return dateTimeStart;
     }
 
-    public void setTimestampStart(Timestamp timestampStart) {
-        this.timestampStart = timestampStart;
+    public void setDateTimeStart(DateTime dateTimeStart) {
+        this.dateTimeStart = dateTimeStart;
     }
 
-    public Timestamp getTimestampEnd() {
-        return timestampEnd;
+    public DateTime getDateTimeEnd() {
+        return dateTimeEnd;
     }
 
-    public void setTimestampEnd(Timestamp timestampEnd) {
-        this.timestampEnd = timestampEnd;
+    public void setDateTimeEnd(DateTime dateTimeEnd) {
+        this.dateTimeEnd = dateTimeEnd;
     }
-    
     
 
 }
