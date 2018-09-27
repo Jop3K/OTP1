@@ -32,10 +32,6 @@ public class WorkEvent {
     @JoinColumn(name = "tyoprofiili_id")
     private WorkProfile tyoprofiili;
     
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Palkka.class)
-    @JoinColumn(name = "palkka_id", nullable = false)
-    private Palkka palkka;
-    
     private Timestamp timestampStart; // not sure about timestamp, must check
     
     private Timestamp timestampEnd;   // not sure about timestamp, must check
@@ -65,14 +61,6 @@ public class WorkEvent {
 
     public void setTyoprofiili(WorkProfile tyoprofiili) {
         this.tyoprofiili = tyoprofiili;
-    }
-
-    public Palkka getPalkka() {
-        return palkka;
-    }
-
-    public void setPalkka(Palkka palkka) {
-        this.palkka = palkka;
     }
 
     public Timestamp getTimestampStart() {
