@@ -18,7 +18,8 @@ public class Main extends Application {
 
         //Valjastetaan ensinmäin MVC-hommeli käyttöön. stage kulkee kokoajan mukana kirjautumisen
         //ja rekisteröinnin välissä
-   //     ViewChanger viewChanger = new ViewChanger(stage);
+        ViewChanger viewChanger = new ViewChanger(stage);
+        viewChanger.switchStage("/views/WorkProfileView.fxml", viewChanger);
 //        LoginView loginView = new LoginView();
   //      LoginModel loginModel = new LoginModel();
     //    LoginController loginViewController = new LoginController(loginView, loginModel, viewChanger); // Tarvitaanko tätä tässä?
@@ -28,10 +29,10 @@ public class Main extends Application {
 //        stage.setScene(window);
 //
 //        stage.show();
-        Parent root = FXMLLoader.load(getClass().getResource("/views/WorkProfileView.fxml"));
-        Scene scene = new Scene(root, 800, 800);
-        stage.setScene(scene);
-        stage.show();
+//        Parent root = FXMLLoader.load(getClass().getResource("/views/WorkProfileView.fxml"));
+//        Scene scene = new Scene(root, 800, 800);
+//        stage.setScene(scene);
+//        stage.show();
     }
 
     public static void main(String[] args) {

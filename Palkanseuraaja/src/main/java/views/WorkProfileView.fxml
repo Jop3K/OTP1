@@ -18,12 +18,12 @@
    <children>
       <TabPane prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
          <tabs>
-            <Tab text="Kalenteri">
+            <Tab fx:id="calendarView" onSelectionChanged="#handleTabChangeToCalendarView" text="Kalenteri">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                </content>
             </Tab>
-            <Tab text="Työprofiili">
+            <Tab fx:id="workProfileView" onSelectionChanged="#handleTabChangeToCalendarView" text="Työprofiili">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
