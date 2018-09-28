@@ -1,4 +1,4 @@
-package views;
+package controllers;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -92,19 +92,6 @@ public class WorkProfileViewController implements Initializable {
             }
         });
 
-        profileChooser.setButtonCell(
-                new ListCell<WorkProfile>() {
-            @Override
-            protected void updateItem(WorkProfile w, boolean bln) {
-                super.updateItem(w, bln);
-                if (bln) {
-                    setText("");
-                } else {
-                    setText(w.getNimi());
-                }
-            }
-        });
-
         profileChooser.setConverter(
                 new StringConverter<WorkProfile>() {
                     private Map<String, WorkProfile> map = new HashMap<>();
@@ -131,10 +118,14 @@ public class WorkProfileViewController implements Initializable {
 
     @FXML
     private void handleSaveProfileButtonClick(ActionEvent event) {
-
+        
         WorkProfile workProfile = new WorkProfile();
+        
+        String selected = profileChooser.getEditor().getText();
+        
+        System.out.println(selected);
 
-        workProfile.setNimi(profileChooser.getSelectionModel().getSelectedItem().toString());
+        workProfile.setNimi(profileChooser.getEditor().getText().toString());
 
         if (!(tuntipalkka.getText().isEmpty())) {
             Palkka palkka = new Palkka();
@@ -149,6 +140,8 @@ public class WorkProfileViewController implements Initializable {
         if (!lauantailisa.getText().isEmpty()) {
             workProfile.getPalkka().addPalkkalisa(getYolisa());
         }
+        
+        System.out.println(workProfile.getNimi());
         
         profileChooser.getItems().add(workProfile);
 

@@ -1,4 +1,4 @@
-package views;
+package controllers;
 
 import application.Main;
 import java.io.IOException;
@@ -32,10 +32,10 @@ public class TabsViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         try {
-        calendarTab.setContent((Node) FXMLLoader.load(this.getClass().getResource("/fxml/CalendarView.fxml")));
-        profileTab.setContent((Node) FXMLLoader.load(this.getClass().getResource("/fxml/WorkProfileView.fxml")));
+            calendarTab.setContent((Node) FXMLLoader.load(this.getClass().getResource("/fxml/CalendarView.fxml")));
+            profileTab.setContent((Node) FXMLLoader.load(this.getClass().getResource("/fxml/WorkProfileView.fxml")));
         } catch (IOException e) {
-        e.printStackTrace();
-    }
+            e.printStackTrace();
+        }
     }
 }

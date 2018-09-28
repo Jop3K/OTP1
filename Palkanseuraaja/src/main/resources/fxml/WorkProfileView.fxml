@@ -4,8 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -14,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.WorkProfileViewController">
+<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.WorkProfileViewController">
     <children>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
             <children>
@@ -87,7 +85,7 @@
                                 <Insets left="10.0" right="200.0" top="140.0" />
                             </GridPane.margin>
                         </TextField>
-                        <Button fx:id="saveProfile" layoutX="440.0" layoutY="258.0" mnemonicParsing="false" onAction="#handleSaveLisaButtonClick" text="Tallenna" GridPane.rowIndex="1">
+                        <Button fx:id="saveProfile" layoutX="440.0" layoutY="258.0" mnemonicParsing="false" onAction="#handleSaveProfileButtonClick" text="Tallenna" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="175.0" top="270.0" />
                             </GridPane.margin>
@@ -180,7 +178,7 @@
                                 <Insets left="188.0" />
                             </GridPane.margin>
                         </Label>
-                        <ComboBox fx:id="profileChooser" editable="true" layoutX="630.0" layoutY="132.0" prefHeight="25.0" prefWidth="87.0" promptText="Profile1">
+                        <ComboBox fx:id="profileChooser" editable="true" layoutX="630.0" layoutY="132.0" prefHeight="25.0" prefWidth="87.0">
                             <GridPane.margin>
                                 <Insets left="270.0" />
                             </GridPane.margin>
@@ -191,4 +189,3 @@
         </AnchorPane>
     </children>
 </VBox>
-                  
