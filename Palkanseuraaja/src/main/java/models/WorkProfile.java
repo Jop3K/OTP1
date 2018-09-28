@@ -25,11 +25,11 @@ public class WorkProfile {
     private String nimi;
 
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToOne
-    @JoinColumn(name = "palkka_id", nullable = false)
+    @JoinColumn(name = "palkka_id")
     private Palkka palkka;
 
     public WorkProfile() {

@@ -51,7 +51,7 @@
                                     <Insets left="20.0" />
                                  </GridPane.margin>
                               </Label>
-                              <TextField GridPane.rowIndex="1">
+                              <TextField fx:id="lauantailisa" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets bottom="50.0" left="10.0" right="200.0" />
                                  </GridPane.margin>
@@ -61,12 +61,12 @@
                                     <Insets bottom="110.0" left="10.0" />
                                  </GridPane.margin>
                               </Label>
-                              <Button mnemonicParsing="false" text="Luo lisä" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <Button fx:id="saveLisa" mnemonicParsing="false" onAction="#handleSaveLisaButtonClick" text="Luo lisä" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets left="160.0" top="270.0" />
                                  </GridPane.margin>
                               </Button>
-                              <TextField GridPane.rowIndex="1">
+                              <TextField fx:id="yolisa" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets bottom="160.0" left="10.0" right="200.0" />
                                  </GridPane.margin>
@@ -86,7 +86,7 @@
                                     <Insets left="10.0" top="10.0" />
                                  </GridPane.margin>
                               </Label>
-                              <ComboBox prefHeight="25.0" prefWidth="169.0" promptText="Sunnuntailisä" GridPane.rowIndex="1">
+                              <ComboBox fx:id="muulisa" prefHeight="25.0" prefWidth="169.0" promptText="Sunnuntailisä" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets left="10.0" top="70.0" />
                                  </GridPane.margin>
@@ -96,7 +96,7 @@
                                     <Insets left="10.0" right="200.0" top="140.0" />
                                  </GridPane.margin>
                               </TextField>
-                              <Button fx:id="submit" layoutX="440.0" layoutY="258.0" mnemonicParsing="false" onAction="#handleSaveButtonClick" text="Tallenna" GridPane.rowIndex="1">
+                              <Button fx:id="saveProfile" layoutX="440.0" layoutY="258.0" mnemonicParsing="false" onAction="#handleSaveButtonClick" text="Tallenna" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets left="175.0" top="270.0" />
                                  </GridPane.margin>
@@ -119,7 +119,7 @@
                                     <Insets left="20.0" />
                                  </GridPane.margin>
                               </Label>
-                              <ComboBox editable="true" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <ComboBox fx:id="lisanEndHour" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets left="200.0" />
                                  </GridPane.margin>
@@ -139,12 +139,12 @@
                                     <Insets bottom="100.0" left="10.0" />
                                  </GridPane.margin>
                               </Label>
-                              <ComboBox editable="true" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <ComboBox fx:id="lisanStartHour" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets left="50.0" />
                                  </GridPane.margin>
                               </ComboBox>
-                              <ComboBox editable="true" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <ComboBox fx:id="lisanEndMinute" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets left="270.0" />
                                  </GridPane.margin>
@@ -159,7 +159,7 @@
                                     <Insets bottom="50.0" left="140.0" />
                                  </GridPane.margin>
                               </Label>
-                              <ComboBox editable="true" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <ComboBox fx:id="lisanStartMinute" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets left="120.0" />
                                  </GridPane.margin>
@@ -189,7 +189,7 @@
                                     <Insets left="188.0" />
                                  </GridPane.margin>
                               </Label>
-                              <ComboBox fx:id="profiilinNimi" editable="true" layoutX="630.0" layoutY="132.0" prefHeight="25.0" prefWidth="87.0" promptText="Profile1">
+                              <ComboBox fx:id="profileChooser" editable="true" layoutX="630.0" layoutY="132.0" prefHeight="25.0" prefWidth="87.0" promptText="Profile1">
                                  <GridPane.margin>
                                     <Insets left="270.0" />
                                  </GridPane.margin>

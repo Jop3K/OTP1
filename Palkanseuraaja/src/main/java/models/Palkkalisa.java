@@ -22,12 +22,28 @@ public class Palkkalisa {
     @Column(name = "id")
     private int id;
     
+    @Column(name = "nimi")
+    private String nimi;
+    
     @Column(name = "palkkalisa")
     private double palkkalisa;
     
+    @Column(name = "starthour")
+    private int startHour;
+    
+    @Column(name = "startminute")
+    private int startMinute;
+    
+    @Column(name = "endhour")
+    private int endHour;
+    
+    @Column(name = "endminute")
+    private int endMinute;
+    
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
-    @JoinColumn(name = "palkka_id", nullable = false)
+    @JoinColumn(name = "palkka_id")
     private Palkka palkka;
+    
 
     public Palkkalisa() {
     }
@@ -38,6 +54,14 @@ public class Palkkalisa {
 
     public void setId(int id) {
         this.id = id;
+    }
+    
+    public String getNimi() {
+        return nimi;
+    }
+
+    public void setNimi(String nimi) {
+        this.nimi = nimi;
     }
 
     public double getPalkkalisa() {
@@ -54,6 +78,43 @@ public class Palkkalisa {
 
     public void setPalkka(Palkka palkka) {
         this.palkka = palkka;
+    }
+
+    public int getStartHour() {
+        return startHour;
+    }
+
+    public void setStartHour(int startHour) {
+        this.startHour = startHour;
+    }
+
+    public int getStartMinute() {
+        return startMinute;
+    }
+
+    public void setStartMinute(int startMinute) {
+        this.startMinute = startMinute;
+    }
+
+    public int getEndHour() {
+        return endHour;
+    }
+
+    public void setEndHour(int endHour) {
+        this.endHour = endHour;
+    }
+
+    public int getEndMinute() {
+        return endMinute;
+    }
+
+    public void setEndMinute(int endMinute) {
+        this.endMinute = endMinute;
+    }
+
+    @Override
+    public String toString() {
+        return nimi + ", startTime: " + startHour + ":" + startMinute + " , endTime: " + endHour + ":" + endMinute;
     }
     
     

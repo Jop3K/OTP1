@@ -25,9 +25,6 @@ public class Palkka {
     @Column(name = "palkka")
     private double tuntipalkka;
 
-    @Column(name = "palkkalisa")
-    private double palkkalisa;
-
     @OneToOne
     @JoinColumn(name = "profiili_id")
     private WorkProfile tyoprofiili;
@@ -54,14 +51,6 @@ public class Palkka {
 
     public void setTuntipalkka(double tuntipalkka) {
         this.tuntipalkka = tuntipalkka;
-    }
-
-    public double getPalkkalisa() {
-        return palkkalisa;
-    }
-
-    public void setPalkkalisa(double palkkalisa) {
-        this.palkkalisa = palkkalisa;
     }
 
     public WorkProfile getTyoprofiili() {
