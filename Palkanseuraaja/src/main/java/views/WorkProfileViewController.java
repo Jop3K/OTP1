@@ -1,26 +1,16 @@
 package views;
 
-import application.ViewChanger;
-import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
@@ -28,8 +18,6 @@ import javafx.util.StringConverter;
 import models.Palkka;
 import models.Palkkalisa;
 import models.WorkProfile;
-import application.*;
-import javafx.stage.Stage;
 
 /**
  * FXML Controller class

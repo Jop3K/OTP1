@@ -29,7 +29,7 @@ public class Main extends Application {
 //        stage.setScene(window);
 //
 //        stage.show();
-        Parent root = FXMLLoader.load(getClass().getResource("/views/CalendarView.fxml"));
+        Parent root= FXMLLoader.load(Main.class.getResource("/fxml/TabsView.fxml"));
         Scene scene = new Scene(root, 800, 800);
         stage.setScene(scene);
         stage.show();

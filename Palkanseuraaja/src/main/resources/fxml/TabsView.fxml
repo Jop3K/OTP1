@@ -8,8 +8,11 @@
     <children>
         <TabPane fx:id="tabPane" prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
-                <Tab>
-                    <content />
+                <Tab fx:id="calendarTab" text="Kalenteri">
+                    <content></content>
+                </Tab>
+                <Tab fx:id="profileTab" text="Työprofiili">
+                    <content></content>
                 </Tab>
             </tabs>
         </TabPane>
