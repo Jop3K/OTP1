@@ -66,8 +66,7 @@ public class WorkProfileViewController implements Initializable {
     private ComboBox<?> lisanStartMinute;
     @FXML
     private ComboBox<WorkProfile> profileChooser;
-    @FXML
-    private Tab calendarView;
+
 
     /**
      * Initializes the controller class.
@@ -180,13 +179,6 @@ public class WorkProfileViewController implements Initializable {
         }
     }
     
-    @FXML
-    public void handleTabChangeToCalendarView() {
-        Stage stage = new Stage();
-        ViewChanger viewChanger = new ViewChanger(stage);
-        viewChanger.switchStage("/views/CalendarView.fxml", viewChanger);
-    }
-
     private Palkkalisa getYolisa() {
         Palkkalisa lisa = new Palkkalisa();
         lisa.setNimi("Yölisä");

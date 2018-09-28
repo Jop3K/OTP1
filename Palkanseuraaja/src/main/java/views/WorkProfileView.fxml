@@ -14,16 +14,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.WorkProfileViewController">
-   <children>
-      <TabPane prefHeight="600.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
-         <tabs>
-            <Tab fx:id="calendarView" onSelectionChanged="#handleTabChangeToCalendarView" text="Kalenteri">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-               </content>
-            </Tab>
-            <Tab fx:id="workProfileView" onSelectionChanged="#handleTabChangeToCalendarView" text="Työprofiili">
+
+            
+            <Tab text="Työprofiilit" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.WorkProfileViewController">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -200,7 +193,3 @@
                   </AnchorPane>
                </content>
             </Tab>
-         </tabs>
-      </TabPane>
-   </children>
-</VBox>
