@@ -6,20 +6,21 @@ import dataAccessObjects.UserDAO;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import models.EventModel;
 import models.LoginModel;
 import models.RegisterModel;
 import views.LoginView;
 import views.RegisterView;
 
 public class LoginController {
-	
+
 	private UserDAO dao;
     private ViewChanger viewChanger;
     private LoginView loginView;
     private LoginModel loginModel;
 
     public LoginController(LoginView loginView, LoginModel loginModel, ViewChanger viewChanger) {
-
+    	this.dao = new UserDAO();
         this.viewChanger = viewChanger;
         this.loginModel = loginModel;
         this.loginView = loginView;
@@ -51,15 +52,17 @@ public class LoginController {
         public void handle(Event arg0) {
             //Varmistaa, että kumpikaan kentistä ei ole tyhjä
             if (loginModel.loginFieldValidation(loginView.getUsernameField(), loginView.getPasswordField())) {
-
+            	// new PasswordHashing(loginView.getPasswordField()).get_SHA_256_SecurePassword()
                 //Yritetään sisäänkirjaumista ottamalla yhteys tietokantaan
-               if (dao.login(loginView.getUsernameField(), new PasswordHashing(loginView.getPasswordField()).get_SHA_256_SecurePassword())) {
-                    //Kirjautuminen onnistui ja luodaan ilmoitus siitä. 
+               if (dao.login(loginView.getUsernameField(), loginView.getPasswordField())) {
+                    //Kirjautuminen onnistui ja luodaan ilmoitus siitä.
                    loginView.showAlert(dao.getAlert());
                    //Ohjataan ohjelmaan
-                    viewChanger.switchStage("kalenteriView", viewChanger);
-                    
-                  
+                   EventModel eventModel = new EventModel();
+                   CalendarViewController  calendarViewController = new CalendarViewController();
+                    viewChanger.switchStage("/views/CalendarView", viewChanger);
+
+
                }
                else {
                     //Kirjautuminen epäonnistui. Ilmoitetaan siitä
@@ -70,7 +73,7 @@ public class LoginController {
                 //Jompikumpi tai molemmat kentät ovat tyhjät. Ilmoitetaan siitä
                 loginView.showAlert(loginModel.getAlert());
             }
-        
+
 
         }
 

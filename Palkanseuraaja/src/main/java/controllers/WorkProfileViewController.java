@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,6 +13,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
+
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -22,9 +31,11 @@ import models.WorkProfile;
 /**
  * FXML Controller class
  *
- * @author artur
+ * @author artur, joni
  */
 public class WorkProfileViewController implements Initializable {
+	
+	ObservableList<String> workProfileList = FXCollections.observableArrayList("Profile1", "Profile2", "Profile3");
 
     @FXML
     private TextField tuntipalkka;
@@ -55,6 +66,9 @@ public class WorkProfileViewController implements Initializable {
     @FXML
     private ComboBox<WorkProfile> profileChooser;
 
+    
+    @FXML
+    private ComboBox<String> tyoprofiiliDrop;
 
     /**
      * Initializes the controller class.
