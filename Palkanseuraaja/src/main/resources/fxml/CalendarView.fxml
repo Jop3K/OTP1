@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -16,7 +22,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CalendarViewController">
+<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CalendarViewController">
     <children>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
             <children>
@@ -45,12 +51,12 @@
                                 <Insets left="15.0" />
                             </GridPane.margin>
                         </Label>
-                        <DatePicker fx:id="dateChooser">
+                        <DatePicker>
                             <GridPane.margin>
                                 <Insets left="140.0" />
                             </GridPane.margin>
                         </DatePicker>
-                        <DatePicker fx:id="dateStart" prefHeight="25.0" prefWidth="130.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <DatePicker fx:id="startDay" prefHeight="25.0" prefWidth="130.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets bottom="70.0" left="70.0" />
                             </GridPane.margin>
@@ -60,7 +66,7 @@
                                 <Insets bottom="120.0" />
                             </GridPane.margin>
                         </Label>
-                        <DatePicker fx:id="dateEnd" prefHeight="25.0" prefWidth="130.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <DatePicker fx:id="endDay" prefHeight="25.0" prefWidth="130.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets bottom="70.0" left="240.0" />
                             </GridPane.margin>
@@ -104,17 +110,17 @@
                                 <Color blue="0.624" green="0.624" red="0.624" fx:id="x21" />
                             </textFill>
                         </Label>
-                        <ListView prefHeight="150.0" prefWidth="330.0" GridPane.rowIndex="1" GridPane.rowSpan="4">
+                        <ListView fx:id="eventList" prefHeight="150.0" prefWidth="330.0" GridPane.rowIndex="1" GridPane.rowSpan="4">
                             <GridPane.margin>
                                 <Insets bottom="20.0" left="20.0" right="20.0" />
                             </GridPane.margin>
                         </ListView>
-                        <Button fx:id="sendToGoogleCalendar" mnemonicParsing="false" prefHeight="27.0" prefWidth="149.0" text="Vie google-kalenteriin" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="149.0" text="Vie google-kalenteriin" GridPane.columnIndex="1" GridPane.rowIndex="4">
                             <GridPane.margin>
                                 <Insets left="150.0" />
                             </GridPane.margin>
                         </Button>
-                        <Button fx:id="saveButton" mnemonicParsing="false" text="Tallenna" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveEvent" text="Tallenna" GridPane.columnIndex="1" GridPane.rowIndex="2">
                             <GridPane.margin>
                                 <Insets left="190.0" />
                             </GridPane.margin>
@@ -124,22 +130,22 @@
                                 <Insets left="220.0" top="50.0" />
                             </GridPane.margin>
                         </Label>
-                        <ComboBox fx:id="hourStart" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <ComboBox fx:id="startHour" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="80.0" top="50.0" />
                             </GridPane.margin>
                         </ComboBox>
-                        <ComboBox fx:id="minuteStart" editable="true" layoutX="430.0" layoutY="157.0" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <ComboBox fx:id="startMinute" editable="true" layoutX="430.0" layoutY="157.0" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="150.0" top="50.0" />
                             </GridPane.margin>
                         </ComboBox>
-                        <ComboBox fx:id="hourEnd" editable="true" layoutX="430.0" layoutY="157.0" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <ComboBox fx:id="endHour" editable="true" layoutX="430.0" layoutY="157.0" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="250.0" top="50.0" />
                             </GridPane.margin>
                         </ComboBox>
-                        <ComboBox fx:id="minuteEnd" editable="true" layoutX="590.0" layoutY="157.0" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <ComboBox fx:id="endMinute" editable="true" layoutX="590.0" layoutY="157.0" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="320.0" top="50.0" />
                             </GridPane.margin>
@@ -154,7 +160,7 @@
                                 <Insets left="312.0" top="50.0" />
                             </GridPane.margin>
                         </Label>
-                        <ComboBox fx:id="profileChooser" layoutX="420.0" layoutY="157.0" prefHeight="25.0" prefWidth="96.0" promptText="Profile1" GridPane.columnIndex="1">
+                        <ComboBox fx:id="workProfile" layoutX="420.0" layoutY="157.0" prefHeight="25.0" prefWidth="96.0" promptText="Profile1" GridPane.columnIndex="1">
                             <GridPane.margin>
                                 <Insets left="320.0" />
                             </GridPane.margin>
