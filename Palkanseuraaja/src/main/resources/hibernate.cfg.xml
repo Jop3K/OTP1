@@ -50,10 +50,10 @@ Contributor(s):
     <property name="hibernate.current_session_context_class">thread</property>
     <property name="show_sql">true</property>
     <!--   <property name="hbm2ddl.auto">update</property> -->
-    <mapping class="application.User"/>
-    <mapping class="application.Tyoprofiili"/>
-    <mapping class="application.Palkka"/>
-    <mapping class="application.GoogleAccount"/>
-    <mapping class="application.Palkkalisa"/>
+    <mapping class="application.models.User"/>
+    <mapping class="application.models.WorkProfile"/>
+    <mapping class="application.models.Palkka"/>
+    <mapping class="application.models.GoogleAccount"/>
+    <mapping class="application.models.Palkkalisa"/>
   </session-factory>
 </hibernate-configuration>

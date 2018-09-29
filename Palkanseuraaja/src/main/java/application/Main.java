@@ -1,5 +1,6 @@
 package application;
 
+import models.ViewChanger;
 import controllers.LoginController;
 import java.io.IOException;
 import javafx.application.Application;
@@ -17,22 +18,18 @@ public class Main extends Application {
         stage.setTitle("Tervetuloa Palkanseuraajaan");
 
         //Valjastetaan ensinmäin MVC-hommeli käyttöön. stage kulkee kokoajan mukana kirjautumisen
-//        //ja rekisteröinnin välissä
-//        ViewChanger viewChanger = new ViewChanger(stage);
-//        viewChanger.switchStage("/views/TabsView.fxml", viewChanger);
-//        LoginView loginView = new LoginView();
-  //      LoginModel loginModel = new LoginModel();
-    //    LoginController loginViewController = new LoginController(loginView, loginModel, viewChanger); // Tarvitaanko tätä tässä?
+        //ja rekisteröinnin välissä
+        ViewChanger viewChanger = new ViewChanger(stage);
+        LoginView loginView = new LoginView();
+        LoginModel loginModel = new LoginModel();
+        LoginController loginViewController = new LoginController(loginView, loginModel, viewChanger);
 
-//        Scene window = new Scene(loginView.getView(), 800, 800);
-//
-//        stage.setScene(window);
-//
-//        stage.show();
-        Parent root= FXMLLoader.load(Main.class.getResource("/fxml/TabsView.fxml"));
-        Scene scene = new Scene(root, 800, 600);
-        stage.setScene(scene);
+        Scene window = new Scene(loginView.getView(), 800, 800);
+
+        stage.setScene(window);
+
         stage.show();
+
     }
 
     public static void main(String[] args) {

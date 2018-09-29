@@ -1,11 +1,9 @@
 package controllers;
 
-import application.PasswordHashing;
-import application.ViewChanger;
+import models.ViewChanger;
 import dataAccessObjects.UserDAO;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.stage.Stage;
 import models.EventModel;
 import models.LoginModel;
 import models.RegisterModel;
@@ -56,11 +54,11 @@ public class LoginController {
                 //Yritetään sisäänkirjaumista ottamalla yhteys tietokantaan
                if (dao.login(loginView.getUsernameField(), loginView.getPasswordField())) {
                     //Kirjautuminen onnistui ja luodaan ilmoitus siitä.
-                   loginView.showAlert(dao.getAlert());
+                   //loginView.showAlert(dao.getAlert());
                    //Ohjataan ohjelmaan
                    EventModel eventModel = new EventModel();
                    CalendarViewController  calendarViewController = new CalendarViewController();
-                    viewChanger.switchStage("/views/CalendarView", viewChanger);
+                    viewChanger.switchStage("/fxml/TabsView.fxml", viewChanger);
 
 
                }

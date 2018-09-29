@@ -1,5 +1,6 @@
-package application;
+package models;
 
+import application.Main;
 import java.io.IOException;
 
 import javafx.fxml.FXMLLoader;
@@ -26,6 +27,7 @@ public class ViewChanger {
 
         Parent root = null;
         Stage stage = new Stage();
+        stage.setTitle("Palkanseuraaja v0.01a");
 
         try {
             root = FXMLLoader.load(Main.class.getResource(name));

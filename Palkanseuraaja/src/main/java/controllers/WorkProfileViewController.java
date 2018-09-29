@@ -6,17 +6,11 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -34,15 +28,13 @@ import models.WorkProfile;
  * @author artur, joni
  */
 public class WorkProfileViewController implements Initializable {
-	
-	ObservableList<String> workProfileList = FXCollections.observableArrayList("Profile1", "Profile2", "Profile3");
 
     @FXML
     private TextField tuntipalkka;
     @FXML
     private Font x12;
     @FXML
-    private TextField lauantailisa;
+    private TextField profileName;
     @FXML
     private Button saveLisa;
     @FXML
@@ -65,10 +57,6 @@ public class WorkProfileViewController implements Initializable {
     private ComboBox<?> lisanStartMinute;
     @FXML
     private ComboBox<WorkProfile> profileChooser;
-
-    
-    @FXML
-    private ComboBox<String> tyoprofiiliDrop;
 
     /**
      * Initializes the controller class.
@@ -108,8 +96,8 @@ public class WorkProfileViewController implements Initializable {
 
         profileChooser.setConverter(
                 new StringConverter<WorkProfile>() {
-                    private Map<String, WorkProfile> map = new HashMap<>();
-                    
+            private Map<String, WorkProfile> map = new HashMap<>();
+
             @Override
             public String toString(WorkProfile w) {
                 if (w != null) {
@@ -119,9 +107,10 @@ public class WorkProfileViewController implements Initializable {
                 } else {
                     return "";
                 }
-                
+
             }
 
+            //  TODO
             @Override
             public WorkProfile fromString(String string) {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -132,33 +121,27 @@ public class WorkProfileViewController implements Initializable {
 
     @FXML
     private void handleSaveProfileButtonClick(ActionEvent event) {
-        
-        WorkProfile workProfile = new WorkProfile();
-        
-        String selected = profileChooser.getEditor().getText();
-        
-        System.out.println(selected);
 
-        workProfile.setNimi(profileChooser.getEditor().getText().toString());
+        if (!profileName.getText().isEmpty()) {
 
-        if (!(tuntipalkka.getText().isEmpty())) {
-            Palkka palkka = new Palkka();
-            palkka.setTuntipalkka(Double.parseDouble(tuntipalkka.getText()));
-            workProfile.setPalkka(palkka);
+            WorkProfile workProfile = new WorkProfile();
+
+            workProfile.setNimi(profileName.getText());
+
+            if (!(tuntipalkka.getText().isEmpty())) {
+                Palkka palkka = new Palkka();
+                palkka.setTuntipalkka(Double.parseDouble(tuntipalkka.getText()));
+                workProfile.setPalkka(palkka);
+            }
+
+            if (!yolisa.getText().isEmpty()) {
+                workProfile.getPalkka().addPalkkalisa(getYolisa());
+            }
+
+            System.out.println(workProfile.getNimi());
+
+            profileChooser.getItems().add(workProfile);
         }
-
-        if (!yolisa.getText().isEmpty()) {
-            workProfile.getPalkka().addPalkkalisa(getYolisa());
-        }
-
-        if (!lauantailisa.getText().isEmpty()) {
-            workProfile.getPalkka().addPalkkalisa(getYolisa());
-        }
-        
-        System.out.println(workProfile.getNimi());
-        
-        profileChooser.getItems().add(workProfile);
-
     }
 
     @FXML
@@ -173,7 +156,7 @@ public class WorkProfileViewController implements Initializable {
             System.out.println(lisa);
         }
     }
-    
+
     private Palkkalisa getYolisa() {
         Palkkalisa lisa = new Palkkalisa();
         lisa.setNimi("Yölisä");
@@ -181,13 +164,5 @@ public class WorkProfileViewController implements Initializable {
         return lisa;
     }
 
-    private Palkkalisa getLauantaiLisa() {
-        Palkkalisa lisa = new Palkkalisa();
-        lisa.setNimi("Lauantailisä");
-        lisa.setPalkkalisa(Double.parseDouble(lauantailisa.getText()));
-        return lisa;
-    }
-    
-    
 
 }

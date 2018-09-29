@@ -1,17 +1,13 @@
 
 package models;
 
-import java.sql.Timestamp;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 //@Entity
@@ -28,7 +24,7 @@ public class WorkEvent {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     
-    @OneToMany(cascade = CascadeType.ALL, targetEntity = WorkProfile.class)
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = WorkProfile.class)
     @JoinColumn(name = "tyoprofiili_id")
     private WorkProfile tyoprofiili;
     
@@ -81,5 +77,5 @@ public class WorkEvent {
         this.dateTimeEnd = dateTimeEnd;
     }
     
-
+    
 }

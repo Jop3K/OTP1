@@ -17,7 +17,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
-import application.ViewChanger;
+import models.ViewChanger;
 import dataAccessObjects.UserDAO;
 
 public class RegisterController {
