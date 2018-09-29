@@ -9,7 +9,6 @@ import org.hibernate.service.ServiceRegistry;
 
 import models.EventModel;
 import models.GoogleAccount;
-import models.Palkka;
 import models.Palkkalisa;
 import models.User;
 import models.WorkProfile;
@@ -27,7 +26,6 @@ public class DataAccessObject {
         Configuration con = new Configuration().configure().addAnnotatedClass(User.class)
         .addAnnotatedClass(GoogleAccount.class)
         .addAnnotatedClass(WorkProfile.class)
-        .addAnnotatedClass(Palkka.class)
         .addAnnotatedClass(Palkkalisa.class)
         .addAnnotatedClass(EventModel.class);
         ServiceRegistry reg = new StandardServiceRegistryBuilder().applySettings(con.getProperties()).build();

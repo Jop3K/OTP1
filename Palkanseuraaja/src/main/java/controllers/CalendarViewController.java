@@ -1,6 +1,5 @@
 package controllers;
 
-
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
@@ -24,8 +23,9 @@ import models.WorkProfile;
  * @author artur
  */
 public class CalendarViewController implements Initializable {
-	private UserDAO dao;
-	private EventModel eventModel;
+
+    private UserDAO dao;
+    private EventModel eventModel;
     @FXML
     private Color x2;
     @FXML
@@ -70,31 +70,31 @@ public class CalendarViewController implements Initializable {
     private ComboBox<String> workProfile;
 
     public CalendarViewController() {
-    	dao = new UserDAO();
-    	//this.eventModel = e;
+        dao = new UserDAO();
+        //this.eventModel = e;
 
     }
-	@Override
 
-	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-		System.out.print("Alkaako");
+    @Override
+
+    public void initialize(URL location, ResourceBundle resources) {
+        // TODO Auto-generated method stub
+        System.out.print("Alkaako");
         // Täytetään comboboxit
         for (int i = 0; i < 60; i++) {
-        	startMinute.getItems().add(Integer.toString(i));
-        	endMinute.getItems().add(Integer.toString(i));
+            startMinute.getItems().add(Integer.toString(i));
+            endMinute.getItems().add(Integer.toString(i));
 
         }
-        for (int i = 0; i<24; i ++) {
-        	if(i <10) {
-        		String tmp = "0"+i;
-        		startHour.getItems().add(tmp);
-        		endHour.getItems().add(tmp);
-        	}
-        	else {
-        		startHour.getItems().add(Integer.toString(i));
-        		endHour.getItems().add(Integer.toString(i));
-        	}
+        for (int i = 0; i < 24; i++) {
+            if (i < 10) {
+                String tmp = "0" + i;
+                startHour.getItems().add(tmp);
+                endHour.getItems().add(tmp);
+            } else {
+                startHour.getItems().add(Integer.toString(i));
+                endHour.getItems().add(Integer.toString(i));
+            }
         }
 
 //      List <WorkProfile> profiles = new ArrayList<WorkProfile>();
@@ -104,41 +104,38 @@ public class CalendarViewController implements Initializable {
 //        	WorkProfile tmp = list.next();
 //        	workProfile.getItems().add(tmp.getNimi());
 //        }
-	}
+    }
 
     public void init() {
 
-       System.out.print("Alkaako");
+        System.out.print("Alkaako");
         // Täytetään comboboxit
         for (int i = 0; i < 59; i++) {
-        	startMinute.getItems().add(Integer.toString(i));
-        	endMinute.getItems().add(Integer.toString(i));
+            startMinute.getItems().add(Integer.toString(i));
+            endMinute.getItems().add(Integer.toString(i));
 
         }
-        for (int i = 0; i<24; i ++) {
-        	if(i <10) {
-        		String tmp = "0"+i;
-        		startHour.getItems().add(tmp);
-        		endHour.getItems().add(tmp);
-        	}
-        	else {
-        		startHour.getItems().add(Integer.toString(i));
-        		endHour.getItems().add(Integer.toString(i));
-        	}
+        for (int i = 0; i < 24; i++) {
+            if (i < 10) {
+                String tmp = "0" + i;
+                startHour.getItems().add(tmp);
+                endHour.getItems().add(tmp);
+            } else {
+                startHour.getItems().add(Integer.toString(i));
+                endHour.getItems().add(Integer.toString(i));
+            }
         }
 
-        List <WorkProfile> profiles = dao.getUsersWorkProfiles(CurrentUser.getUser());
+        List<WorkProfile> profiles = dao.getUsersWorkProfiles(CurrentUser.getUser());
         Iterator<WorkProfile> list = profiles.iterator();
         while (list.hasNext()) {
-        	WorkProfile tmp = list.next();
-        	workProfile.getItems().add(tmp.getNimi());
+            WorkProfile tmp = list.next();
+            workProfile.getItems().add(tmp.getNimi());
         }
     }
 
-
-    public void saveEvent (ActionEvent even) {
-
+    public void saveEvent(ActionEvent even) {
 
     }
-    
+
 }

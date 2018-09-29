@@ -15,6 +15,7 @@ import org.hibernate.query.Query;
 
 public class UserDAO extends DataAccessObject {
 
+    private CurrentUser currentUser;
     private Alert alert;
 
     public UserDAO() {
@@ -31,9 +32,7 @@ public class UserDAO extends DataAccessObject {
 
         closeCurrentSession();
 
-        String pw = new PasswordHashing().get_SHA_256_SecurePassword(password, user.getSalt().getBytes());
-
-        if (user == null || !user.getPassword().equals(pw)) {
+        if (user == null || !(user.getPassword().equals(new PasswordHashing().get_SHA_256_SecurePassword(password, user.getSalt().getBytes())))) {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Kirjautuminen epäonnistui.");
             alert.setHeaderText("Tarkista käyttäjätunnus ja salasana");
@@ -41,7 +40,7 @@ public class UserDAO extends DataAccessObject {
             return false;
         }
 
-        CurrentUser currentUser = new CurrentUser(user);
+        currentUser = new CurrentUser(user);
 
         alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Kirjautuminen onnistui!");
@@ -121,21 +120,20 @@ public class UserDAO extends DataAccessObject {
 //        closeCurrentSession();
 //        return profiles;
 //    }
-    
-    public List<WorkProfile> getUsersWorkProfiles(User user) {
-        
+    public List<WorkProfile> getUsersWorkProfiles() {
+
         openCurrentSession();
-        Query q = session.createQuery("FROM WorkProfile WHERE user_id='" + user.getId() + "'");
+        Query q = session.createQuery("FROM WorkProfile WHERE user_id='" + CurrentUser.getUser().getId() + "'");
         List<WorkProfile> profiles = q.list();
 
         closeCurrentSession();
-        
+
         for (WorkProfile w : profiles) {
             System.out.println(w.getNimi());
         }
-        
+
         return profiles;
-        
+
     }
 
     public Alert getAlert() {

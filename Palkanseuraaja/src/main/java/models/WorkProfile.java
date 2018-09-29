@@ -23,14 +23,17 @@ public class WorkProfile {
 
     @Column(name = "nimi", nullable = false)
     private String nimi;
+    
+    @Column(name = "palkka")
+    private double palkka;
 
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "palkka_id")
-    private Palkka palkka;
+//    @OneToOne
+//    @JoinColumn(name = "palkka_id")
+//    private Palkka palkka;
 
     public WorkProfile() {
     }
@@ -59,12 +62,12 @@ public class WorkProfile {
         this.nimi = nimi;
     }
 
-    public Palkka getPalkka() {
+    public double getPalkka() {
         return palkka;
     }
 
-    public void setPalkka(Palkka palkat) {
-        this.palkka = palkat;
+    public void setPalkka(double palkka) {
+        this.palkka = palkka;
     }
 
 }

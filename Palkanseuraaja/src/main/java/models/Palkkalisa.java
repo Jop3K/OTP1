@@ -1,14 +1,11 @@
 
 package models;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -40,9 +37,9 @@ public class Palkkalisa {
     @Column(name = "endminute")
     private int endMinute;
     
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
-    @JoinColumn(name = "palkka_id")
-    private Palkka palkka;
+//    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
+//    @JoinColumn(name = "palkka_id")
+//    private Palkka palkka;
     
 
     public Palkkalisa() {
@@ -72,13 +69,13 @@ public class Palkkalisa {
         this.palkkalisa = palkkalisa;
     }
 
-    public Palkka getPalkka() {
-        return palkka;
-    }
-
-    public void setPalkka(Palkka palkka) {
-        this.palkka = palkka;
-    }
+//    public Palkka getPalkka() {
+//        return palkka;
+//    }
+//
+//    public void setPalkka(Palkka palkka) {
+//        this.palkka = palkka;
+//    }
 
     public int getStartHour() {
         return startHour;

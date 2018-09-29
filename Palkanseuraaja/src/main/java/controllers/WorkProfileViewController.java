@@ -1,7 +1,9 @@
 package controllers;
 
+import dataAccessObjects.UserDAO;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -18,7 +20,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import models.Palkka;
+import models.CurrentUser;
 import models.Palkkalisa;
 import models.WorkProfile;
 
@@ -28,6 +30,8 @@ import models.WorkProfile;
  * @author artur, joni
  */
 public class WorkProfileViewController implements Initializable {
+
+    private UserDAO dao;
 
     @FXML
     private TextField tuntipalkka;
@@ -63,17 +67,15 @@ public class WorkProfileViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-//         TODO
 
-        WorkProfile eka = new WorkProfile();
-        WorkProfile toka = new WorkProfile();
-        WorkProfile kolmas = new WorkProfile();
-        WorkProfile neljas = new WorkProfile();
-        eka.setNimi("eka");
-        toka.setNimi("toka");
-        kolmas.setNimi("kolmas");
-        neljas.setNimi("neljas");
-        profileChooser.getItems().addAll(eka, toka, kolmas, neljas);
+        dao = new UserDAO();
+        dao.openCurrentSession();
+
+        List<WorkProfile> list = dao.getUsersWorkProfiles();
+
+        for (WorkProfile w : list) {
+            profileChooser.getItems().add(w);
+        }
 
         profileChooser.setCellFactory(
                 new Callback<ListView<WorkProfile>, ListCell<WorkProfile>>() {
@@ -122,25 +124,34 @@ public class WorkProfileViewController implements Initializable {
     @FXML
     private void handleSaveProfileButtonClick(ActionEvent event) {
 
-        if (!profileName.getText().isEmpty()) {
+        if (!(profileChooser.getSelectionModel().isEmpty())) {
+            profileChooser.getSelectionModel().getSelectedItem().setNimi(profileName.getText());
+            profileChooser.getSelectionModel().getSelectedItem().setPalkka(Double.parseDouble(tuntipalkka.getText()));
+            dao.openCurrentSessionWithTransaction().saveOrUpdate(profileChooser.getSelectionModel().getSelectedItem());
+            dao.closeCurrentSessionWithTransaction();
+        } else {
 
-            WorkProfile workProfile = new WorkProfile();
+            if (!profileName.getText().isEmpty()) {
 
-            workProfile.setNimi(profileName.getText());
+                WorkProfile workProfile = new WorkProfile();
 
-            if (!(tuntipalkka.getText().isEmpty())) {
-                Palkka palkka = new Palkka();
-                palkka.setTuntipalkka(Double.parseDouble(tuntipalkka.getText()));
-                workProfile.setPalkka(palkka);
+                workProfile.setNimi(profileName.getText());
+                workProfile.setUser(CurrentUser.getUser());
+
+                if (!tuntipalkka.getText().isEmpty()) {
+                    workProfile.setPalkka(Double.parseDouble(tuntipalkka.getText()));
+                }
+                if (!yolisa.getText().isEmpty()) {
+                    Palkkalisa lisa = new Palkkalisa();
+                    lisa.setPalkkalisa(Double.parseDouble(yolisa.getText()));
+                    dao.openCurrentSessionWithTransaction().saveOrUpdate(lisa);
+                }
+
+                dao.openCurrentSessionWithTransaction().saveOrUpdate(workProfile);
+                dao.closeCurrentSessionWithTransaction();
+
+                profileChooser.getItems().add(workProfile);
             }
-
-            if (!yolisa.getText().isEmpty()) {
-                workProfile.getPalkka().addPalkkalisa(getYolisa());
-            }
-
-            System.out.println(workProfile.getNimi());
-
-            profileChooser.getItems().add(workProfile);
         }
     }
 
@@ -157,12 +168,17 @@ public class WorkProfileViewController implements Initializable {
         }
     }
 
+    @FXML
+    private void handleProfileChooserClick(ActionEvent event) {
+        profileName.setText(profileChooser.getSelectionModel().getSelectedItem().getNimi());
+        tuntipalkka.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getPalkka()));
+    }
+
     private Palkkalisa getYolisa() {
         Palkkalisa lisa = new Palkkalisa();
         lisa.setNimi("Yölisä");
         lisa.setPalkkalisa(Double.parseDouble(yolisa.getText()));
         return lisa;
     }
-
 
 }
