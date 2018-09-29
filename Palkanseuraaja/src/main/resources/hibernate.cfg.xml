@@ -49,11 +49,11 @@ Contributor(s):
     <property name="hibernate.hbm2ddl.auto">update</property>
     <property name="hibernate.current_session_context_class">thread</property>
     <property name="show_sql">true</property>
-    <!--   <property name="hbm2ddl.auto">update</property> -->
     <mapping class="application.models.User"/>
     <mapping class="application.models.WorkProfile"/>
     <mapping class="application.models.Palkka"/>
     <mapping class="application.models.GoogleAccount"/>
     <mapping class="application.models.Palkkalisa"/>
+    <mapping class="application.models.EventModel"/>
   </session-factory>
 </hibernate-configuration>

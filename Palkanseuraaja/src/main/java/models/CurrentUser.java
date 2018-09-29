@@ -1,4 +1,8 @@
 package models;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+
 /*
  * Staattinen luokka, joka pitää välimuistissa kirjautuneen käyttäjän tiedot
  * 
@@ -6,7 +10,7 @@ package models;
 public class CurrentUser extends User {
 	private static User user;
 	
-	public CurrentUser(User user) {
+	public CurrentUser(User user) throws NoSuchAlgorithmException, NoSuchProviderException {
 		CurrentUser.setUser(user);
 	}
 	

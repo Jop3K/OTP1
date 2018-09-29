@@ -2,6 +2,10 @@ package controllers;
 
 import models.ViewChanger;
 import dataAccessObjects.UserDAO;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import models.EventModel;
@@ -50,22 +54,28 @@ public class LoginController {
         public void handle(Event arg0) {
             //Varmistaa, että kumpikaan kentistä ei ole tyhjä
             if (loginModel.loginFieldValidation(loginView.getUsernameField(), loginView.getPasswordField())) {
-            	// new PasswordHashing(loginView.getPasswordField()).get_SHA_256_SecurePassword()
-                //Yritetään sisäänkirjaumista ottamalla yhteys tietokantaan
-               if (dao.login(loginView.getUsernameField(), loginView.getPasswordField())) {
-                    //Kirjautuminen onnistui ja luodaan ilmoitus siitä.
-                   //loginView.showAlert(dao.getAlert());
-                   //Ohjataan ohjelmaan
-                   EventModel eventModel = new EventModel();
-                   CalendarViewController  calendarViewController = new CalendarViewController();
-                    viewChanger.switchStage("/fxml/TabsView.fxml", viewChanger);
-
-
-               }
-               else {
-                    //Kirjautuminen epäonnistui. Ilmoitetaan siitä
-                   loginView.showAlert(dao.getAlert());
-               		}
+                try {
+                    // new PasswordHashing(loginView.getPasswordField()).get_SHA_256_SecurePassword()
+                    //Yritetään sisäänkirjaumista ottamalla yhteys tietokantaan
+                    if (dao.login(loginView.getUsernameField(), loginView.getPasswordField())) {
+                        //Kirjautuminen onnistui ja luodaan ilmoitus siitä.
+                        //loginView.showAlert(dao.getAlert());
+                        //Ohjataan ohjelmaan
+                        EventModel eventModel = new EventModel();
+                        CalendarViewController  calendarViewController = new CalendarViewController();
+                        viewChanger.switchStage("/fxml/TabsView.fxml", viewChanger);
+                        
+                        
+                    }
+                    else {
+                        //Kirjautuminen epäonnistui. Ilmoitetaan siitä
+                        loginView.showAlert(dao.getAlert());
+                    }
+                } catch (NoSuchAlgorithmException ex) {
+                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NoSuchProviderException ex) {
+                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             else {
                 //Jompikumpi tai molemmat kentät ovat tyhjät. Ilmoitetaan siitä
