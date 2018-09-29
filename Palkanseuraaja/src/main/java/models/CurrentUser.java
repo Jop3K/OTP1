@@ -1,17 +1,15 @@
 package models;
-
-public final class CurrentUser extends User {
+/*
+ * Staattinen luokka, joka pitää välimuistissa kirjautuneen käyttäjän tiedot
+ * 
+ */
+public class CurrentUser extends User {
 	private static User user;
 	
 	public CurrentUser(User user) {
 		CurrentUser.setUser(user);
 	}
 	
-	public void updateCurrentUser(User user) {
-		CurrentUser.setUser(user);
-		
-	}
-
 	public static User getUser() {
 		return user;
 	}

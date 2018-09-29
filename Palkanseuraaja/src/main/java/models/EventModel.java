@@ -2,6 +2,7 @@ package models;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,10 +23,10 @@ public class EventModel {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@OneToMany
+	@ManyToOne(cascade = CascadeType.ALL, targetEntity = WorkProfile.class)
 	@JoinColumn( name = "workProfile_id")
 	private WorkProfile workProfile;
-	@OneToMany
+	@ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
 	@JoinColumn ( name = "user_id")
 	private User user;
 	@Column ( name = "beginTime")

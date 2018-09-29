@@ -35,7 +35,7 @@ public class RegisterController {
         SessionFactory sf = con.buildSessionFactory();
         session = sf.getCurrentSession();
         tx = session.beginTransaction();*/
-        
+        this.dao = new UserDAO();
         this.registerView = registerView;
         this.registerModel = registerModel;
         this.viewChanger = viewChanger;
