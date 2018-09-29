@@ -3,22 +3,20 @@ package controllers;
 import java.security.NoSuchAlgorithmException;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
 import models.LoginModel;
 import models.RegisterModel;
 import models.User;
 import views.LoginView;
 import views.RegisterView;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
 
 import models.ViewChanger;
 import dataAccessObjects.UserDAO;
+import java.security.NoSuchProviderException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import models.PasswordHashing;
 
 public class RegisterController {
 
@@ -78,33 +76,38 @@ public class RegisterController {
             //Tarkistetaan formi
             if (tmpRegisterModel.formValidation(tmpRegisterModel)) {
 
-                User user = new User();
-                user.setFirstname(tmpRegisterModel.getfName());
-                user.setLastname(tmpRegisterModel.getlName());
-                user.setPassword(tmpRegisterModel.getPw1());
-                user.setUsername(tmpRegisterModel.getuName());
-                user.setGmail(tmpRegisterModel.getGmail());
-
-                //luodaan käyttäjä tietokantaan, jos käyttäjänimeä ei ole varattu.
-                if (dao.save(user)) {
-                    //ilmoitetaan onnistumisesta
-                  registerView.showAlert(dao.getAlert());
-                    //Ohjataan takaisin loginiin
-                    /*
-				         * TODO: Joku builderi, jolla saadaan luotua controllerit yhdellä rivillä koodia nätisti.
-                     */
+                try {
+                    User user = new User();
+                    user.setFirstname(tmpRegisterModel.getfName());
+                    user.setLastname(tmpRegisterModel.getlName());
+                    user.setPassword(new PasswordHashing().get_SHA_256_SecurePassword(tmpRegisterModel.getPw1(), user.getSalt().getBytes()));
+                    user.setUsername(tmpRegisterModel.getuName());
+                    user.setGmail(tmpRegisterModel.getGmail());
                     
-                    
-                    
-                    LoginView loginView = new LoginView();
-                    LoginModel loginModel = new LoginModel();
-                    LoginController loginViewController = new LoginController(loginView, loginModel, viewChanger);
-                    
-                   
-                } else {
-                    //Ilmoitetaan käyttäjätunnuksen olevan varattu
-                    registerView.showAlert(dao.getAlert());
-               }
+                    //luodaan käyttäjä tietokantaan, jos käyttäjänimeä ei ole varattu.
+                    if (dao.save(user)) {
+                        //ilmoitetaan onnistumisesta
+                        registerView.showAlert(dao.getAlert());
+                        //Ohjataan takaisin loginiin
+                        /*
+                        * TODO: Joku builderi, jolla saadaan luotua controllerit yhdellä rivillä koodia nätisti.
+                        */
+                        
+                        
+                        
+                        LoginView loginView = new LoginView();
+                        LoginModel loginModel = new LoginModel();
+                        LoginController loginViewController = new LoginController(loginView, loginModel, viewChanger);
+                        
+                        
+                    } else {
+                        //Ilmoitetaan käyttäjätunnuksen olevan varattu
+                        registerView.showAlert(dao.getAlert());
+                    }} catch (NoSuchAlgorithmException ex) {
+                    Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NoSuchProviderException ex) {
+                    Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
+                }
            } else {//ilmoitetaan formin validaatiosta tapahtuneesta virheestä
                 registerView.showAlert(tmpRegisterModel.getAlert());
             }

@@ -1,5 +1,7 @@
 package models;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -34,7 +36,8 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
     
-//    private byte[] salt;
+    @Column(name = "salt", nullable = false)
+    private String salt;
     
     @Column(name = "gmail")
     private String gmail;
@@ -46,7 +49,8 @@ public class User {
     @JoinColumn(name = "google_id")
     private GoogleAccount google;
 
-    public User() {
+    public User() throws NoSuchAlgorithmException, NoSuchProviderException {
+        salt = new PasswordHashing().generateSalt().toString();
         profiilit = new HashSet<>();
     }
     
@@ -66,6 +70,10 @@ public class User {
         return this.password;
     }
 
+    public String getSalt() {
+        return salt;
+    }
+
     public String getFirstname() {
         return this.firstname;
     }
@@ -78,6 +86,10 @@ public class User {
         return this.gmail;
     }
 
+    public void getGoogle() {
+        this.google = google;
+    }
+
     // Setterit jos etunimi, sukunimi ei pakollisia. Muuten laitetaan ne konstruktoriin.
     public void setUsername(String username) {
         this.username = username;
@@ -85,6 +97,10 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public void setFirstname(String firstname) {
@@ -98,6 +114,11 @@ public class User {
     public void setGmail(String gmail) {
         this.gmail = gmail;
     }
+
+    public void setGoogle(GoogleAccount google) {
+        this.google = google;
+    }
+    
 
     @Override
     public String toString() {
