@@ -1,5 +1,6 @@
 package models;
 
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,32 +9,32 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tyoprofiilit")
+@Table(name = "workprofile")
 
 public class WorkProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "workprofile_id")
     private int id;
 
-    @Column(name = "nimi", nullable = false)
-    private String nimi;
-    
-    @Column(name = "palkka")
-    private double palkka;
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "pay")
+    private double pay;
 
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-//    @OneToOne
-//    @JoinColumn(name = "palkka_id")
-//    private Palkka palkka;
+    @OneToMany(mappedBy = "workProfile")
+    private Set<Extrapay> extrapays;
 
     public WorkProfile() {
     }
@@ -55,19 +56,28 @@ public class WorkProfile {
     }
 
     public String getNimi() {
-        return nimi;
+        return name;
     }
 
-    public void setNimi(String nimi) {
-        this.nimi = nimi;
+    public void setNimi(String name) {
+        this.name = name;
     }
 
-    public double getPalkka() {
-        return palkka;
+    public double getPay() {
+        return pay;
     }
 
-    public void setPalkka(double palkka) {
-        this.palkka = palkka;
+    public void setPay(double pay) {
+        this.pay = pay;
     }
+
+    public Set<Extrapay> getPalkkalisat() {
+        return extrapays;
+    }
+
+    public void setPalkkalisat(Set<Extrapay> extrapays) {
+        this.extrapays = extrapays;
+    }
+    
 
 }

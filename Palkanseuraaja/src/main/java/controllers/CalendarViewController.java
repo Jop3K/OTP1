@@ -153,18 +153,17 @@ public class CalendarViewController implements Initializable {
             }
         });
 
-//      List <WorkProfile> profiles = new ArrayList<WorkProfile>();
-//      profiles = dao.getUsersWorkProfiles(CurrentUser.getUser());
-//        Iterator<WorkProfile> list = profiles.iterator();
-//        while (list.hasNext()) {
-//        	WorkProfile tmp = list.next();
-//        	workProfile.getItems().add(tmp.getNimi());
-//        }
     }
 
 
     public void saveEvent(ActionEvent even) {
 
     }
+
+    public ComboBox<WorkProfile> getProfileChooser() {
+        return profileChooser;
+    }
+    
+    
 
 }

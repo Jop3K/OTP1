@@ -16,7 +16,7 @@ public class GoogleAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "google_id")
     private int id;
 
     @Column(name = "email")

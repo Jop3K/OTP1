@@ -1,29 +1,32 @@
 
 package models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "palkkalisat")
+@Table(name = "extrapay")
 
 
-public class Palkkalisa {
+public class Extrapay {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "extrapay_id")
     private int id;
     
-    @Column(name = "nimi")
-    private String nimi;
+    @Column(name = "name")
+    private String name;
     
-    @Column(name = "palkkalisa")
-    private double palkkalisa;
+    @Column(name = "extrapay")
+    private double extrapay;
     
     @Column(name = "starthour")
     private int startHour;
@@ -37,12 +40,12 @@ public class Palkkalisa {
     @Column(name = "endminute")
     private int endMinute;
     
-//    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
-//    @JoinColumn(name = "palkka_id")
-//    private Palkka palkka;
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = WorkProfile.class)
+    @JoinColumn(name = "workprofile_id")
+    private WorkProfile workProfile;
     
 
-    public Palkkalisa() {
+    public Extrapay() {
     }
 
     public int getId() {
@@ -53,29 +56,21 @@ public class Palkkalisa {
         this.id = id;
     }
     
-    public String getNimi() {
-        return nimi;
+    public String getName() {
+        return name;
     }
 
-    public void setNimi(String nimi) {
-        this.nimi = nimi;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public double getPalkkalisa() {
-        return palkkalisa;
+    public double getExtrapay() {
+        return extrapay;
     }
 
-    public void setPalkkalisa(double palkkalisa) {
-        this.palkkalisa = palkkalisa;
+    public void setExtrapay(double extrapay) {
+        this.extrapay = extrapay;
     }
-
-//    public Palkka getPalkka() {
-//        return palkka;
-//    }
-//
-//    public void setPalkka(Palkka palkka) {
-//        this.palkka = palkka;
-//    }
 
     public int getStartHour() {
         return startHour;
@@ -109,9 +104,17 @@ public class Palkkalisa {
         this.endMinute = endMinute;
     }
 
+    public WorkProfile getWorkProfile() {
+        return workProfile;
+    }
+
+    public void setWorkProfile(WorkProfile workProfile) {
+        this.workProfile = workProfile;
+    }
+
     @Override
     public String toString() {
-        return nimi + ", startTime: " + startHour + ":" + startMinute + " , endTime: " + endHour + ":" + endMinute;
+        return name + ", startTime: " + startHour + ":" + startMinute + " , endTime: " + endHour + ":" + endMinute;
     }
     
     

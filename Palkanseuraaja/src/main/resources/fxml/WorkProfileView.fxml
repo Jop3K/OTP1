@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.WorkProfileViewController">
+<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.WorkProfileViewController">
     <children>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
             <children>
@@ -174,7 +174,7 @@
                                 <Insets left="188.0" top="50.0" />
                             </GridPane.margin>
                         </Label>
-                        <ComboBox fx:id="profileChooser" editable="true" layoutX="630.0" layoutY="132.0" onAction="#handleProfileChooserClick" prefHeight="25.0" prefWidth="87.0" promptText="Profile">
+                        <ComboBox fx:id="profileChooser" layoutX="630.0" layoutY="132.0" onAction="#handleProfileChooserClick" prefHeight="25.0" prefWidth="87.0">
                             <GridPane.margin>
                                 <Insets left="270.0" top="50.0" />
                             </GridPane.margin>
@@ -219,12 +219,12 @@
                         <Insets bottom="240.0" left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <Button disable="true" mnemonicParsing="false" text="Muokkaa" GridPane.rowIndex="1">
+                  <Button fx:id="editButton" disable="true" mnemonicParsing="false" onAction="#handleEditButtonClick" text="Muokkaa" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="140.0" top="270.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button mnemonicParsing="false" text="Uusi profiili">
+                  <Button fx:id="newProfile" mnemonicParsing="false" onAction="#handleNewProfileButtonClick" text="Uusi profiili">
                      <GridPane.margin>
                         <Insets bottom="30.0" left="270.0" />
                      </GridPane.margin>
