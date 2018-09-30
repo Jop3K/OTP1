@@ -174,7 +174,7 @@
                                 <Insets left="188.0" />
                             </GridPane.margin>
                         </Label>
-                        <ComboBox fx:id="profileChooser" editable="true" layoutX="630.0" layoutY="132.0" onAction="#handleProfileChooserClick" prefHeight="25.0" prefWidth="87.0">
+                        <ComboBox fx:id="profileChooser" editable="true" layoutX="630.0" layoutY="132.0" onAction="#handleProfileChooserClick" prefHeight="25.0" prefWidth="87.0" promptText="Profile">
                             <GridPane.margin>
                                 <Insets left="270.0" />
                             </GridPane.margin>
