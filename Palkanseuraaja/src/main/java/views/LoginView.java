@@ -16,7 +16,8 @@ public class LoginView {
     public LoginView() {
 
     }
-
+    
+    // tekstikentät
     Label username = new Label("Käyttäjätunnus: ");
     TextField usernameField = new TextField();
 
@@ -39,8 +40,9 @@ public class LoginView {
         grid.setVgap(10);
         grid.setHgap(10);
         grid.setPadding(new Insets(10, 10, 10, 10));
-
-        // tekstikentät
+        
+        login.setDefaultButton(true);
+        
         // komponentien asettelu ruudukkoon
         grid.add(username, 0, 0);
         grid.add(usernameField, 1, 0);

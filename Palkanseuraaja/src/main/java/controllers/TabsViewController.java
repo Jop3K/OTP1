@@ -1,13 +1,9 @@
 package controllers;
 
-import application.Main;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
@@ -31,11 +27,9 @@ public class TabsViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        try {
-            calendarTab.setContent((Node) FXMLLoader.load(this.getClass().getResource("/fxml/CalendarView.fxml")));
-            profileTab.setContent((Node) FXMLLoader.load(this.getClass().getResource("/fxml/WorkProfileView.fxml")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    }
+    
+    public void refresh() {
+        //TODO
     }
 }
