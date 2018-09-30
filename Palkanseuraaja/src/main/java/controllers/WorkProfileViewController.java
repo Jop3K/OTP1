@@ -20,6 +20,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import models.CurrentCalendarViewController;
 import models.CurrentUser;
 import models.Extrapay;
 import models.WorkProfile;
@@ -66,6 +67,8 @@ public class WorkProfileViewController implements Initializable {
     @FXML
     private ComboBox<WorkProfile> profileChooser;
 
+    private List<WorkProfile> profileList;
+
     /**
      * Initializes the controller class.
      */
@@ -75,9 +78,9 @@ public class WorkProfileViewController implements Initializable {
         dao = new UserDAO();
         dao.openCurrentSession();
 
-        List<WorkProfile> list = dao.getUsersWorkProfiles();
+        profileList = dao.getUsersWorkProfiles();
 
-        for (WorkProfile w : list) {
+        for (WorkProfile w : profileList) {
             profileChooser.getItems().add(w);
         }
 
@@ -128,11 +131,14 @@ public class WorkProfileViewController implements Initializable {
     @FXML
     private void handleSaveProfileButtonClick(ActionEvent event) {
 
-        if (!(profileChooser.getSelectionModel().isEmpty())) {
+        if (!profileChooser.getSelectionModel().isEmpty()) {
+
             profileChooser.getSelectionModel().getSelectedItem().setNimi(profileName.getText());
             profileChooser.getSelectionModel().getSelectedItem().setPay(Double.parseDouble(tuntipalkka.getText()));
+
             dao.openCurrentSessionWithTransaction().saveOrUpdate(profileChooser.getSelectionModel().getSelectedItem());
             dao.closeCurrentSessionWithTransaction();
+
         } else {
 
             if (!profileName.getText().isEmpty()) {
@@ -146,65 +152,102 @@ public class WorkProfileViewController implements Initializable {
                     workProfile.setPay(Double.parseDouble(tuntipalkka.getText()));
                 }
                 if (!yolisa.getText().isEmpty()) {
+
                     Extrapay lisa = new Extrapay();
                     lisa.setExtrapay(Double.parseDouble(yolisa.getText()));
                     lisa.setWorkProfile(workProfile);
+
                     dao.openCurrentSessionWithTransaction().saveOrUpdate(lisa);
                     dao.closeCurrentSessionWithTransaction();
+
                 }
 
                 dao.openCurrentSessionWithTransaction().saveOrUpdate(workProfile);
                 dao.closeCurrentSessionWithTransaction();
 
                 profileChooser.getItems().add(workProfile);
+                
+                CurrentCalendarViewController.getCalendarViewController().loadWorkProfiles();
+
             }
         }
     }
 
+    //NOT READY!!
     @FXML
     private void handleSaveLisaButtonClick(ActionEvent event) {
-        if (!lisanNimi.getText().isEmpty()) {
-            Extrapay lisa = new Extrapay();
-            lisa.setName(lisanNimi.getText());
-            lisa.setStartHour(Integer.parseInt(lisanStartHour.getSelectionModel().getSelectedItem().toString()));
-            lisa.setStartMinute(Integer.parseInt(lisanStartMinute.getSelectionModel().getSelectedItem().toString()));
-            lisa.setEndHour(Integer.parseInt(lisanEndHour.getSelectionModel().getSelectedItem().toString()));
-            lisa.setEndMinute(Integer.parseInt(lisanEndMinute.getSelectionModel().getSelectedItem().toString()));
-            System.out.println(lisa);
-        }
+//        if (!lisanNimi.getText().isEmpty()) {
+//            Extrapay lisa = new Extrapay();
+//            lisa.setName(lisanNimi.getText());
+//            lisa.setStartHour(Integer.parseInt(lisanStartHour.getSelectionModel().getSelectedItem().toString()));
+//            lisa.setStartMinute(Integer.parseInt(lisanStartMinute.getSelectionModel().getSelectedItem().toString()));
+//            lisa.setEndHour(Integer.parseInt(lisanEndHour.getSelectionModel().getSelectedItem().toString()));
+//            lisa.setEndMinute(Integer.parseInt(lisanEndMinute.getSelectionModel().getSelectedItem().toString()));
+//            System.out.println(lisa);
+//        }
     }
-    
+
     @FXML
     private void handleNewProfileButtonClick() {
+
         profileName.clear();
         tuntipalkka.clear();
         yolisa.clear();
+
         profileChooser.getSelectionModel().clearSelection();
+
         profileName.setDisable(false);
         tuntipalkka.setDisable(false);
-        yolisa.setDisable(false); 
+        yolisa.setDisable(false);
+
+        editButton.setText("Muokkaa");
+        editButton.setDisable(true);
+
     }
 
     @FXML
     private void handleProfileChooserClick(ActionEvent event) {
+
+        if (profileChooser.getSelectionModel().getSelectedItem() != null) {
+
+            loadValuesToTextFields();
+
+            editButton.setDisable(false);
+
+        }
+
+    }
+
+    @FXML
+    private void handleEditButtonClick() {
+
+        if (editButton.getText().equals("Muokkaa")) {
+
+            profileName.setDisable(false);
+            tuntipalkka.setDisable(false);
+            yolisa.setDisable(false);
+
+            editButton.setText("Peruuta");
+
+        } else {
+
+            loadValuesToTextFields();
+
+        }
+
+    }
+
+    private void loadValuesToTextFields() {
+
+        profileName.setText(profileChooser.getSelectionModel().getSelectedItem().getNimi());
+        tuntipalkka.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getPay()));
+        // yolisa.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem()));
         profileName.setDisable(true);
         tuntipalkka.setDisable(true);
         yolisa.setDisable(true);
-        editButton.setDisable(false);
-    }
-    
-    @FXML
-    private void handleEditButtonClick() {
-        profileName.setDisable(false);
-        tuntipalkka.setDisable(false);
-        yolisa.setDisable(false); 
-    }
 
-    private Extrapay getYolisa() {
-        Extrapay lisa = new Extrapay();
-        lisa.setName("Yölisä");
-        lisa.setExtrapay(Double.parseDouble(yolisa.getText()));
-        return lisa;
+        editButton.setText("Muokkaa");
+
     }
 
 }

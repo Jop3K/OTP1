@@ -47,32 +47,6 @@ public class UserDAO extends DataAccessObject {
         alert.setTitle("Kirjautuminen onnistui!");
         alert.setHeaderText("Tervetuloa!");
 
-//        openCurrentSession();
-//        System.out.print(username);
-//        System.out.print(password);
-//       Criteria crit = getCurrentSession().createCriteria(User.class);
-//       //Asetetaan kriteerit, joilla haku tehdään taulusta
-//       crit.add(Restrictions.eq("username", username));
-//       crit.add(Restrictions.eq("password", password));
-//       List<User> user = new ArrayList<User>();
-//       user = crit.list();
-//       closeCurrentSession();
-//       //Jos ei löydy käyttäjää tietokannasta
-//       if (user.isEmpty()) {
-//    	   alert = new Alert(Alert.AlertType.ERROR);
-//           alert.setTitle("Kirjautuminen epäonnistui.");
-//           alert.setHeaderText("Tarkista käyttäjätunnus ja salasana");
-//           
-//    	   System.out.print(user.toString());
-//    	   return false;
-//       }
-//       //Luodaan käyttäjästä staattinen currentuser luokkaan.
-//       	CurrentUser currentUser = new CurrentUser(user.get(0));
-//       	System.out.print(user.get(0));
-//        alert = new Alert(Alert.AlertType.INFORMATION);
-//        alert.setTitle("Kirjautuminen onnistui!");
-//        alert.setHeaderText("Tervetuloa!");
-//
         return true;
 
     }
@@ -98,7 +72,7 @@ public class UserDAO extends DataAccessObject {
 
         return true;
     }
-    
+
     public boolean save(EventModel event) {
 
         openCurrentSessionWithTransaction().save(event);
@@ -125,25 +99,14 @@ public class UserDAO extends DataAccessObject {
         return false;
     }
 
-//    @SuppressWarnings("deprecation")
-//    public List<WorkProfile> getUsersWorkProfiles(User user) {
-//        @SuppressWarnings("unchecked")
-//        List<WorkProfile> profiles = openCurrentSession().createCriteria(WorkProfile.class)
-//                .add(Restrictions.eq("user_id", user.getId())).list();
-//        closeCurrentSession();
-//        return profiles;
-//    }
     public List<WorkProfile> getUsersWorkProfiles() {
 
         openCurrentSession();
         Query q = session.createQuery("FROM WorkProfile WHERE user_id='" + CurrentUser.getUser().getId() + "'");
+        
         List<WorkProfile> profiles = q.list();
 
         closeCurrentSession();
-
-        for (WorkProfile w : profiles) {
-            System.out.println(w.getNimi());
-        }
 
         return profiles;
 

@@ -21,7 +21,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "user_id")
     private int id;
 
     @Column(name = "username", nullable = false)
@@ -44,6 +44,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<WorkProfile> profiles;
+    
+    @OneToMany(mappedBy = "user")
+    private Set<EventModel> events;
 
     @OneToOne
     @JoinColumn(name = "google_id")
@@ -124,6 +127,22 @@ public class User {
 
     public void setProfiilit(Set<WorkProfile> profiilit) {
         this.profiles = profiilit;
+    }
+
+    public Set<WorkProfile> getProfiles() {
+        return profiles;
+    }
+
+    public void setProfiles(Set<WorkProfile> profiles) {
+        this.profiles = profiles;
+    }
+
+    public Set<EventModel> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<EventModel> events) {
+        this.events = events;
     }
 
     @Override
