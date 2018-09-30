@@ -8,6 +8,7 @@ import org.hibernate.criterion.Restrictions;
 
 import javafx.scene.control.Alert;
 import models.CurrentUser;
+import models.EventModel;
 import models.PasswordHashing;
 import models.User;
 import models.WorkProfile;
@@ -94,6 +95,18 @@ public class UserDAO extends DataAccessObject {
         alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Rekisteröinti");
         alert.setHeaderText("Uuden käyttäjän luominen onnistui!");
+
+        return true;
+    }
+    
+    public boolean save(EventModel event) {
+
+        openCurrentSessionWithTransaction().save(event);
+        closeCurrentSessionWithTransaction();
+
+        alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Onnistui!");
+        alert.setHeaderText("Tapahtuma lisätty");
 
         return true;
     }

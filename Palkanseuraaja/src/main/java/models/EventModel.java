@@ -1,5 +1,6 @@
 package models;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -28,18 +29,19 @@ public class EventModel {
 	@ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
 	@JoinColumn ( name = "user_id")
 	private User user;
+
 	@Column ( name = "beginTime")
 	private Date beginTime;
 	@Column ( name = "endTime")
 	private Date endTime;
 	@Transient
-	private String beginDay;
+	private LocalDate beginDay;
 	@Transient
 	private String beginHour;
 	@Transient
 	private String beginMinute;
 	@Transient
-	private String endDay;
+	private LocalDate endDay;
 	@Transient
 	private String endHour;
 	@Transient
@@ -47,6 +49,7 @@ public class EventModel {
 
 	public EventModel() {
 		user = CurrentUser.getUser();
+
 	}
 	public WorkProfile getWorkProfile() {
 		return workProfile;
@@ -66,41 +69,65 @@ public class EventModel {
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
-	public String getBeginDay() {
+	public LocalDate getBeginDay() {
 		return beginDay;
 	}
-	public void setBeginDay(String beginDay) {
-		this.beginDay = beginDay;
+	public void setBeginDay(LocalDate beginDay) {
+		
+		beginTime = new Date(beginDay.getYear()-1900,beginDay.getMonthValue() - 1,beginDay.getDayOfMonth());
+		System.out.println(beginTime);
+		
+		
 	}
 	public String getBeginHour() {
 		return beginHour;
 	}
 	public void setBeginHour(String beginHour) {
+		beginTime.setHours(Integer.parseInt(beginHour));
+		System.out.println(beginTime);
 		this.beginHour = beginHour;
 	}
 	public String getBeginMinute() {
 		return beginMinute;
 	}
 	public void setBeginMinute(String beginMinute) {
+		beginTime.setMinutes(Integer.parseInt(beginMinute));
 		this.beginMinute = beginMinute;
 	}
-	public String getEndDay() {
+	public LocalDate getEndDay() {
 		return endDay;
 	}
-	public void setEndDay(String endDay) {
-		this.endDay = endDay;
+	public void setEndDay(LocalDate endDay) {
+		endTime = new Date(endDay.getYear(),endDay.getMonthValue() - 1,endDay.getDayOfMonth());
 	}
+	
 	public String getEndHour() {
 		return endHour;
 	}
 	public void setEndHour(String endHour) {
+		endTime.setHours(Integer.parseInt(endHour));
 		this.endHour = endHour;
 	}
 	public String getEndMinute() {
 		return endMinute;
 	}
 	public void setEndMinute(String endMinute) {
+		endTime.setMinutes(Integer.parseInt(endMinute));
 		this.endMinute = endMinute;
 	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	
 
 }

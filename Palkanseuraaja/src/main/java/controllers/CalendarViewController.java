@@ -25,7 +25,6 @@ import models.WorkProfile;
 public class CalendarViewController implements Initializable {
 
     private UserDAO dao;
-    private EventModel eventModel;
     @FXML
     private Color x2;
     @FXML
@@ -68,6 +67,9 @@ public class CalendarViewController implements Initializable {
     private ComboBox<String> endMinute;
     @FXML
     private ComboBox<String> workProfile;
+    
+    private List<WorkProfile> profiles;
+    private Iterator<WorkProfile> list;
 
     public CalendarViewController() {
         dao = new UserDAO();
@@ -97,45 +99,35 @@ public class CalendarViewController implements Initializable {
             }
         }
 
-//      List <WorkProfile> profiles = new ArrayList<WorkProfile>();
-//      profiles = dao.getUsersWorkProfiles(CurrentUser.getUser());
-//        Iterator<WorkProfile> list = profiles.iterator();
-//        while (list.hasNext()) {
-//        	WorkProfile tmp = list.next();
-//        	workProfile.getItems().add(tmp.getNimi());
-//        }
+        profiles = dao.getUsersWorkProfiles();
+        list = profiles.iterator();
+       while (list.hasNext()) {
+       	WorkProfile tmp = list.next();
+       	workProfile.getItems().add(tmp.getNimi());
+       }
     }
 
-    public void init() {
-
-        System.out.print("Alkaako");
-        // Täytetään comboboxit
-        for (int i = 0; i < 59; i++) {
-            startMinute.getItems().add(Integer.toString(i));
-            endMinute.getItems().add(Integer.toString(i));
-
-        }
-        for (int i = 0; i < 24; i++) {
-            if (i < 10) {
-                String tmp = "0" + i;
-                startHour.getItems().add(tmp);
-                endHour.getItems().add(tmp);
-            } else {
-                startHour.getItems().add(Integer.toString(i));
-                endHour.getItems().add(Integer.toString(i));
-            }
-        }
-
-        List<WorkProfile> profiles = dao.getUsersWorkProfiles(CurrentUser.getUser());
-        Iterator<WorkProfile> list = profiles.iterator();
-        while (list.hasNext()) {
-            WorkProfile tmp = list.next();
-            workProfile.getItems().add(tmp.getNimi());
-        }
-    }
-
-    public void saveEvent(ActionEvent even) {
-
-    }
-
+  public void saveEvent(ActionEvent e) {
+	  EventModel eventModel = new EventModel();
+	  eventModel.setBeginDay(startDay.getValue());
+	  eventModel.setEndDay(endDay.getValue());
+	  eventModel.setBeginHour(startHour.getValue());
+	  eventModel.setBeginMinute(startMinute.getValue());
+	  eventModel.setEndHour(endHour.getValue());
+	  eventModel.setEndMinute(endMinute.getValue());
+	  eventModel.setUser(CurrentUser.getUser());
+	  // Etsitään oikea workprofile-olio eventtiin
+	  list = profiles.iterator();
+	  while(list.hasNext()) {
+		  WorkProfile tmp = list.next();
+		  if (tmp.getNimi().equals(workProfile.getValue())) {
+			//  eventModel.setWorkProfile(tmp);
+			  break;
+		  }
+	  }
+	  //System.out.println(eventModel.getBeginTime());
+	  dao.save(eventModel);
+	  
+		  
+  }
 }
