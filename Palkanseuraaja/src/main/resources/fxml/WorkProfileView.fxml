@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -12,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.WorkProfileViewController">
+<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.WorkProfileViewController">
     <children>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
             <children>
@@ -92,12 +93,12 @@
                         </Button>
                         <Label layoutX="20.0" layoutY="127.0" text="Lisän nimi" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets bottom="260.0" left="10.0" />
+                                <Insets bottom="360.0" left="10.0" />
                             </GridPane.margin>
                         </Label>
                         <TextField fx:id="lisanNimi" layoutX="20.0" layoutY="153.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets bottom="200.0" left="10.0" right="150.0" />
+                                <Insets bottom="310.0" left="10.0" right="150.0" />
                             </GridPane.margin>
                         </TextField>
                         <Label alignment="CENTER" layoutX="30.0" layoutY="20.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Luo uusi lisä" textAlignment="CENTER" textFill="#3c3737" wrapText="false" GridPane.columnIndex="1">
@@ -158,11 +159,6 @@
                                 <Insets left="185.0" />
                             </GridPane.margin>
                         </Label>
-                        <ComboBox layoutX="20.0" layoutY="269.0" prefHeight="25.0" prefWidth="111.0" promptText="Maanantai" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                            <GridPane.margin>
-                                <Insets bottom="200.0" left="250.0" />
-                            </GridPane.margin>
-                        </ComboBox>
                         <Label layoutX="578.0" layoutY="238.0" text=":" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="262.0" />
@@ -183,6 +179,46 @@
                                 <Insets left="270.0" />
                             </GridPane.margin>
                         </ComboBox>
+                  <CheckBox mnemonicParsing="false" text="Ma" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="190.0" left="10.0" />
+                     </GridPane.margin>
+                  </CheckBox>
+                  <CheckBox layoutX="420.0" layoutY="214.0" mnemonicParsing="false" text="Ti" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="190.0" left="60.0" />
+                     </GridPane.margin>
+                  </CheckBox>
+                  <CheckBox layoutX="470.0" layoutY="214.0" mnemonicParsing="false" text="Ke" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="190.0" left="100.0" />
+                     </GridPane.margin>
+                  </CheckBox>
+                  <CheckBox layoutX="510.0" layoutY="214.0" mnemonicParsing="false" text="To" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="190.0" left="140.0" />
+                     </GridPane.margin>
+                  </CheckBox>
+                  <CheckBox layoutX="550.0" layoutY="214.0" mnemonicParsing="false" text="Pe" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="190.0" left="180.0" />
+                     </GridPane.margin>
+                  </CheckBox>
+                  <CheckBox layoutX="590.0" layoutY="214.0" mnemonicParsing="false" text="La" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="190.0" left="220.0" />
+                     </GridPane.margin>
+                  </CheckBox>
+                  <CheckBox layoutX="630.0" layoutY="214.0" mnemonicParsing="false" text="Su" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="190.0" left="260.0" />
+                     </GridPane.margin>
+                  </CheckBox>
+                  <Label layoutX="420.0" layoutY="259.0" text="Päivät" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="240.0" left="10.0" />
+                     </GridPane.margin>
+                  </Label>
                     </children>
                 </GridPane>
             </children>
