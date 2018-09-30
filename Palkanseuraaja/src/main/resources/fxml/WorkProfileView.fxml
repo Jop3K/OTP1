@@ -171,12 +171,12 @@
                         </Label>
                         <Label layoutX="400.0" layoutY="106.0" text="Valitse profiili :">
                             <GridPane.margin>
-                                <Insets left="188.0" />
+                                <Insets left="188.0" top="50.0" />
                             </GridPane.margin>
                         </Label>
                         <ComboBox fx:id="profileChooser" editable="true" layoutX="630.0" layoutY="132.0" onAction="#handleProfileChooserClick" prefHeight="25.0" prefWidth="87.0" promptText="Profile">
                             <GridPane.margin>
-                                <Insets left="270.0" />
+                                <Insets left="270.0" top="50.0" />
                             </GridPane.margin>
                         </ComboBox>
                   <CheckBox mnemonicParsing="false" text="Ma" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -226,7 +226,7 @@
                   </Button>
                   <Button mnemonicParsing="false" text="Uusi profiili">
                      <GridPane.margin>
-                        <Insets left="270.0" top="70.0" />
+                        <Insets bottom="30.0" left="270.0" />
                      </GridPane.margin>
                   </Button>
                     </children>
