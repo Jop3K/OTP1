@@ -21,7 +21,7 @@ import javafx.scene.text.Font;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import models.CurrentUser;
-import models.Palkkalisa;
+import models.Extrapay;
 import models.WorkProfile;
 
 /**
@@ -47,6 +47,10 @@ public class WorkProfileViewController implements Initializable {
     private ComboBox<?> muulisa;
     @FXML
     private Button saveProfile;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button newProfile;
     @FXML
     private TextField lisanNimi;
     @FXML
@@ -126,7 +130,7 @@ public class WorkProfileViewController implements Initializable {
 
         if (!(profileChooser.getSelectionModel().isEmpty())) {
             profileChooser.getSelectionModel().getSelectedItem().setNimi(profileName.getText());
-            profileChooser.getSelectionModel().getSelectedItem().setPalkka(Double.parseDouble(tuntipalkka.getText()));
+            profileChooser.getSelectionModel().getSelectedItem().setPay(Double.parseDouble(tuntipalkka.getText()));
             dao.openCurrentSessionWithTransaction().saveOrUpdate(profileChooser.getSelectionModel().getSelectedItem());
             dao.closeCurrentSessionWithTransaction();
         } else {
@@ -139,12 +143,14 @@ public class WorkProfileViewController implements Initializable {
                 workProfile.setUser(CurrentUser.getUser());
 
                 if (!tuntipalkka.getText().isEmpty()) {
-                    workProfile.setPalkka(Double.parseDouble(tuntipalkka.getText()));
+                    workProfile.setPay(Double.parseDouble(tuntipalkka.getText()));
                 }
                 if (!yolisa.getText().isEmpty()) {
-                    Palkkalisa lisa = new Palkkalisa();
-                    lisa.setPalkkalisa(Double.parseDouble(yolisa.getText()));
+                    Extrapay lisa = new Extrapay();
+                    lisa.setExtrapay(Double.parseDouble(yolisa.getText()));
+                    lisa.setWorkProfile(workProfile);
                     dao.openCurrentSessionWithTransaction().saveOrUpdate(lisa);
+                    dao.closeCurrentSessionWithTransaction();
                 }
 
                 dao.openCurrentSessionWithTransaction().saveOrUpdate(workProfile);
@@ -158,8 +164,8 @@ public class WorkProfileViewController implements Initializable {
     @FXML
     private void handleSaveLisaButtonClick(ActionEvent event) {
         if (!lisanNimi.getText().isEmpty()) {
-            Palkkalisa lisa = new Palkkalisa();
-            lisa.setNimi(lisanNimi.getText());
+            Extrapay lisa = new Extrapay();
+            lisa.setName(lisanNimi.getText());
             lisa.setStartHour(Integer.parseInt(lisanStartHour.getSelectionModel().getSelectedItem().toString()));
             lisa.setStartMinute(Integer.parseInt(lisanStartMinute.getSelectionModel().getSelectedItem().toString()));
             lisa.setEndHour(Integer.parseInt(lisanEndHour.getSelectionModel().getSelectedItem().toString()));
@@ -167,17 +173,37 @@ public class WorkProfileViewController implements Initializable {
             System.out.println(lisa);
         }
     }
+    
+    @FXML
+    private void handleNewProfileButtonClick() {
+        profileName.clear();
+        tuntipalkka.clear();
+        yolisa.clear();
+        profileChooser.getSelectionModel().clearSelection();
+        profileName.setDisable(false);
+        tuntipalkka.setDisable(false);
+        yolisa.setDisable(false); 
+    }
 
     @FXML
     private void handleProfileChooserClick(ActionEvent event) {
-        profileName.setText(profileChooser.getSelectionModel().getSelectedItem().getNimi());
-        tuntipalkka.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getPalkka()));
+        profileName.setDisable(true);
+        tuntipalkka.setDisable(true);
+        yolisa.setDisable(true);
+        editButton.setDisable(false);
+    }
+    
+    @FXML
+    private void handleEditButtonClick() {
+        profileName.setDisable(false);
+        tuntipalkka.setDisable(false);
+        yolisa.setDisable(false); 
     }
 
-    private Palkkalisa getYolisa() {
-        Palkkalisa lisa = new Palkkalisa();
-        lisa.setNimi("Yölisä");
-        lisa.setPalkkalisa(Double.parseDouble(yolisa.getText()));
+    private Extrapay getYolisa() {
+        Extrapay lisa = new Extrapay();
+        lisa.setName("Yölisä");
+        lisa.setExtrapay(Double.parseDouble(yolisa.getText()));
         return lisa;
     }
 

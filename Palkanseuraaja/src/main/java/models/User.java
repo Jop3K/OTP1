@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Table(name = "users")
 
 public class User {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -26,24 +26,24 @@ public class User {
 
     @Column(name = "username", nullable = false)
     private String username;
-    
+
     @Column(name = "firstname", nullable = false)
     private String firstname;
-    
+
     @Column(name = "lastname", nullable = false)
     private String lastname;
-    
+
     @Column(name = "password", nullable = false)
     private String password;
-    
+
     @Column(name = "salt", nullable = false)
     private String salt;
-    
+
     @Column(name = "gmail")
     private String gmail;
-    
+
     @OneToMany(mappedBy = "user")
-    private Set<WorkProfile> profiilit;
+    private Set<WorkProfile> profiles;
 
     @OneToOne
     @JoinColumn(name = "google_id")
@@ -51,9 +51,9 @@ public class User {
 
     public User() throws NoSuchAlgorithmException, NoSuchProviderException {
         salt = new PasswordHashing().generateSalt().toString();
-        profiilit = new HashSet<>();
+        profiles = new HashSet<>();
     }
-    
+
     public int getId() {
         return id;
     }
@@ -90,7 +90,6 @@ public class User {
         this.google = google;
     }
 
-    // Setterit jos etunimi, sukunimi ei pakollisia. Muuten laitetaan ne konstruktoriin.
     public void setUsername(String username) {
         this.username = username;
     }
@@ -118,12 +117,18 @@ public class User {
     public void setGoogle(GoogleAccount google) {
         this.google = google;
     }
-    
+
+    public Set<WorkProfile> getProfiilit() {
+        return profiles;
+    }
+
+    public void setProfiilit(Set<WorkProfile> profiilit) {
+        this.profiles = profiilit;
+    }
 
     @Override
     public String toString() {
         return "Käyttäjä: " + username + "\nEtunimi: " + firstname + "\nSukunimi: " + lastname;
     }
-
 
 }

@@ -99,6 +99,7 @@ public class RegisterController {
                         LoginModel loginModel = new LoginModel();
                         LoginController loginViewController = new LoginController(loginView, loginModel, viewChanger);
                         
+                        viewChanger.viewBuilder(loginView.getView());
                         
                     } else {
                         //Ilmoitetaan käyttäjätunnuksen olevan varattu
