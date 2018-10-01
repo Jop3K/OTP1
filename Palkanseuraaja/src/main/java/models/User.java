@@ -44,9 +44,6 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<WorkProfile> profiles;
-    
-    @OneToMany(mappedBy = "user")
-    private Set<EventModel> events;
 
     @OneToOne
     @JoinColumn(name = "google_id")
@@ -137,13 +134,6 @@ public class User {
         this.profiles = profiles;
     }
 
-    public Set<EventModel> getEvents() {
-        return events;
-    }
-
-    public void setEvents(Set<EventModel> events) {
-        this.events = events;
-    }
 
     @Override
     public String toString() {

@@ -103,7 +103,7 @@ public class UserDAO extends DataAccessObject {
 
         openCurrentSession();
         Query q = session.createQuery("FROM WorkProfile WHERE user_id='" + CurrentUser.getUser().getId() + "'");
-        
+
         List<WorkProfile> profiles = q.list();
 
         closeCurrentSession();

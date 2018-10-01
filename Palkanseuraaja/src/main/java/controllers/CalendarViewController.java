@@ -76,8 +76,6 @@ public class CalendarViewController implements Initializable {
 
     private List<WorkProfile> profileList;
 
-    private TabsViewController tabsViewController;
-
     public CalendarViewController() {
         dao = new UserDAO();
     }
@@ -109,7 +107,7 @@ public class CalendarViewController implements Initializable {
         dao = new UserDAO();
         dao.openCurrentSession();
         
-        loadWorkProfiles();
+        loadWorkProfilesToProfileChooser();
         
             }
 
@@ -128,7 +126,7 @@ public class CalendarViewController implements Initializable {
         dao.save(eventModel);
     }
 
-    public void loadWorkProfiles() {
+    public void loadWorkProfilesToProfileChooser() {
         
         profileList = new UserDAO().getUsersWorkProfiles();
 

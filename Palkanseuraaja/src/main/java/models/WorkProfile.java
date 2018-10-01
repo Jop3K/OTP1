@@ -34,6 +34,9 @@ public class WorkProfile {
 
     @OneToMany(mappedBy = "workProfile")
     private Set<Extrapay> extrapays;
+    
+    @OneToMany(mappedBy = "workProfile")
+    private Set<EventModel> events;
 
     public WorkProfile() {
     }
@@ -77,6 +80,31 @@ public class WorkProfile {
     public void setPalkkalisat(Set<Extrapay> extrapays) {
         this.extrapays = extrapays;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Set<Extrapay> getExtrapays() {
+        return extrapays;
+    }
+
+    public void setExtrapays(Set<Extrapay> extrapays) {
+        this.extrapays = extrapays;
+    }
+
+    public Set<EventModel> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<EventModel> events) {
+        this.events = events;
+    }
+    
     
 
 }

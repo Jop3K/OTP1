@@ -24,12 +24,8 @@ public class EventModel {
     private int id;
 
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = WorkProfile.class)
-    @JoinColumn(name = "workProfile_id")
+    @JoinColumn(name = "workprofile_id")
     private WorkProfile workProfile;
-
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
-    @JoinColumn(name = "user_id")
-    private User user;
 
     @Column(name = "beginTime")
     private Date beginTime;
@@ -110,7 +106,7 @@ public class EventModel {
     }
 
     public void setEndDay(LocalDate endDay) {
-        endTime = new Date(endDay.getYear(), endDay.getMonthValue() - 1, endDay.getDayOfMonth());
+        endTime = new Date(endDay.getYear()-1900, endDay.getMonthValue() - 1, endDay.getDayOfMonth());
     }
 
     public String getEndHour() {
@@ -139,12 +135,5 @@ public class EventModel {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
 }
