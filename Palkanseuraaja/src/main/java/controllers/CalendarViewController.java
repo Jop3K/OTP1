@@ -119,11 +119,28 @@ public class CalendarViewController implements Initializable {
         loadWorkProfilesToProfileChooser();
         
             }
-
+    public boolean isValid() {
+    	if(startDay.getValue() == null || endDay.getValue() == null || startHour.getSelectionModel().isEmpty() || endHour.getSelectionModel().isEmpty() || startMinute.getSelectionModel().isEmpty() || endMinute.getSelectionModel().isEmpty() || profileChooser.getSelectionModel().isEmpty())
+    	 {
+    		return false;
+ 
+    	} else {
+    		return true;
+    	}
+    	//startDay != null || endDay != null || startHour != null || endHour != null || startMinute != null || endMinute != null || profileChooser != null;
+    }
     public void saveEvent(ActionEvent e) {
     	 LocalDate startDate = startDay.getValue();
     	 LocalDate endDate = endDay.getValue();
         EventModel eventModel = new EventModel();
+        
+        try {
+        
+        if(isValid() == false) {
+        	JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
+			return;
+        }
+        
         if(startDate.isBefore(endDate)) {
         eventModel.setBeginDay(startDay.getValue());
         eventModel.setEndDay(endDay.getValue());
@@ -154,7 +171,18 @@ public class CalendarViewController implements Initializable {
 
         eventModel.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
 
+        }catch (Exception err) {
+        	JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
+			return;
+        }
+        
+        if(isValid() == true) {
+        	JOptionPane.showMessageDialog(null, "Luonti onnistui!");
         dao.save(eventModel);
+        } else {
+        	JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
+			return;
+        }
     }
 
     public void loadWorkProfilesToProfileChooser() {
