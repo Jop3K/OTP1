@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -15,7 +21,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CalendarViewController">
+<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CalendarViewController">
     <children>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
             <children>
@@ -163,8 +169,9 @@
                         </Label>
                   <TableView fx:id="eventTable" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" GridPane.rowSpan="4">
                     <columns>
-                      <TableColumn prefWidth="173.0" resizable="false" text="Työprofiili" />
-                      <TableColumn prefWidth="154.0" resizable="false" text="Aika" />
+                      <TableColumn fx:id="workProfileColumn" prefWidth="109.0" resizable="false" text="Työprofiili" />
+                      <TableColumn fx:id="sartColumn" minWidth="0.0" prefWidth="97.0" resizable="false" text="Alkaa" />
+                        <TableColumn fx:id="endColumn" prefWidth="121.0" text="Loppuu" />
                     </columns>
                      <GridPane.margin>
                         <Insets left="20.0" right="20.0" />

@@ -24,6 +24,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import models.Calculation;
 import models.CurrentCalendarViewController;
 import models.CurrentUser;
 import models.EventModel;
@@ -183,6 +184,8 @@ public class CalendarViewController implements Initializable {
         	JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
 			return;
         }
+        
+        System.out.print(Calculation.Calculate(eventModel));
     }
 
     public void loadWorkProfilesToProfileChooser() {
