@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 
 import javafx.scene.text.Font;
@@ -57,13 +58,13 @@ public class WorkProfileViewController implements Initializable {
     @FXML
     private Font x121;
     @FXML
-    private ComboBox<?> lisanEndHour;
+    private ComboBox<String> setEndHour;
     @FXML
-    private ComboBox<?> lisanStartHour;
+    private ComboBox<String> setBeginHour;
     @FXML
-    private ComboBox<?> lisanEndMinute;
+    private ComboBox<String> setEndMinute;
     @FXML
-    private ComboBox<?> lisanStartMinute;
+    private ComboBox<String> setBeginMinute;
     @FXML
     private ComboBox<WorkProfile> profileChooser;
 
@@ -154,6 +155,7 @@ public class WorkProfileViewController implements Initializable {
                 if (!yolisa.getText().isEmpty()) {
 
                     Extrapay lisa = new Extrapay();
+                    lisa.setName("Yölisä");
                     lisa.setExtrapay(Double.parseDouble(yolisa.getText()));
                     lisa.setWorkProfile(workProfile);
 
@@ -166,25 +168,39 @@ public class WorkProfileViewController implements Initializable {
                 dao.closeCurrentSessionWithTransaction();
 
                 profileChooser.getItems().add(workProfile);
-                
+
                 CurrentCalendarViewController.getCalendarViewController().loadWorkProfilesToProfileChooser();
+
+                profileName.setDisable(true);
+                tuntipalkka.setDisable(true);
+                yolisa.setDisable(true);
+                editButton.setDisable(false);
 
             }
         }
     }
 
-    //NOT READY!!
     @FXML
     private void handleSaveLisaButtonClick(ActionEvent event) {
-//        if (!lisanNimi.getText().isEmpty()) {
-//            Extrapay lisa = new Extrapay();
-//            lisa.setName(lisanNimi.getText());
-//            lisa.setStartHour(Integer.parseInt(lisanStartHour.getSelectionModel().getSelectedItem().toString()));
-//            lisa.setStartMinute(Integer.parseInt(lisanStartMinute.getSelectionModel().getSelectedItem().toString()));
-//            lisa.setEndHour(Integer.parseInt(lisanEndHour.getSelectionModel().getSelectedItem().toString()));
-//            lisa.setEndMinute(Integer.parseInt(lisanEndMinute.getSelectionModel().getSelectedItem().toString()));
-//            System.out.println(lisa);
-//        }
+        if (!profileChooser.getSelectionModel().isEmpty()) {
+
+            if (!lisanNimi.getText().isEmpty()) {
+                Extrapay lisa = new Extrapay();
+                lisa.setName(lisanNimi.getText());
+                lisa.setBeginHour(setBeginHour.getSelectionModel().getSelectedItem());
+                lisa.setBeginMinute(setBeginMinute.getSelectionModel().getSelectedItem());
+                lisa.setEndHour(setEndHour.getSelectionModel().getSelectedItem());
+                lisa.setEndMinute(setEndMinute.getSelectionModel().getSelectedItem());
+                lisa.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
+                dao.save(lisa);
+                System.out.println(lisa);
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Virhe!");
+            alert.setHeaderText("Valitse työprofiili");
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -241,13 +257,26 @@ public class WorkProfileViewController implements Initializable {
 
         profileName.setText(profileChooser.getSelectionModel().getSelectedItem().getNimi());
         tuntipalkka.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getPay()));
-        // yolisa.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem()));
+        if (getYolisa() != null) {
+            yolisa.setText(Double.toString(getYolisa().getExtrapay()));
+        }
         profileName.setDisable(true);
         tuntipalkka.setDisable(true);
         yolisa.setDisable(true);
 
         editButton.setText("Muokkaa");
 
+    }
+
+    private Extrapay getYolisa() {
+        if (profileChooser.getSelectionModel().getSelectedItem().getPalkkalisat() != null) {
+            for (Extrapay e : profileChooser.getSelectionModel().getSelectedItem().getExtrapays()) {
+                if (e.getName().equals("Yölisä")) {
+                    return e;
+                }
+            }
+        }
+        return null;
     }
 
 }

@@ -109,7 +109,7 @@
                                 <Insets left="20.0" />
                             </GridPane.margin>
                         </Label>
-                        <ComboBox fx:id="lisanEndHour" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <ComboBox fx:id="setEndHour" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="200.0" />
                             </GridPane.margin>
@@ -129,12 +129,12 @@
                                 <Insets bottom="100.0" left="10.0" />
                             </GridPane.margin>
                         </Label>
-                        <ComboBox fx:id="lisanStartHour" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <ComboBox fx:id="setBeginHour" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="50.0" />
                             </GridPane.margin>
                         </ComboBox>
-                        <ComboBox fx:id="lisanEndMinute" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <ComboBox fx:id="setEndMinute" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="270.0" />
                             </GridPane.margin>
@@ -149,7 +149,7 @@
                                 <Insets bottom="50.0" left="140.0" />
                             </GridPane.margin>
                         </Label>
-                        <ComboBox fx:id="lisanStartMinute" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <ComboBox fx:id="setBeginMinute" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="120.0" />
                             </GridPane.margin>

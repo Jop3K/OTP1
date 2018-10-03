@@ -17,28 +17,29 @@ import javax.persistence.Table;
 
 public class Extrapay {
     
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "extrapay_id")
     private int id;
     
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
     
     @Column(name = "extrapay")
     private double extrapay;
     
-    @Column(name = "starthour")
-    private int startHour;
+    @Column(name = "beginhour")
+    private String beginHour;
     
-    @Column(name = "startminute")
-    private int startMinute;
+    @Column(name = "beginminute")
+    private String beginMinute;
     
     @Column(name = "endhour")
-    private int endHour;
+    private String endHour;
     
     @Column(name = "endminute")
-    private int endMinute;
+    private String endMinute;
     
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = WorkProfile.class)
     @JoinColumn(name = "workprofile_id")
@@ -72,35 +73,35 @@ public class Extrapay {
         this.extrapay = extrapay;
     }
 
-    public int getStartHour() {
-        return startHour;
+    public String getBeginHour() {
+        return beginHour;
     }
 
-    public void setStartHour(int startHour) {
-        this.startHour = startHour;
+    public void setBeginHour(String startHour) {
+        this.beginHour = startHour;
     }
 
-    public int getStartMinute() {
-        return startMinute;
+    public String getBeginMinute() {
+        return beginMinute;
     }
 
-    public void setStartMinute(int startMinute) {
-        this.startMinute = startMinute;
+    public void setBeginMinute(String startMinute) {
+        this.beginMinute = startMinute;
     }
 
-    public int getEndHour() {
+    public String getEndHour() {
         return endHour;
     }
 
-    public void setEndHour(int endHour) {
+    public void setEndHour(String endHour) {
         this.endHour = endHour;
     }
 
-    public int getEndMinute() {
+    public String getEndMinute() {
         return endMinute;
     }
 
-    public void setEndMinute(int endMinute) {
+    public void setEndMinute(String endMinute) {
         this.endMinute = endMinute;
     }
 
@@ -114,7 +115,7 @@ public class Extrapay {
 
     @Override
     public String toString() {
-        return name + ", startTime: " + startHour + ":" + startMinute + " , endTime: " + endHour + ":" + endMinute;
+        return name + ", startTime: " + beginHour + ":" + beginMinute + " , endTime: " + endHour + ":" + endMinute;
     }
     
     
