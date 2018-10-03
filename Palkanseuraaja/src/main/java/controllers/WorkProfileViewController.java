@@ -24,7 +24,7 @@ import javafx.util.StringConverter;
 import models.CurrentCalendarViewController;
 import models.CurrentUser;
 import models.CurrentWorkProfile;
-import models.Extrapay;
+import models.ExtraPay;
 import models.WorkProfile;
 import org.hibernate.Hibernate;
 
@@ -48,7 +48,7 @@ public class WorkProfileViewController implements Initializable {
     @FXML
     private TextField yolisa;
     @FXML
-    private ComboBox<Extrapay> extrapayChooser;
+    private ComboBox<ExtraPay> extrapayChooser;
     @FXML
     private Button saveProfile;
     @FXML
@@ -74,7 +74,7 @@ public class WorkProfileViewController implements Initializable {
 
     private List<WorkProfile> profileList;
 
-    private List<Extrapay> extrapayList;
+    private List<ExtraPay> extrapayList;
 
     public CurrentWorkProfile currentWorkProfile;
 
@@ -142,9 +142,23 @@ public class WorkProfileViewController implements Initializable {
 
         if (!profileChooser.getSelectionModel().isEmpty()) {
 
-            profileChooser.getSelectionModel().getSelectedItem().setNimi(profileName.getText());
-            profileChooser.getSelectionModel().getSelectedItem().setPay(Double.parseDouble(tuntipalkka.getText()));
+            if (!profileName.getText().isEmpty()) {
+                profileChooser.getSelectionModel().getSelectedItem().setNimi(profileName.getText());
+            }
+            if (!tuntipalkka.getText().isEmpty()) {
+                profileChooser.getSelectionModel().getSelectedItem().setPay(Double.parseDouble(tuntipalkka.getText()));
+            }
+            if (!yolisa.getText().isEmpty()) {
+                profileChooser.getSelectionModel().getSelectedItem().getYolisa().setExtraPay(Double.parseDouble(yolisa.getText()));
+                dao.save(profileChooser.getSelectionModel().getSelectedItem().getYolisa());
+            }
+            if (!extrapay.getText().isEmpty()) {
+                extrapayChooser.getSelectionModel().getSelectedItem().setExtraPay(Double.parseDouble(extrapay.getText()));
+                dao.save(extrapayChooser.getSelectionModel().getSelectedItem());
+            }
 
+            disableFields();
+            
             dao.openCurrentSessionWithTransaction().saveOrUpdate(profileChooser.getSelectionModel().getSelectedItem());
             dao.closeCurrentSessionWithTransaction();
 
@@ -162,13 +176,20 @@ public class WorkProfileViewController implements Initializable {
                 }
                 if (!yolisa.getText().isEmpty()) {
 
-                    Extrapay lisa = new Extrapay();
+                    ExtraPay lisa = new ExtraPay();
                     lisa.setName("Yölisä");
-                    lisa.setExtrapay(Double.parseDouble(yolisa.getText()));
+                    lisa.setExtraPay(Double.parseDouble(yolisa.getText()));
                     lisa.setWorkProfile(workProfile);
 
-                    dao.openCurrentSessionWithTransaction().saveOrUpdate(lisa);
-                    dao.closeCurrentSessionWithTransaction();
+                    dao.save(lisa);
+
+                }
+
+                if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
+
+                    extrapayChooser.getSelectionModel().getSelectedItem().setExtraPay(Double.parseDouble(extrapay.getText()));
+
+                    dao.save(extrapayChooser.getSelectionModel().getSelectedItem());
 
                 }
 
@@ -179,9 +200,7 @@ public class WorkProfileViewController implements Initializable {
 
                 CurrentCalendarViewController.getCalendarViewController().loadWorkProfilesToProfileChooser();
 
-                profileName.setDisable(true);
-                tuntipalkka.setDisable(true);
-                yolisa.setDisable(true);
+                disableFields();
                 editButton.setDisable(false);
 
             }
@@ -193,7 +212,7 @@ public class WorkProfileViewController implements Initializable {
         if (!profileChooser.getSelectionModel().isEmpty()) {
 
             if (!lisanNimi.getText().isEmpty()) {
-                Extrapay lisa = new Extrapay();
+                ExtraPay lisa = new ExtraPay();
                 lisa.setName(lisanNimi.getText());
                 lisa.setBeginHour(setBeginHour.getSelectionModel().getSelectedItem());
                 lisa.setBeginMinute(setBeginMinute.getSelectionModel().getSelectedItem());
@@ -201,7 +220,7 @@ public class WorkProfileViewController implements Initializable {
                 lisa.setEndMinute(setEndMinute.getSelectionModel().getSelectedItem());
                 lisa.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
                 dao.save(lisa);
-                System.out.println(lisa);
+                extrapayChooser.getItems().add(lisa);
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -209,18 +228,16 @@ public class WorkProfileViewController implements Initializable {
             alert.setHeaderText("Valitse työprofiili");
             alert.showAndWait();
         }
+
     }
 
     @FXML
     private void handleNewProfileButtonClick() {
 
         clearTextFields();
+        enableFields();
 
         profileChooser.getSelectionModel().clearSelection();
-
-        profileName.setDisable(false);
-        tuntipalkka.setDisable(false);
-        yolisa.setDisable(false);
 
         editButton.setText("Muokkaa");
         editButton.setDisable(true);
@@ -242,7 +259,7 @@ public class WorkProfileViewController implements Initializable {
 
     @FXML
     private void handleExtrapayChooserClick(ActionEvent event) {
-        //TODO
+        extrapay.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtraPay()));
     }
 
     @FXML
@@ -250,10 +267,7 @@ public class WorkProfileViewController implements Initializable {
 
         if (editButton.getText().equals("Muokkaa")) {
 
-            profileName.setDisable(false);
-            tuntipalkka.setDisable(false);
-            yolisa.setDisable(false);
-            extrapay.setDisable(false);
+            enableFields();
 
             editButton.setText("Peruuta");
 
@@ -261,38 +275,36 @@ public class WorkProfileViewController implements Initializable {
 
             loadValuesToTextFields();
 
+            disableFields();
+
         }
 
     }
 
     private void loadValuesToTextFields() {
-        
-        clearTextFields();
 
         currentWorkProfile = new CurrentWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
 
-        profileName.setDisable(true);
-        tuntipalkka.setDisable(true);
-        yolisa.setDisable(true);
-        extrapay.setDisable(true);
+        clearTextFields();
+        disableFields();
 
         editButton.setText("Muokkaa");
 
         profileName.setText(profileChooser.getSelectionModel().getSelectedItem().getNimi());
         tuntipalkka.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getPay()));
-        if (profileChooser.getSelectionModel().getSelectedItem().getExtrapays() != null) {
+        if (profileChooser.getSelectionModel().getSelectedItem().getExtraPays() != null) {
             if (profileChooser.getSelectionModel().getSelectedItem().getYolisa() != null) {
-                yolisa.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getYolisa().getExtrapay()));
+                yolisa.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getYolisa().getExtraPay()));
             }
         }
         if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
-            extrapay.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtrapay()));
+            extrapay.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtraPay()));
         }
 
         loadValuesToExtrapayChooser();
 
     }
-    
+
     private void clearTextFields() {
         profileName.clear();
         tuntipalkka.clear();
@@ -300,28 +312,40 @@ public class WorkProfileViewController implements Initializable {
         extrapay.clear();
     }
 
+    private void disableFields() {
+        profileName.setDisable(true);
+        tuntipalkka.setDisable(true);
+        yolisa.setDisable(true);
+        extrapay.setDisable(true);
+    }
+
+    private void enableFields() {
+        profileName.setDisable(false);
+        tuntipalkka.setDisable(false);
+        yolisa.setDisable(false);
+        extrapay.setDisable(false);
+    }
+
     private void loadValuesToExtrapayChooser() {
-        
+
         extrapayChooser.getItems().clear();
 
-        extrapayList = dao.getProfilesExtrapays();
+        extrapayList = dao.getProfilesExtraPays();
 
         if (!extrapayList.isEmpty()) {
-            for (Extrapay e : extrapayList) {
-                System.out.println(e);
+            for (ExtraPay e : extrapayList) {
                 extrapayChooser.getItems().add(e);
             }
         }
 
         if (!extrapayList.isEmpty()) {
 
-            extrapayChooser.setCellFactory(
-                    new Callback<ListView<Extrapay>, ListCell<Extrapay>>() {
+            extrapayChooser.setCellFactory(new Callback<ListView<ExtraPay>, ListCell<ExtraPay>>() {
                 @Override
-                public ListCell<Extrapay> call(ListView<Extrapay> w) {
-                    ListCell cell = new ListCell<Extrapay>() {
+                public ListCell<ExtraPay> call(ListView<ExtraPay> w) {
+                    ListCell cell = new ListCell<ExtraPay>() {
                         @Override
-                        protected void updateItem(Extrapay item, boolean empty) {
+                        protected void updateItem(ExtraPay item, boolean empty) {
                             super.updateItem(item, empty);
                             if (empty) {
                                 setText("");
@@ -334,12 +358,11 @@ public class WorkProfileViewController implements Initializable {
                 }
             });
 
-            extrapayChooser.setConverter(
-                    new StringConverter<Extrapay>() {
-                private Map<String, Extrapay> map = new HashMap<>();
+            extrapayChooser.setConverter(new StringConverter<ExtraPay>() {
+                private Map<String, ExtraPay> map = new HashMap<>();
 
                 @Override
-                public String toString(Extrapay w) {
+                public String toString(ExtraPay w) {
                     if (w != null) {
                         String str = w.getName();
                         map.put(w.getName(), w);
@@ -352,7 +375,7 @@ public class WorkProfileViewController implements Initializable {
 
                 //  TODO
                 @Override
-                public Extrapay fromString(String string) {
+                public ExtraPay fromString(String string) {
                     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
             });

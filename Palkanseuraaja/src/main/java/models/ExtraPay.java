@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Table(name = "extrapay")
 
 
-public class Extrapay {
+public class ExtraPay {
     
     
     @Id
@@ -46,7 +46,7 @@ public class Extrapay {
     private WorkProfile workProfile;
     
 
-    public Extrapay() {
+    public ExtraPay() {
     }
 
     public int getId() {
@@ -65,11 +65,11 @@ public class Extrapay {
         this.name = name;
     }
 
-    public double getExtrapay() {
+    public double getExtraPay() {
         return extrapay;
     }
 
-    public void setExtrapay(double extrapay) {
+    public void setExtraPay(double extrapay) {
         this.extrapay = extrapay;
     }
 
@@ -111,11 +111,6 @@ public class Extrapay {
 
     public void setWorkProfile(WorkProfile workProfile) {
         this.workProfile = workProfile;
-    }
-
-    @Override
-    public String toString() {
-        return name + ", startTime: " + beginHour + ":" + beginMinute + " , endTime: " + endHour + ":" + endMinute;
     }
     
     
