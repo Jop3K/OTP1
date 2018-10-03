@@ -60,6 +60,8 @@ public class WorkProfileViewController implements Initializable {
     @FXML
     private Font x121;
     @FXML
+    private TextField extrapay;
+    @FXML
     private ComboBox<String> setEndHour;
     @FXML
     private ComboBox<String> setBeginHour;
@@ -73,6 +75,8 @@ public class WorkProfileViewController implements Initializable {
     private List<WorkProfile> profileList;
 
     private List<Extrapay> extrapayList;
+
+    public CurrentWorkProfile currentWorkProfile;
 
     /**
      * Initializes the controller class.
@@ -171,8 +175,6 @@ public class WorkProfileViewController implements Initializable {
                 dao.openCurrentSessionWithTransaction().saveOrUpdate(workProfile);
                 dao.closeCurrentSessionWithTransaction();
 
-                CurrentWorkProfile currentWorkProfile = new CurrentWorkProfile(workProfile);
-
                 profileChooser.getItems().add(workProfile);
 
                 CurrentCalendarViewController.getCalendarViewController().loadWorkProfilesToProfileChooser();
@@ -212,9 +214,7 @@ public class WorkProfileViewController implements Initializable {
     @FXML
     private void handleNewProfileButtonClick() {
 
-        profileName.clear();
-        tuntipalkka.clear();
-        yolisa.clear();
+        clearTextFields();
 
         profileChooser.getSelectionModel().clearSelection();
 
@@ -241,6 +241,11 @@ public class WorkProfileViewController implements Initializable {
     }
 
     @FXML
+    private void handleExtrapayChooserClick(ActionEvent event) {
+        //TODO
+    }
+
+    @FXML
     private void handleEditButtonClick() {
 
         if (editButton.getText().equals("Muokkaa")) {
@@ -248,6 +253,7 @@ public class WorkProfileViewController implements Initializable {
             profileName.setDisable(false);
             tuntipalkka.setDisable(false);
             yolisa.setDisable(false);
+            extrapay.setDisable(false);
 
             editButton.setText("Peruuta");
 
@@ -260,10 +266,15 @@ public class WorkProfileViewController implements Initializable {
     }
 
     private void loadValuesToTextFields() {
+        
+        clearTextFields();
+
+        currentWorkProfile = new CurrentWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
 
         profileName.setDisable(true);
         tuntipalkka.setDisable(true);
         yolisa.setDisable(true);
+        extrapay.setDisable(true);
 
         editButton.setText("Muokkaa");
 
@@ -274,59 +285,79 @@ public class WorkProfileViewController implements Initializable {
                 yolisa.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getYolisa().getExtrapay()));
             }
         }
+        if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
+            extrapay.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtrapay()));
+        }
+
+        loadValuesToExtrapayChooser();
+
+    }
+    
+    private void clearTextFields() {
+        profileName.clear();
+        tuntipalkka.clear();
+        yolisa.clear();
+        extrapay.clear();
+    }
+
+    private void loadValuesToExtrapayChooser() {
+        
+        extrapayChooser.getItems().clear();
 
         extrapayList = dao.getProfilesExtrapays();
 
         if (!extrapayList.isEmpty()) {
             for (Extrapay e : extrapayList) {
+                System.out.println(e);
                 extrapayChooser.getItems().add(e);
             }
         }
 
-        extrapayChooser.setCellFactory(
-                new Callback<ListView<Extrapay>, ListCell<Extrapay>>() {
-            @Override
-            public ListCell<Extrapay> call(ListView<Extrapay> w) {
-                ListCell cell = new ListCell<Extrapay>() {
-                    @Override
-                    protected void updateItem(Extrapay item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setText("");
-                        } else {
-                            setText(item.getName());
+        if (!extrapayList.isEmpty()) {
+
+            extrapayChooser.setCellFactory(
+                    new Callback<ListView<Extrapay>, ListCell<Extrapay>>() {
+                @Override
+                public ListCell<Extrapay> call(ListView<Extrapay> w) {
+                    ListCell cell = new ListCell<Extrapay>() {
+                        @Override
+                        protected void updateItem(Extrapay item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                setText("");
+                            } else {
+                                setText(item.getName());
+                            }
                         }
+                    };
+                    return cell;
+                }
+            });
+
+            extrapayChooser.setConverter(
+                    new StringConverter<Extrapay>() {
+                private Map<String, Extrapay> map = new HashMap<>();
+
+                @Override
+                public String toString(Extrapay w) {
+                    if (w != null) {
+                        String str = w.getName();
+                        map.put(w.getName(), w);
+                        return str;
+                    } else {
+                        return "";
                     }
-                };
-                return cell;
-            }
-        });
 
-        extrapayChooser.setConverter(
-                new StringConverter<Extrapay>() {
-            private Map<String, Extrapay> map = new HashMap<>();
-
-            @Override
-            public String toString(Extrapay w) {
-                if (w != null) {
-                    String str = w.getName();
-                    map.put(w.getName(), w);
-                    return str;
-                } else {
-                    return "";
                 }
 
-            }
+                //  TODO
+                @Override
+                public Extrapay fromString(String string) {
+                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                }
+            });
 
-            //  TODO
-            @Override
-            public Extrapay fromString(String string) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        });
+        }
 
     }
-
-}
-
 }
