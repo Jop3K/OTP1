@@ -13,6 +13,7 @@ import models.EventModel;
 import models.ExtraPay;
 import models.PasswordHashing;
 import models.User;
+import models.WeekDays;
 import models.WorkProfile;
 import org.hibernate.query.Query;
 
@@ -90,6 +91,14 @@ public class UserDAO extends DataAccessObject {
     public boolean save(ExtraPay extrapay) {
 
         openCurrentSessionWithTransaction().saveOrUpdate(extrapay);
+        closeCurrentSessionWithTransaction();
+
+        return true;
+    }
+    
+    public boolean save(WeekDays weekdays) {
+
+        openCurrentSessionWithTransaction().saveOrUpdate(weekdays);
         closeCurrentSessionWithTransaction();
 
         return true;

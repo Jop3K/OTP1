@@ -54,5 +54,6 @@ Contributor(s):
     <mapping class="application.models.GoogleAccount"/>
     <mapping class="application.models.ExtraPay"/>
     <mapping class="application.models.EventModel"/>
+    <mapping class="application.models.WeekDays"/>
   </session-factory>
 </hibernate-configuration>

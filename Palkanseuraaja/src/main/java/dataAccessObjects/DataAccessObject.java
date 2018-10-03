@@ -11,6 +11,7 @@ import models.EventModel;
 import models.GoogleAccount;
 import models.ExtraPay;
 import models.User;
+import models.WeekDays;
 import models.WorkProfile;
 
 public class DataAccessObject {
@@ -27,7 +28,8 @@ public class DataAccessObject {
         .addAnnotatedClass(GoogleAccount.class)
         .addAnnotatedClass(WorkProfile.class)
         .addAnnotatedClass(ExtraPay.class)
-        .addAnnotatedClass(EventModel.class);
+        .addAnnotatedClass(EventModel.class)
+        .addAnnotatedClass(WeekDays.class);
         ServiceRegistry reg = new StandardServiceRegistryBuilder().applySettings(con.getProperties()).build();
         SessionFactory sf = con.buildSessionFactory(reg);
 

@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 
 import javafx.scene.text.Font;
@@ -25,6 +26,7 @@ import models.CurrentCalendarViewController;
 import models.CurrentUser;
 import models.CurrentWorkProfile;
 import models.ExtraPay;
+import models.WeekDays;
 import models.WorkProfile;
 import org.hibernate.Hibernate;
 
@@ -71,6 +73,20 @@ public class WorkProfileViewController implements Initializable {
     private ComboBox<String> setBeginMinute;
     @FXML
     private ComboBox<WorkProfile> profileChooser;
+    @FXML
+    private CheckBox monday;
+    @FXML
+    private CheckBox tuesday;
+    @FXML
+    private CheckBox wednesday;
+    @FXML
+    private CheckBox thursday;
+    @FXML
+    private CheckBox friday;
+    @FXML
+    private CheckBox saturday;
+    @FXML
+    private CheckBox sunday;
 
     private List<WorkProfile> profileList;
 
@@ -218,7 +234,33 @@ public class WorkProfileViewController implements Initializable {
                 lisa.setBeginMinute(setBeginMinute.getSelectionModel().getSelectedItem());
                 lisa.setEndHour(setEndHour.getSelectionModel().getSelectedItem());
                 lisa.setEndMinute(setEndMinute.getSelectionModel().getSelectedItem());
+                
+                WeekDays weekdays = new WeekDays();
+                
+                if (monday.isSelected()) {
+                    weekdays.setMonday(true);
+                }
+                if (tuesday.isSelected()) {
+                    weekdays.setTuesday(true);
+                }
+                if (wednesday.isSelected()) {
+                    weekdays.setWednesday(true);
+                }
+                if (thursday.isSelected()) {
+                    weekdays.setThursday(true);
+                }if (friday.isSelected()) {
+                    weekdays.setFriday(true);
+                }if (saturday.isSelected()) {
+                    weekdays.setSaturday(true);
+                }
+                if (sunday.isSelected()) {
+                    weekdays.setSunday(true);
+                }
+
                 lisa.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
+                lisa.setWeekdays(weekdays);
+                weekdays.setExtrapay(lisa);
+                dao.save(weekdays);
                 dao.save(lisa);
                 extrapayChooser.getItems().add(lisa);
             }

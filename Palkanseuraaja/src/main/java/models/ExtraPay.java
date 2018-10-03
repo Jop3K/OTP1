@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -44,6 +45,10 @@ public class ExtraPay {
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = WorkProfile.class)
     @JoinColumn(name = "workprofile_id")
     private WorkProfile workProfile;
+    
+    @OneToOne(cascade = CascadeType.ALL, targetEntity = WeekDays.class)
+    @JoinColumn(name = "weekdays_id")
+    private WeekDays weekdays;
     
 
     public ExtraPay() {
@@ -112,6 +117,14 @@ public class ExtraPay {
     public void setWorkProfile(WorkProfile workProfile) {
         this.workProfile = workProfile;
     }
-    
+
+    public WeekDays getWeekdays() {
+        return weekdays;
+    }
+
+    public void setWeekdays(WeekDays weekdays) {
+        this.weekdays = weekdays;
+    }
+
     
 }
