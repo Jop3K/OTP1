@@ -8,6 +8,7 @@ import org.hibernate.criterion.Restrictions;
 
 import javafx.scene.control.Alert;
 import models.CurrentUser;
+import models.CurrentWorkProfile;
 import models.EventModel;
 import models.Extrapay;
 import models.PasswordHashing;
@@ -123,6 +124,17 @@ public class UserDAO extends DataAccessObject {
 
         return profiles;
 
+    }
+    
+    public List<Extrapay> getProfilesExtrapays() {
+        openCurrentSession();
+        Query q = session.createQuery("FROM Extrapay WHERE workprofile_id='" + CurrentWorkProfile.getWorkProfile().getId() + "'");
+
+        List<Extrapay> profiles = q.list();
+
+        closeCurrentSession();
+
+        return profiles;
     }
 
     public Alert getAlert() {

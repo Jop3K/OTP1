@@ -23,8 +23,10 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 import models.CurrentCalendarViewController;
 import models.CurrentUser;
+import models.CurrentWorkProfile;
 import models.Extrapay;
 import models.WorkProfile;
+import org.hibernate.Hibernate;
 
 /**
  * FXML Controller class
@@ -46,7 +48,7 @@ public class WorkProfileViewController implements Initializable {
     @FXML
     private TextField yolisa;
     @FXML
-    private ComboBox<?> muulisa;
+    private ComboBox<Extrapay> extrapayChooser;
     @FXML
     private Button saveProfile;
     @FXML
@@ -69,6 +71,8 @@ public class WorkProfileViewController implements Initializable {
     private ComboBox<WorkProfile> profileChooser;
 
     private List<WorkProfile> profileList;
+
+    private List<Extrapay> extrapayList;
 
     /**
      * Initializes the controller class.
@@ -167,6 +171,8 @@ public class WorkProfileViewController implements Initializable {
                 dao.openCurrentSessionWithTransaction().saveOrUpdate(workProfile);
                 dao.closeCurrentSessionWithTransaction();
 
+                CurrentWorkProfile currentWorkProfile = new CurrentWorkProfile(workProfile);
+
                 profileChooser.getItems().add(workProfile);
 
                 CurrentCalendarViewController.getCalendarViewController().loadWorkProfilesToProfileChooser();
@@ -255,28 +261,72 @@ public class WorkProfileViewController implements Initializable {
 
     private void loadValuesToTextFields() {
 
-        profileName.setText(profileChooser.getSelectionModel().getSelectedItem().getNimi());
-        tuntipalkka.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getPay()));
-        if (getYolisa() != null) {
-            yolisa.setText(Double.toString(getYolisa().getExtrapay()));
-        }
         profileName.setDisable(true);
         tuntipalkka.setDisable(true);
         yolisa.setDisable(true);
 
         editButton.setText("Muokkaa");
 
-    }
-
-    private Extrapay getYolisa() {
-        if (profileChooser.getSelectionModel().getSelectedItem().getPalkkalisat() != null) {
-            for (Extrapay e : profileChooser.getSelectionModel().getSelectedItem().getExtrapays()) {
-                if (e.getName().equals("Yölisä")) {
-                    return e;
-                }
+        profileName.setText(profileChooser.getSelectionModel().getSelectedItem().getNimi());
+        tuntipalkka.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getPay()));
+        if (profileChooser.getSelectionModel().getSelectedItem().getExtrapays() != null) {
+            if (profileChooser.getSelectionModel().getSelectedItem().getYolisa() != null) {
+                yolisa.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getYolisa().getExtrapay()));
             }
         }
-        return null;
+
+        extrapayList = dao.getProfilesExtrapays();
+
+        if (!extrapayList.isEmpty()) {
+            for (Extrapay e : extrapayList) {
+                extrapayChooser.getItems().add(e);
+            }
+        }
+
+        extrapayChooser.setCellFactory(
+                new Callback<ListView<Extrapay>, ListCell<Extrapay>>() {
+            @Override
+            public ListCell<Extrapay> call(ListView<Extrapay> w) {
+                ListCell cell = new ListCell<Extrapay>() {
+                    @Override
+                    protected void updateItem(Extrapay item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setText("");
+                        } else {
+                            setText(item.getName());
+                        }
+                    }
+                };
+                return cell;
+            }
+        });
+
+        extrapayChooser.setConverter(
+                new StringConverter<Extrapay>() {
+            private Map<String, Extrapay> map = new HashMap<>();
+
+            @Override
+            public String toString(Extrapay w) {
+                if (w != null) {
+                    String str = w.getName();
+                    map.put(w.getName(), w);
+                    return str;
+                } else {
+                    return "";
+                }
+
+            }
+
+            //  TODO
+            @Override
+            public Extrapay fromString(String string) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+
     }
+
+}
 
 }

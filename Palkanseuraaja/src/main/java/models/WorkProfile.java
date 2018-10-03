@@ -1,9 +1,11 @@
 package models;
 
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,11 +34,11 @@ public class WorkProfile {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "workProfile")
+    private Set<Extrapay> extrapays = new HashSet<>();
+
     @OneToMany(mappedBy = "workProfile")
-    private Set<Extrapay> extrapays;
-    
-    @OneToMany(mappedBy = "workProfile")
-    private Set<EventModel> events;
+    private Set<EventModel> events = new HashSet<>();
 
     public WorkProfile() {
     }
@@ -97,6 +99,17 @@ public class WorkProfile {
         this.extrapays = extrapays;
     }
 
+    public Extrapay getYolisa() {
+        if (extrapays != null) {
+            for (Extrapay e : extrapays) {
+                if (e.getName().equals("Yölisä")) {
+                    return e;
+                }
+            }
+        }
+        return null;
+    }
+
     public Set<EventModel> getEvents() {
         return events;
     }
@@ -104,7 +117,5 @@ public class WorkProfile {
     public void setEvents(Set<EventModel> events) {
         this.events = events;
     }
-    
-    
 
 }
