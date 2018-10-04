@@ -221,8 +221,8 @@ public class WorkProfileViewController implements Initializable {
 
             } else {
 
-                if (!lisanNimi.getText().isEmpty() && !setBeginHour.getSelectionModel().getSelectedItem().isEmpty() && !setBeginMinute.getSelectionModel().getSelectedItem().isEmpty()
-                        && !setEndHour.getSelectionModel().getSelectedItem().isEmpty() && !setEndMinute.getSelectionModel().getSelectedItem().isEmpty()) {
+                if (!lisanNimi.getText().isEmpty() || !setBeginHour.getSelectionModel().getSelectedItem().isEmpty() || !setBeginMinute.getSelectionModel().getSelectedItem().isEmpty()
+                        || !setEndHour.getSelectionModel().getSelectedItem().isEmpty() || !setEndMinute.getSelectionModel().getSelectedItem().isEmpty()) {
                     ExtraPay lisa = new ExtraPay();
                     lisa.setName(lisanNimi.getText());
                     lisa.setBeginHour(setBeginHour.getSelectionModel().getSelectedItem());
@@ -302,7 +302,6 @@ public class WorkProfileViewController implements Initializable {
         editButton.setText("Muokkaa");
         editButton.setDisable(true);
 
-        extrapayChooser.setDisable(true);
         extrapay.setDisable(true);
 
     }
@@ -362,6 +361,8 @@ public class WorkProfileViewController implements Initializable {
 
         if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
             extrapay.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtraPay()));
+        } else {
+            extrapay.clear();
         }
 
         loadValuesToExtrapayChooser();
