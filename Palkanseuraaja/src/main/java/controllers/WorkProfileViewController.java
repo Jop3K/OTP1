@@ -102,6 +102,22 @@ public class WorkProfileViewController implements Initializable {
         loadValuesToProfileChooser();
 
         extrapay.setDisable(true);
+        
+        for (int i = 0; i < 60; i++) {
+            setBeginMinute.getItems().add(Integer.toString(i));
+            setEndMinute.getItems().add(Integer.toString(i));
+
+        }
+        for (int i = 0; i < 24; i++) {
+            if (i < 10) {
+                String tmp = "0" + i;
+                setBeginHour.getItems().add(tmp);
+                setEndHour.getItems().add(tmp);
+            } else {
+                setBeginHour.getItems().add(Integer.toString(i));
+                setEndHour.getItems().add(Integer.toString(i));
+            }
+        }
 
     }
 

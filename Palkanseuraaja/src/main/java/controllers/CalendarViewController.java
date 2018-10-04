@@ -44,7 +44,6 @@ import models.WorkProfile;
  */
 public class CalendarViewController implements Initializable {
 
-
     private UserDAO dao;
     @FXML
     private Color x2;
@@ -109,14 +108,11 @@ public class CalendarViewController implements Initializable {
         CurrentCalendarViewController.setCalendarViewController(this);
 
         //Täytetään taulu
-
         data = FXCollections.observableArrayList(dao.getEvents());
-    	workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
-    	startColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("beginTime"));
-    	endColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("endTime"));
-    	eventTable.setItems(data);
-
-
+        workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
+        startColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("beginTime"));
+        endColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("endTime"));
+        eventTable.setItems(data);
 
         System.out.print("Alkaako");
         // Täytetään comboboxit
@@ -141,71 +137,70 @@ public class CalendarViewController implements Initializable {
 
         loadWorkProfilesToProfileChooser();
 
-            }
-    public boolean isValid() {
-    	if(startDay.getValue() == null || endDay.getValue() == null || startHour.getSelectionModel().isEmpty() || endHour.getSelectionModel().isEmpty() || startMinute.getSelectionModel().isEmpty() || endMinute.getSelectionModel().isEmpty() || profileChooser.getSelectionModel().isEmpty())
-    	 {
-    		return false;
-
-    	} else {
-    		return true;
-    	}
-    	//startDay != null || endDay != null || startHour != null || endHour != null || startMinute != null || endMinute != null || profileChooser != null;
     }
+
+    public boolean isValid() {
+        if (startDay.getValue() == null || endDay.getValue() == null || startHour.getSelectionModel().isEmpty() || endHour.getSelectionModel().isEmpty() || startMinute.getSelectionModel().isEmpty() || endMinute.getSelectionModel().isEmpty() || profileChooser.getSelectionModel().isEmpty()) {
+            return false;
+
+        } else {
+            return true;
+        }
+        //startDay != null || endDay != null || startHour != null || endHour != null || startMinute != null || endMinute != null || profileChooser != null;
+    }
+
     public void saveEvent(ActionEvent e) {
-    	 LocalDate startDate = startDay.getValue();
-    	 LocalDate endDate = endDay.getValue();
+        LocalDate startDate = startDay.getValue();
+        LocalDate endDate = endDay.getValue();
         EventModel eventModel = new EventModel();
 
         try {
 
-        if(isValid() == false) {
-        	JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
-			return;
+            if (isValid() == false) {
+                JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
+                return;
+            }
+
+            if (startDate.isBefore(endDate)) {
+                eventModel.setBeginDay(startDay.getValue());
+                eventModel.setEndDay(endDay.getValue());
+            } else if (startDate.isAfter(endDate)) {
+                JOptionPane.showMessageDialog(null, "Lopetusajan pitää olla aloitusajan jälkeen (päivä)");
+                return;
+            } else if (startDate.equals(endDate)) { // jos aloitus pvm ja lopetus pvm sama niin...
+                eventModel.setBeginDay(startDay.getValue());
+                eventModel.setEndDay(endDay.getValue());
+                if (Integer.parseInt(startHour.getValue()) > Integer.parseInt(endHour.getValue())) { // jos aloitusaika on isompi kuin lopetusaika
+                    JOptionPane.showMessageDialog(null, "Aloitusaika ei voi olla lopetusajan jälkeen, tarkista tunnit");
+                    return;
+                } else if (Integer.parseInt(startHour.getValue()) == Integer.parseInt(endHour.getValue())) { // jos aloitustunti on sama kuin lopetustunti
+                    if (Integer.parseInt(startMinute.getValue()) >= Integer.parseInt(endMinute.getValue())) {
+                        JOptionPane.showMessageDialog(null, "Aloitusaika ei voi olla lopetusajan jälkeen, tarkista minuutit");
+                        return;
+                    }
+                }
+            }
+
+            eventModel.setBeginHour(startHour.getValue());
+            eventModel.setBeginMinute(startMinute.getValue());
+            eventModel.setEndHour(endHour.getValue());
+            eventModel.setEndMinute(endMinute.getValue());
+            // Etsitään oikea workprofile-olio eventtiin
+
+            eventModel.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
+
+        } catch (Exception err) {
+            JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
+            return;
         }
 
-        if(startDate.isBefore(endDate)) {
-        eventModel.setBeginDay(startDay.getValue());
-        eventModel.setEndDay(endDay.getValue());
-        }else if(startDate.isAfter(endDate)){
-        	JOptionPane.showMessageDialog(null, "Lopetusajan pitää olla aloitusajan jälkeen (päivä)");
-        	return;
-        }
-        else if(startDate.equals(endDate)) { // jos aloitus pvm ja lopetus pvm sama niin...
-            eventModel.setBeginDay(startDay.getValue());
-            eventModel.setEndDay(endDay.getValue());
-        	if(Integer.parseInt(startHour.getValue()) > Integer.parseInt(endHour.getValue())){ // jos aloitusaika on isompi kuin lopetusaika
-        		JOptionPane.showMessageDialog(null, "Aloitusaika ei voi olla lopetusajan jälkeen, tarkista tunnit");
-        		return;
-        	}else if(Integer.parseInt(startHour.getValue()) == Integer.parseInt(endHour.getValue())) { // jos aloitustunti on sama kuin lopetustunti
-        		if(Integer.parseInt(startMinute.getValue()) >= Integer.parseInt(endMinute.getValue())) {
-        			JOptionPane.showMessageDialog(null, "Aloitusaika ei voi olla lopetusajan jälkeen, tarkista minuutit");
-        			return;
-        		}
-        	}
-        }
-
-
-        eventModel.setBeginHour(startHour.getValue());
-        eventModel.setBeginMinute(startMinute.getValue());
-        eventModel.setEndHour(endHour.getValue());
-        eventModel.setEndMinute(endMinute.getValue());
-        // Etsitään oikea workprofile-olio eventtiin
-
-        eventModel.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
-
-        }catch (Exception err) {
-        	JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
-			return;
-        }
-
-        if(isValid() == true) {
-        	JOptionPane.showMessageDialog(null, "Luonti onnistui!");
-        dao.save(eventModel);
-        data.add(eventModel);
+        if (isValid() == true) {
+            JOptionPane.showMessageDialog(null, "Luonti onnistui!");
+            dao.save(eventModel);
+            data.add(eventModel);
         } else {
-        	JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
-			return;
+            JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
+            return;
         }
 
         System.out.print(Calculation.Calculate(eventModel));
