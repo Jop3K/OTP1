@@ -95,7 +95,7 @@ public class CalendarViewController implements Initializable {
     @FXML
     private TableColumn<EventModel, String> workProfileColumn;
 
-
+    ObservableList<EventModel> data;
     private List<WorkProfile> profileList;
 
     public CalendarViewController() {
@@ -109,19 +109,13 @@ public class CalendarViewController implements Initializable {
         CurrentCalendarViewController.setCalendarViewController(this);
 
         //Täytetään taulu
-        final ObservableList<EventModel> data = FXCollections.observableArrayList(dao.getEvents());
-      //  Set<EventModel> events = dao.getEvents();
-    	workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
-    //	startColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("beginTime"));
-    //	endColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("endTime"));
-    	eventTable.setItems(data);
-        Iterator itr = data.iterator();
-       /** while(itr.hasNext()) {
-        	EventModel tmp = (EventModel)itr.next();
-        	System.out.println(tmp.getEndTime());
-        	System.out.println(tmp.getWorkProfile().getName());
 
-        }*/
+        data = FXCollections.observableArrayList(dao.getEvents());
+    	workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
+    	startColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("beginTime"));
+    	endColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("endTime"));
+    	eventTable.setItems(data);
+
 
 
         System.out.print("Alkaako");
@@ -208,6 +202,7 @@ public class CalendarViewController implements Initializable {
         if(isValid() == true) {
         	JOptionPane.showMessageDialog(null, "Luonti onnistui!");
         dao.save(eventModel);
+        data.add(eventModel);
         } else {
         	JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
 			return;

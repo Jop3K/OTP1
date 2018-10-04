@@ -119,5 +119,10 @@ public class WorkProfile {
     public void setEvents(List<EventModel> events) {
         this.events = events;
     }
+    
+    @Override
+    public String toString(){
+    	return getName();
+    }
 
 }
