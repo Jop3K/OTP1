@@ -2,7 +2,11 @@ package dataAccessObjects;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.criterion.Restrictions;
 
@@ -117,7 +121,24 @@ public class UserDAO extends DataAccessObject {
         }
         return false;
     }
+    public List<EventModel> getEvents() {
+    	
+    	List<WorkProfile> profiles = getUsersWorkProfiles();
+    	Iterator itr = profiles.iterator();
+    	List<EventModel>events = new ArrayList<EventModel>();
+    	while (itr.hasNext()) {
+    		WorkProfile tmp =(WorkProfile) itr.next();
+    		List<EventModel> eventlist =  (List<EventModel>) tmp.getEvents();
+    		Iterator itr1 = eventlist.iterator();
+    		while(itr1.hasNext()) {
+    			EventModel tmp2 = (EventModel) itr1.next();
+    			events.add(tmp2);
+    		}
+    		
+    	}
 
+    	 return events;
+    }
     public List<WorkProfile> getUsersWorkProfiles() {
 
         openCurrentSession();

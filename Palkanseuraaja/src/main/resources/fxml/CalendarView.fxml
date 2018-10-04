@@ -170,7 +170,7 @@
                   <TableView fx:id="eventTable" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" GridPane.rowSpan="4">
                     <columns>
                       <TableColumn fx:id="workProfileColumn" prefWidth="109.0" resizable="false" text="Työprofiili" />
-                      <TableColumn fx:id="sartColumn" minWidth="0.0" prefWidth="97.0" resizable="false" text="Alkaa" />
+                      <TableColumn fx:id="startColumn" minWidth="0.0" prefWidth="97.0" resizable="false" text="Alkaa" />
                         <TableColumn fx:id="endColumn" prefWidth="121.0" text="Loppuu" />
                     </columns>
                      <GridPane.margin>
