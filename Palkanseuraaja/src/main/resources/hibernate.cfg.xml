@@ -52,7 +52,7 @@ Contributor(s):
     <mapping class="application.models.User"/>
     <mapping class="application.models.WorkProfile"/>
     <mapping class="application.models.GoogleAccount"/>
-    <mapping class="application.models.Palkkalisa"/>
+    <mapping class="application.models.ExtraPay"/>
     <mapping class="application.models.EventModel"/>
   </session-factory>
 </hibernate-configuration>

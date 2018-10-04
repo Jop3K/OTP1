@@ -76,7 +76,7 @@
                                 <Insets left="10.0" top="10.0" />
                             </GridPane.margin>
                         </Label>
-                        <ComboBox fx:id="extrapayChooser" prefHeight="25.0" prefWidth="169.0" promptText="Sunnuntailisä" GridPane.rowIndex="1">
+                        <ComboBox fx:id="extrapayChooser" onAction="#handleExtrapayChooserClick" prefHeight="25.0" prefWidth="169.0" promptText="Valitse tai luo uusi" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="10.0" top="70.0" />
                             </GridPane.margin>

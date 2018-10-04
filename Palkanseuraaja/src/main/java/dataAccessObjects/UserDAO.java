@@ -14,7 +14,7 @@ import javafx.scene.control.Alert;
 import models.CurrentUser;
 import models.CurrentWorkProfile;
 import models.EventModel;
-import models.Extrapay;
+import models.ExtraPay;
 import models.PasswordHashing;
 import models.User;
 import models.WorkProfile;
@@ -81,7 +81,7 @@ public class UserDAO extends DataAccessObject {
 
     public boolean save(EventModel event) {
 
-        openCurrentSessionWithTransaction().save(event);
+        openCurrentSessionWithTransaction().saveOrUpdate(event);
         closeCurrentSessionWithTransaction();
 
         alert = new Alert(Alert.AlertType.INFORMATION);
@@ -91,14 +91,10 @@ public class UserDAO extends DataAccessObject {
         return true;
     }
 
-    public boolean save(Extrapay event) {
+    public boolean save(ExtraPay extrapay) {
 
-        openCurrentSessionWithTransaction().save(event);
+        openCurrentSessionWithTransaction().saveOrUpdate(extrapay);
         closeCurrentSessionWithTransaction();
-
-        alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Onnistui!");
-        alert.setHeaderText("Tapahtuma lisätty");
 
         return true;
     }
@@ -147,11 +143,11 @@ public class UserDAO extends DataAccessObject {
 
     }
     
-    public List<Extrapay> getProfilesExtrapays() {
+    public List<ExtraPay> getProfilesExtraPays() {
         openCurrentSession();
-        Query q = session.createQuery("FROM Extrapay WHERE workprofile_id='" + CurrentWorkProfile.getWorkProfile().getId() + "'");
+        Query q = session.createQuery("FROM ExtraPay WHERE workprofile_id='" + CurrentWorkProfile.getWorkProfile().getId() + "'");
 
-        List<Extrapay> profiles = q.list();
+        List<ExtraPay> profiles = q.list();
 
         closeCurrentSession();
 
