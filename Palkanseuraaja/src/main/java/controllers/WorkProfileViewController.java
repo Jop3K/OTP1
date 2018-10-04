@@ -22,13 +22,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import models.CurrentCalendarViewController;
 import models.CurrentUser;
 import models.CurrentWorkProfile;
 import models.ExtraPay;
 import models.WeekDays;
 import models.WorkProfile;
-import org.hibernate.Hibernate;
 
 /**
  * FXML Controller class
@@ -47,8 +45,6 @@ public class WorkProfileViewController implements Initializable {
     private TextField profileName;
     @FXML
     private Button saveLisa;
-    @FXML
-    private TextField yolisa;
     @FXML
     private ComboBox<ExtraPay> extrapayChooser;
     @FXML
@@ -103,6 +99,361 @@ public class WorkProfileViewController implements Initializable {
         dao = new UserDAO();
         dao.openCurrentSession();
 
+        loadValuesToProfileChooser();
+
+        extrapay.setDisable(true);
+
+    }
+
+    @FXML
+    private void handleSaveProfileButtonClick(ActionEvent event) {
+
+        if (!profileChooser.getSelectionModel().isEmpty()) {
+
+            if (!profileName.getText().isEmpty()) {
+                profileChooser.getSelectionModel().getSelectedItem().setNimi(profileName.getText());
+            }
+            if (!tuntipalkka.getText().isEmpty()) {
+                profileChooser.getSelectionModel().getSelectedItem().setPay(Double.parseDouble(tuntipalkka.getText()));
+            }
+            if (!extrapay.getText().isEmpty()) {
+                extrapayChooser.getSelectionModel().getSelectedItem().setExtraPay(Double.parseDouble(extrapay.getText()));
+                dao.save(extrapayChooser.getSelectionModel().getSelectedItem());
+            }
+
+            disableFields();
+
+            dao.openCurrentSessionWithTransaction().saveOrUpdate(profileChooser.getSelectionModel().getSelectedItem());
+            dao.closeCurrentSessionWithTransaction();
+
+        } else {
+
+            if (!profileName.getText().isEmpty()) {
+
+                WorkProfile workProfile = new WorkProfile();
+
+                workProfile.setNimi(profileName.getText());
+                workProfile.setUser(CurrentUser.getUser());
+
+                if (!tuntipalkka.getText().isEmpty()) {
+                    workProfile.setPay(Double.parseDouble(tuntipalkka.getText()));
+                }
+
+                if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
+
+                    extrapayChooser.getSelectionModel().getSelectedItem().setExtraPay(Double.parseDouble(extrapay.getText()));
+
+                    dao.save(extrapayChooser.getSelectionModel().getSelectedItem());
+
+                }
+
+                dao.openCurrentSessionWithTransaction().saveOrUpdate(workProfile);
+                dao.closeCurrentSessionWithTransaction();
+
+                profileChooser.getItems().add(workProfile);
+                profileChooser.getSelectionModel().selectLast();
+
+                loadValuesToProfileChooser();
+                profileChooser.getSelectionModel().selectLast();
+
+                disableFields();
+                editButton.setDisable(false);
+
+            }
+        }
+    }
+
+    @FXML
+    private void handleSaveLisaButtonClick(ActionEvent event) {
+        if (!profileChooser.getSelectionModel().isEmpty()) {
+
+            if (!extrapayChooser.getSelectionModel().isEmpty()) {
+
+                if (!extrapay.getText().isEmpty()) {
+                    extrapayChooser.getSelectionModel().getSelectedItem().setName(lisanNimi.getText());
+                }
+
+                if (monday.isSelected()) {
+                    extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().setMonday(true);
+                } else {
+                    extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().setMonday(false);
+                }
+                if (tuesday.isSelected()) {
+                    extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().setTuesday(true);
+                } else {
+                    extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().setTuesday(false);
+                }
+                if (wednesday.isSelected()) {
+                    extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().setWednesday(true);
+                } else {
+                    extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().setWednesday(false);
+                }
+                if (thursday.isSelected()) {
+                    extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().setThursday(true);
+                } else {
+                    extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().setThursday(false);
+                }
+                if (friday.isSelected()) {
+                    extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().setFriday(true);
+                } else {
+                    extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().setFriday(false);
+                }
+                if (saturday.isSelected()) {
+                    extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().setSaturday(true);
+                } else {
+                    extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().setSaturday(false);
+                }
+                if (sunday.isSelected()) {
+                    extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().setSunday(true);
+                } else {
+                    extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().setSunday(false);
+                }
+
+                extrapayChooser.getSelectionModel().getSelectedItem().setBeginHour(setBeginHour.getSelectionModel().getSelectedItem());
+                extrapayChooser.getSelectionModel().getSelectedItem().setBeginMinute(setBeginMinute.getSelectionModel().getSelectedItem());
+                extrapayChooser.getSelectionModel().getSelectedItem().setEndHour(setEndHour.getSelectionModel().getSelectedItem());
+                extrapayChooser.getSelectionModel().getSelectedItem().setEndMinute(setEndMinute.getSelectionModel().getSelectedItem());
+
+                dao.openCurrentSessionWithTransaction().saveOrUpdate(extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays());
+                dao.closeCurrentSessionWithTransaction();
+                dao.openCurrentSessionWithTransaction().saveOrUpdate(extrapayChooser.getSelectionModel().getSelectedItem());
+                dao.closeCurrentSessionWithTransaction();
+
+            } else {
+
+                if (!lisanNimi.getText().isEmpty() && !setBeginHour.getSelectionModel().getSelectedItem().isEmpty() && !setBeginMinute.getSelectionModel().getSelectedItem().isEmpty()
+                        && !setEndHour.getSelectionModel().getSelectedItem().isEmpty() && !setEndMinute.getSelectionModel().getSelectedItem().isEmpty()) {
+                    ExtraPay lisa = new ExtraPay();
+                    lisa.setName(lisanNimi.getText());
+                    lisa.setBeginHour(setBeginHour.getSelectionModel().getSelectedItem());
+                    lisa.setBeginMinute(setBeginMinute.getSelectionModel().getSelectedItem());
+                    lisa.setEndHour(setEndHour.getSelectionModel().getSelectedItem());
+                    lisa.setEndMinute(setEndMinute.getSelectionModel().getSelectedItem());
+
+                    WeekDays weekdays = new WeekDays();
+
+                    if (monday.isSelected()) {
+                        weekdays.setMonday(true);
+                    } else {
+                        weekdays.setMonday(false);
+                    }
+                    if (tuesday.isSelected()) {
+                        weekdays.setTuesday(true);
+                    } else {
+                        weekdays.setTuesday(false);
+                    }
+                    if (wednesday.isSelected()) {
+                        weekdays.setWednesday(true);
+                    } else {
+                        weekdays.setWednesday(false);
+                    }
+                    if (thursday.isSelected()) {
+                        weekdays.setThursday(true);
+                    } else {
+                        weekdays.setThursday(false);
+                    }
+                    if (friday.isSelected()) {
+                        weekdays.setFriday(true);
+                    } else {
+                        weekdays.setFriday(false);
+                    }
+                    if (saturday.isSelected()) {
+                        weekdays.setSaturday(true);
+                    } else {
+                        weekdays.setSaturday(false);
+                    }
+                    if (sunday.isSelected()) {
+                        weekdays.setSunday(true);
+                    } else {
+                        weekdays.setSunday(false);
+                    }
+
+                    lisa.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
+                    lisa.setWeekdays(weekdays);
+                    weekdays.setExtrapay(lisa);
+                    dao.openCurrentSessionWithTransaction().saveOrUpdate(weekdays);
+                    dao.closeCurrentSessionWithTransaction();
+                    dao.openCurrentSessionWithTransaction().saveOrUpdate(lisa);
+                    dao.closeCurrentSessionWithTransaction();
+
+                }
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Virhe!");
+            alert.setHeaderText("Valitse työprofiili");
+            alert.showAndWait();
+        }
+
+        clearTextFieldsExtraPay();
+        loadValuesToExtrapayChooser();
+
+    }
+
+    @FXML
+    private void handleNewProfileButtonClick() {
+
+        clearTextFieldsProfile();
+        enableFields();
+
+        profileChooser.getSelectionModel().clearSelection();
+        extrapayChooser.getSelectionModel().clearSelection();
+
+        editButton.setText("Muokkaa");
+        editButton.setDisable(true);
+
+        extrapayChooser.setDisable(true);
+        extrapay.setDisable(true);
+
+    }
+
+    @FXML
+    private void handleProfileChooserClick(ActionEvent event) {
+
+        if (profileChooser.getSelectionModel().getSelectedItem() != null) {
+
+            currentWorkProfile = new CurrentWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
+
+            loadValuesToTextFields();
+
+            editButton.setDisable(false);
+
+        }
+
+    }
+
+    @FXML
+    private void handleExtrapayChooserClick(ActionEvent event) {
+        if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
+            extrapay.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtraPay()));
+
+            loadValuesToExtrapayFields();
+        }
+    }
+
+    @FXML
+    private void handleEditButtonClick() {
+
+        if (editButton.getText().equals("Muokkaa")) {
+
+            enableFields();
+
+            editButton.setText("Peruuta");
+
+        } else {
+
+            loadValuesToTextFields();
+
+            disableFields();
+
+        }
+
+    }
+
+    private void loadValuesToTextFields() {
+
+        clearTextFieldsProfile();
+        disableFields();
+
+        editButton.setText("Muokkaa");
+
+        profileName.setText(profileChooser.getSelectionModel().getSelectedItem().getNimi());
+        tuntipalkka.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getPay()));
+
+        if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
+            extrapay.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtraPay()));
+        }
+
+        loadValuesToExtrapayChooser();
+
+    }
+
+    private void clearTextFieldsProfile() {
+        profileName.clear();
+        tuntipalkka.clear();
+        extrapay.clear();
+    }
+
+    private void clearTextFieldsExtraPay() {
+        lisanNimi.clear();
+        monday.setSelected(false);
+        tuesday.setSelected(false);
+        wednesday.setSelected(false);
+        thursday.setSelected(false);
+        friday.setSelected(false);
+        saturday.setSelected(false);
+        sunday.setSelected(false);
+        setBeginHour.getItems().clear();
+        setBeginMinute.getItems().clear();
+        setEndHour.getItems().clear();
+        setEndHour.getItems().clear();
+    }
+
+    private void disableFields() {
+        profileName.setDisable(true);
+        tuntipalkka.setDisable(true);
+        extrapay.setDisable(true);
+    }
+
+    private void enableFields() {
+        profileName.setDisable(false);
+        tuntipalkka.setDisable(false);
+        if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
+            extrapayChooser.setDisable(false);
+        }
+        extrapay.setDisable(false);
+    }
+
+    private void loadValuesToExtrapayFields() {
+
+        lisanNimi.setText(extrapayChooser.getSelectionModel().getSelectedItem().getName());
+
+        if (extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().isMonday()) {
+            monday.setSelected(true);
+        } else {
+            monday.setSelected(false);
+        }
+        if (extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().isTuesday()) {
+            tuesday.setSelected(true);
+        } else {
+            tuesday.setSelected(false);
+        }
+        if (extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().isWednesday()) {
+            wednesday.setSelected(true);
+        } else {
+            wednesday.setSelected(false);
+        }
+        if (extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().isThursday()) {
+            thursday.setSelected(true);
+        } else {
+            thursday.setSelected(false);
+        }
+        if (extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().isFriday()) {
+            friday.setSelected(true);
+        } else {
+            friday.setSelected(false);
+        }
+        if (extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().isSaturday()) {
+            saturday.setSelected(true);
+        } else {
+            saturday.setSelected(false);
+        }
+        if (extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().isSunday()) {
+            sunday.setSelected(true);
+        } else {
+            sunday.setSelected(false);
+        }
+
+        setBeginHour.getItems().add(extrapayChooser.getSelectionModel().getSelectedItem().getBeginHour());
+        setBeginMinute.getItems().add(extrapayChooser.getSelectionModel().getSelectedItem().getBeginMinute());
+        setEndHour.getItems().add(extrapayChooser.getSelectionModel().getSelectedItem().getEndHour());
+        setEndHour.getItems().add(extrapayChooser.getSelectionModel().getSelectedItem().getEndMinute());
+
+    }
+
+    private void loadValuesToProfileChooser() {
+        profileChooser.getItems().clear();
+
         profileList = dao.getUsersWorkProfiles();
 
         for (WorkProfile w : profileList) {
@@ -150,222 +501,6 @@ public class WorkProfileViewController implements Initializable {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         });
-
-    }
-
-    @FXML
-    private void handleSaveProfileButtonClick(ActionEvent event) {
-
-        if (!profileChooser.getSelectionModel().isEmpty()) {
-
-            if (!profileName.getText().isEmpty()) {
-                profileChooser.getSelectionModel().getSelectedItem().setNimi(profileName.getText());
-            }
-            if (!tuntipalkka.getText().isEmpty()) {
-                profileChooser.getSelectionModel().getSelectedItem().setPay(Double.parseDouble(tuntipalkka.getText()));
-            }
-            if (!yolisa.getText().isEmpty()) {
-                profileChooser.getSelectionModel().getSelectedItem().getYolisa().setExtraPay(Double.parseDouble(yolisa.getText()));
-                dao.save(profileChooser.getSelectionModel().getSelectedItem().getYolisa());
-            }
-            if (!extrapay.getText().isEmpty()) {
-                extrapayChooser.getSelectionModel().getSelectedItem().setExtraPay(Double.parseDouble(extrapay.getText()));
-                dao.save(extrapayChooser.getSelectionModel().getSelectedItem());
-            }
-
-            disableFields();
-            
-            dao.openCurrentSessionWithTransaction().saveOrUpdate(profileChooser.getSelectionModel().getSelectedItem());
-            dao.closeCurrentSessionWithTransaction();
-
-        } else {
-
-            if (!profileName.getText().isEmpty()) {
-
-                WorkProfile workProfile = new WorkProfile();
-
-                workProfile.setNimi(profileName.getText());
-                workProfile.setUser(CurrentUser.getUser());
-
-                if (!tuntipalkka.getText().isEmpty()) {
-                    workProfile.setPay(Double.parseDouble(tuntipalkka.getText()));
-                }
-                if (!yolisa.getText().isEmpty()) {
-
-                    ExtraPay lisa = new ExtraPay();
-                    lisa.setName("Yölisä");
-                    lisa.setExtraPay(Double.parseDouble(yolisa.getText()));
-                    lisa.setWorkProfile(workProfile);
-
-                    dao.save(lisa);
-
-                }
-
-                if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
-
-                    extrapayChooser.getSelectionModel().getSelectedItem().setExtraPay(Double.parseDouble(extrapay.getText()));
-
-                    dao.save(extrapayChooser.getSelectionModel().getSelectedItem());
-
-                }
-
-                dao.openCurrentSessionWithTransaction().saveOrUpdate(workProfile);
-                dao.closeCurrentSessionWithTransaction();
-
-                profileChooser.getItems().add(workProfile);
-
-                CurrentCalendarViewController.getCalendarViewController().loadWorkProfilesToProfileChooser();
-
-                disableFields();
-                editButton.setDisable(false);
-
-            }
-        }
-    }
-
-    @FXML
-    private void handleSaveLisaButtonClick(ActionEvent event) {
-        if (!profileChooser.getSelectionModel().isEmpty()) {
-
-            if (!lisanNimi.getText().isEmpty()) {
-                ExtraPay lisa = new ExtraPay();
-                lisa.setName(lisanNimi.getText());
-                lisa.setBeginHour(setBeginHour.getSelectionModel().getSelectedItem());
-                lisa.setBeginMinute(setBeginMinute.getSelectionModel().getSelectedItem());
-                lisa.setEndHour(setEndHour.getSelectionModel().getSelectedItem());
-                lisa.setEndMinute(setEndMinute.getSelectionModel().getSelectedItem());
-                
-                WeekDays weekdays = new WeekDays();
-                
-                if (monday.isSelected()) {
-                    weekdays.setMonday(true);
-                }
-                if (tuesday.isSelected()) {
-                    weekdays.setTuesday(true);
-                }
-                if (wednesday.isSelected()) {
-                    weekdays.setWednesday(true);
-                }
-                if (thursday.isSelected()) {
-                    weekdays.setThursday(true);
-                }if (friday.isSelected()) {
-                    weekdays.setFriday(true);
-                }if (saturday.isSelected()) {
-                    weekdays.setSaturday(true);
-                }
-                if (sunday.isSelected()) {
-                    weekdays.setSunday(true);
-                }
-
-                lisa.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
-                lisa.setWeekdays(weekdays);
-                weekdays.setExtrapay(lisa);
-                dao.save(weekdays);
-                dao.save(lisa);
-                extrapayChooser.getItems().add(lisa);
-            }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Virhe!");
-            alert.setHeaderText("Valitse työprofiili");
-            alert.showAndWait();
-        }
-
-    }
-
-    @FXML
-    private void handleNewProfileButtonClick() {
-
-        clearTextFields();
-        enableFields();
-
-        profileChooser.getSelectionModel().clearSelection();
-
-        editButton.setText("Muokkaa");
-        editButton.setDisable(true);
-
-    }
-
-    @FXML
-    private void handleProfileChooserClick(ActionEvent event) {
-
-        if (profileChooser.getSelectionModel().getSelectedItem() != null) {
-
-            loadValuesToTextFields();
-
-            editButton.setDisable(false);
-
-        }
-
-    }
-
-    @FXML
-    private void handleExtrapayChooserClick(ActionEvent event) {
-        extrapay.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtraPay()));
-    }
-
-    @FXML
-    private void handleEditButtonClick() {
-
-        if (editButton.getText().equals("Muokkaa")) {
-
-            enableFields();
-
-            editButton.setText("Peruuta");
-
-        } else {
-
-            loadValuesToTextFields();
-
-            disableFields();
-
-        }
-
-    }
-
-    private void loadValuesToTextFields() {
-
-        currentWorkProfile = new CurrentWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
-
-        clearTextFields();
-        disableFields();
-
-        editButton.setText("Muokkaa");
-
-        profileName.setText(profileChooser.getSelectionModel().getSelectedItem().getNimi());
-        tuntipalkka.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getPay()));
-        if (profileChooser.getSelectionModel().getSelectedItem().getExtraPays() != null) {
-            if (profileChooser.getSelectionModel().getSelectedItem().getYolisa() != null) {
-                yolisa.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getYolisa().getExtraPay()));
-            }
-        }
-        if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
-            extrapay.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtraPay()));
-        }
-
-        loadValuesToExtrapayChooser();
-
-    }
-
-    private void clearTextFields() {
-        profileName.clear();
-        tuntipalkka.clear();
-        yolisa.clear();
-        extrapay.clear();
-    }
-
-    private void disableFields() {
-        profileName.setDisable(true);
-        tuntipalkka.setDisable(true);
-        yolisa.setDisable(true);
-        extrapay.setDisable(true);
-    }
-
-    private void enableFields() {
-        profileName.setDisable(false);
-        tuntipalkka.setDisable(false);
-        yolisa.setDisable(false);
-        extrapay.setDisable(false);
     }
 
     private void loadValuesToExtrapayChooser() {
@@ -376,6 +511,9 @@ public class WorkProfileViewController implements Initializable {
 
         if (!extrapayList.isEmpty()) {
             for (ExtraPay e : extrapayList) {
+                if (e.getName().equals("Yölisä")) {
+                    continue;
+                }
                 extrapayChooser.getItems().add(e);
             }
         }
