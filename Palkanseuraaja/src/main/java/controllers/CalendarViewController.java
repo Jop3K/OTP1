@@ -6,12 +6,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import dataAccessObjects.UserDAO;
+
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,6 +24,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
@@ -36,8 +43,8 @@ import models.WorkProfile;
  * @author artur
  */
 public class CalendarViewController implements Initializable {
-	 
-	
+
+
     private UserDAO dao;
     @FXML
     private Color x2;
@@ -79,9 +86,16 @@ public class CalendarViewController implements Initializable {
     private ComboBox<String> startMinute;
     @FXML
     private ComboBox<String> endMinute;
+    @FXML
+    private TableView<EventModel> eventTable;
+    @FXML
+    private TableColumn<EventModel, Date> startColumn;
+    @FXML
+    private TableColumn<EventModel, Date> endColumn;
+    @FXML
+    private TableColumn<EventModel, String> workProfileColumn;
 
-    
-   
+
     private List<WorkProfile> profileList;
 
     public CalendarViewController() {
@@ -93,9 +107,23 @@ public class CalendarViewController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         // TODO Auto-generated method stub
         CurrentCalendarViewController.setCalendarViewController(this);
-        
-       
-        
+
+        //Täytetään taulu
+        final ObservableList<EventModel> data = FXCollections.observableArrayList(dao.getEvents());
+      //  Set<EventModel> events = dao.getEvents();
+    	workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
+    //	startColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("beginTime"));
+    //	endColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("endTime"));
+    	eventTable.setItems(data);
+        Iterator itr = data.iterator();
+       /** while(itr.hasNext()) {
+        	EventModel tmp = (EventModel)itr.next();
+        	System.out.println(tmp.getEndTime());
+        	System.out.println(tmp.getWorkProfile().getName());
+
+        }*/
+
+
         System.out.print("Alkaako");
         // Täytetään comboboxit
         for (int i = 0; i < 60; i++) {
@@ -116,15 +144,15 @@ public class CalendarViewController implements Initializable {
 
         dao = new UserDAO();
         dao.openCurrentSession();
-        
+
         loadWorkProfilesToProfileChooser();
-        
+
             }
     public boolean isValid() {
     	if(startDay.getValue() == null || endDay.getValue() == null || startHour.getSelectionModel().isEmpty() || endHour.getSelectionModel().isEmpty() || startMinute.getSelectionModel().isEmpty() || endMinute.getSelectionModel().isEmpty() || profileChooser.getSelectionModel().isEmpty())
     	 {
     		return false;
- 
+
     	} else {
     		return true;
     	}
@@ -134,14 +162,14 @@ public class CalendarViewController implements Initializable {
     	 LocalDate startDate = startDay.getValue();
     	 LocalDate endDate = endDay.getValue();
         EventModel eventModel = new EventModel();
-        
+
         try {
-        
+
         if(isValid() == false) {
         	JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
 			return;
         }
-        
+
         if(startDate.isBefore(endDate)) {
         eventModel.setBeginDay(startDay.getValue());
         eventModel.setEndDay(endDay.getValue());
@@ -162,8 +190,8 @@ public class CalendarViewController implements Initializable {
         		}
         	}
         }
-       
-        
+
+
         eventModel.setBeginHour(startHour.getValue());
         eventModel.setBeginMinute(startMinute.getValue());
         eventModel.setEndHour(endHour.getValue());
@@ -176,7 +204,7 @@ public class CalendarViewController implements Initializable {
         	JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
 			return;
         }
-        
+
         if(isValid() == true) {
         	JOptionPane.showMessageDialog(null, "Luonti onnistui!");
         dao.save(eventModel);
@@ -184,12 +212,12 @@ public class CalendarViewController implements Initializable {
         	JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
 			return;
         }
-        
+
         System.out.print(Calculation.Calculate(eventModel));
     }
 
     public void loadWorkProfilesToProfileChooser() {
-        
+
         profileList = new UserDAO().getUsersWorkProfiles();
 
         for (WorkProfile w : profileList) {

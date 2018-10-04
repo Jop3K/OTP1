@@ -45,8 +45,10 @@ public class EventModel {
     private String endHour;
     @Transient
     private String endMinute;
+   
 
-    public EventModel() {
+
+	public EventModel() {
     }
 
     public WorkProfile getWorkProfile() {
@@ -132,8 +134,11 @@ public class EventModel {
     }
 
     public void setId(int id) {
+    	
         this.id = id;
     }
 
+
+ 
 
 }

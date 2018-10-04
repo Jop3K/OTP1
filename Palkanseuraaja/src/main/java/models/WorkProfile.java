@@ -1,6 +1,8 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -37,8 +39,8 @@ public class WorkProfile {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "workProfile")
     private Set<Extrapay> extrapays = new HashSet<>();
 
-    @OneToMany(mappedBy = "workProfile")
-    private Set<EventModel> events = new HashSet<>();
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "workProfile")
+    private List<EventModel> events = new ArrayList<>();
 
     public WorkProfile() {
     }
@@ -110,11 +112,11 @@ public class WorkProfile {
         return null;
     }
 
-    public Set<EventModel> getEvents() {
+    public List<EventModel> getEvents() {
         return events;
     }
 
-    public void setEvents(Set<EventModel> events) {
+    public void setEvents(List<EventModel> events) {
         this.events = events;
     }
 
