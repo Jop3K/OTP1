@@ -51,9 +51,9 @@
                                 <Insets bottom="340.0" left="10.0" />
                             </GridPane.margin>
                         </Label>
-                        <Button fx:id="saveLisa" mnemonicParsing="false" onAction="#handleSaveLisaButtonClick" text="Luo palkkalisä" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Button fx:id="saveLisa" mnemonicParsing="false" onAction="#handleSaveLisaButtonClick" text="Luo tai päivitä palkkalisä" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets left="160.0" top="270.0" />
+                                <Insets left="110.0" top="270.0" />
                             </GridPane.margin>
                         </Button>
                         <Label text="Tuntipalkka" GridPane.rowIndex="1">
@@ -99,7 +99,7 @@
                                 <Insets left="20.0" />
                             </GridPane.margin>
                         </Label>
-                        <ComboBox fx:id="setEndHour" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <ComboBox fx:id="setEndHour" editable="true" prefHeight="25.0" prefWidth="56.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="200.0" />
                             </GridPane.margin>
@@ -119,12 +119,12 @@
                                 <Insets bottom="100.0" left="10.0" />
                             </GridPane.margin>
                         </Label>
-                        <ComboBox fx:id="setBeginHour" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <ComboBox fx:id="setBeginHour" editable="true" prefHeight="25.0" prefWidth="56.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="50.0" />
                             </GridPane.margin>
                         </ComboBox>
-                        <ComboBox fx:id="setEndMinute" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <ComboBox fx:id="setEndMinute" editable="true" prefHeight="25.0" prefWidth="56.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="270.0" />
                             </GridPane.margin>
@@ -139,7 +139,7 @@
                                 <Insets bottom="50.0" left="140.0" />
                             </GridPane.margin>
                         </Label>
-                        <ComboBox fx:id="setBeginMinute" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <ComboBox fx:id="setBeginMinute" editable="true" prefHeight="25.0" prefWidth="56.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets left="120.0" />
                             </GridPane.margin>
