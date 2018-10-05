@@ -16,13 +16,13 @@ import views.RegisterView;
 
 public class LoginController {
 
-	private UserDAO dao;
+    private UserDAO dao;
     private ViewChanger viewChanger;
     private LoginView loginView;
     private LoginModel loginModel;
 
     public LoginController(LoginView loginView, LoginModel loginModel, ViewChanger viewChanger) {
-    	this.dao = new UserDAO();
+        this.dao = new UserDAO();
         this.viewChanger = viewChanger;
         this.loginModel = loginModel;
         this.loginView = loginView;
@@ -62,12 +62,10 @@ public class LoginController {
                         //loginView.showAlert(dao.getAlert());
                         //Ohjataan ohjelmaan
                         EventModel eventModel = new EventModel();
-                        CalendarViewController  calendarViewController = new CalendarViewController();
+                        CalendarViewController calendarViewController = new CalendarViewController();
                         viewChanger.switchStage("/fxml/TabsView.fxml", viewChanger);
-                        
-                        
-                    }
-                    else {
+
+                    } else {
                         //Kirjautuminen epäonnistui. Ilmoitetaan siitä
                         loginView.showAlert(dao.getAlert());
                     }
@@ -76,12 +74,10 @@ public class LoginController {
                 } catch (NoSuchProviderException ex) {
                     Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
-            else {
+            } else {
                 //Jompikumpi tai molemmat kentät ovat tyhjät. Ilmoitetaan siitä
                 loginView.showAlert(loginModel.getAlert());
             }
-
 
         }
 

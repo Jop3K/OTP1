@@ -2,7 +2,6 @@ package controllers;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import dataAccessObjects.UserDAO;
@@ -10,7 +9,6 @@ import dataAccessObjects.UserDAO;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -33,7 +31,6 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 import models.Calculation;
 import models.CurrentCalendarViewController;
-import models.CurrentUser;
 import models.EventModel;
 import models.WorkProfile;
 

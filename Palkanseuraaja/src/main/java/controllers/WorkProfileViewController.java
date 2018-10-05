@@ -102,7 +102,7 @@ public class WorkProfileViewController implements Initializable {
         loadValuesToProfileChooser();
 
         extrapay.setDisable(true);
-        
+
         for (int i = 0; i < 60; i++) {
             setBeginMinute.getItems().add(Integer.toString(i));
             setEndMinute.getItems().add(Integer.toString(i));
@@ -183,7 +183,7 @@ public class WorkProfileViewController implements Initializable {
     private void handleSaveLisaButtonClick(ActionEvent event) {
         if (!profileChooser.getSelectionModel().isEmpty()) {
 
-            if (!extrapayChooser.getSelectionModel().isEmpty()) {
+            if (!extrapayChooser.getSelectionModel().isEmpty() && timesAreValid()) {
 
                 if (!extrapay.getText().isEmpty()) {
                     extrapayChooser.getSelectionModel().getSelectedItem().setName(lisanNimi.getText());
@@ -237,8 +237,7 @@ public class WorkProfileViewController implements Initializable {
 
             } else {
 
-                if (!lisanNimi.getText().isEmpty() || !setBeginHour.getSelectionModel().getSelectedItem().isEmpty() || !setBeginMinute.getSelectionModel().getSelectedItem().isEmpty()
-                        || !setEndHour.getSelectionModel().getSelectedItem().isEmpty() || !setEndMinute.getSelectionModel().getSelectedItem().isEmpty()) {
+                if (!lisanNimi.getText().isEmpty() && timesAreValid()) {
                     ExtraPay lisa = new ExtraPay();
                     lisa.setName(lisanNimi.getText());
                     lisa.setBeginHour(setBeginHour.getSelectionModel().getSelectedItem());
@@ -292,12 +291,17 @@ public class WorkProfileViewController implements Initializable {
                     dao.openCurrentSessionWithTransaction().saveOrUpdate(lisa);
                     dao.closeCurrentSessionWithTransaction();
 
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Validation error!");
+                    alert.setHeaderText("Validation error");
+                    alert.showAndWait();
                 }
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Virhe!");
-            alert.setHeaderText("Valitse työprofiili");
+            alert.setHeaderText("Joku virhe");
             alert.showAndWait();
         }
 
@@ -313,7 +317,7 @@ public class WorkProfileViewController implements Initializable {
         enableFields();
 
         profileChooser.getSelectionModel().clearSelection();
-        extrapayChooser.getSelectionModel().clearSelection();
+        extrapayChooser.getItems().clear();
 
         editButton.setText("Muokkaa");
         editButton.setDisable(true);
@@ -330,6 +334,7 @@ public class WorkProfileViewController implements Initializable {
             currentWorkProfile = new CurrentWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
 
             loadValuesToTextFields();
+            extrapay.clear();
 
             editButton.setDisable(false);
 
@@ -461,10 +466,18 @@ public class WorkProfileViewController implements Initializable {
             sunday.setSelected(false);
         }
 
-        setBeginHour.getItems().add(extrapayChooser.getSelectionModel().getSelectedItem().getBeginHour());
-        setBeginMinute.getItems().add(extrapayChooser.getSelectionModel().getSelectedItem().getBeginMinute());
-        setEndHour.getItems().add(extrapayChooser.getSelectionModel().getSelectedItem().getEndHour());
-        setEndHour.getItems().add(extrapayChooser.getSelectionModel().getSelectedItem().getEndMinute());
+        if (extrapayChooser.getSelectionModel().getSelectedItem().getBeginHour() != null) {
+            setBeginHour.getItems().add(extrapayChooser.getSelectionModel().getSelectedItem().getBeginHour());
+        }
+        if (extrapayChooser.getSelectionModel().getSelectedItem().getBeginMinute() != null) {
+            setBeginMinute.getItems().add(extrapayChooser.getSelectionModel().getSelectedItem().getBeginMinute());
+        }
+        if (extrapayChooser.getSelectionModel().getSelectedItem().getEndHour() != null) {
+            setEndHour.getItems().add(extrapayChooser.getSelectionModel().getSelectedItem().getEndHour());
+        }
+        if (extrapayChooser.getSelectionModel().getSelectedItem().getEndMinute() != null) {
+            setEndHour.getItems().add(extrapayChooser.getSelectionModel().getSelectedItem().getEndMinute());
+        }
 
     }
 
@@ -580,4 +593,31 @@ public class WorkProfileViewController implements Initializable {
         }
 
     }
+
+    public void generateTimes() {
+        for (int i = 0; i < 60; i++) {
+            setBeginMinute.getItems().add(Integer.toString(i));
+            setEndMinute.getItems().add(Integer.toString(i));
+
+        }
+        for (int i = 0; i < 24; i++) {
+            if (i < 10) {
+                String tmp = "0" + i;
+                setBeginHour.getItems().add(tmp);
+                setEndHour.getItems().add(tmp);
+            } else {
+                setBeginHour.getItems().add(Integer.toString(i));
+                setEndHour.getItems().add(Integer.toString(i));
+            }
+        }
+    }
+
+    public boolean timesAreValid() {
+        if (setBeginHour.getSelectionModel().isEmpty() || setEndHour.getSelectionModel().isEmpty() || setBeginMinute.getSelectionModel().isEmpty() || setEndMinute.getSelectionModel().isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 }

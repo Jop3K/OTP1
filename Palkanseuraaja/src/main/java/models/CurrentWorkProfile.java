@@ -1,8 +1,6 @@
 
 package models;
 
-import models.WorkProfile;
-
 
 public class CurrentWorkProfile extends WorkProfile {
     
