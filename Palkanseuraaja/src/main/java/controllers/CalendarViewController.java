@@ -1,21 +1,27 @@
 package controllers;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import dataAccessObjects.UserDAO;
 
 import java.util.Date;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
 
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -93,8 +99,10 @@ public class CalendarViewController implements Initializable {
     private TableColumn<EventModel, Date> endColumn;
     @FXML
     private TableColumn<EventModel, String> workProfileColumn;
+    @FXML
+    private DatePicker eventDatePicker;
 
-    ObservableList<EventModel> data;
+    private ObservableList<EventModel> data;
     private List<WorkProfile> profileList;
 
     public CalendarViewController() {
@@ -108,11 +116,8 @@ public class CalendarViewController implements Initializable {
         CurrentCalendarViewController.setCalendarViewController(this);
 
         //Täytetään taulu
-        data = FXCollections.observableArrayList(dao.getEvents());
-        workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
-        startColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("beginTime"));
-        endColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("endTime"));
-        eventTable.setItems(data);
+        setTable();
+
 
         System.out.print("Alkaako");
         // Täytetään comboboxit
@@ -255,6 +260,52 @@ public class CalendarViewController implements Initializable {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         });
+
+
+        }
+    public void setTable() {
+    	
+   	 data = FXCollections.observableArrayList(dao.getEvents());
+     workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
+     startColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("beginTime"));
+     endColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("endTime"));
+   	 FilteredList<EventModel> filteredData = new FilteredList<>(data, p -> true);
+   	 eventDatePicker.valueProperty().addListener((observable, oldValue,newValue) -> {
+   		 System.out.println("äksöni");
+   		 filteredData.setPredicate(EventModel -> { 
+   			 
+   		if (newValue == null) {
+            return true;
+   	 };
+   	java.sql.Date newDate = java.sql.Date.valueOf(newValue);
+   	LocalDate ldate = EventModel.getBeginTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+   	java.sql.Date eventDate = java.sql.Date.valueOf(ldate);
+   	
+   	if(newDate == eventDate) {
+   		System.out.println("==");
+   		return true;
+   	}
+   	
+   	
+   	if(newDate.equals(eventDate)) {
+   		System.out.println("equal");
+   		return true;
+   	}
+   	return false;
+   		 });
+   	 });
+   	
+    eventTable.setItems(filteredData);
+    
+   	 
+   	
+   	 
+   
+        
+
+    }
+
+    public void populateTableByDate() {
 
     }
 

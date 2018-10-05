@@ -50,7 +50,7 @@
                                 <Insets left="21.0" />
                             </GridPane.margin>
                         </Label>
-                        <DatePicker>
+                        <DatePicker fx:id="eventDatePicker">
                             <GridPane.margin>
                                 <Insets left="173.0" />
                             </GridPane.margin>
