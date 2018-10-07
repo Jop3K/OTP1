@@ -1,13 +1,11 @@
 package controllers;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
-<<<<<<< HEAD
 import java.time.ZoneId;
 import java.util.Iterator;
-=======
->>>>>>> 74d9e5b1322b922f56d391e568ab751adbba5048
 import java.util.List;
 import java.util.ResourceBundle;
 import dataAccessObjects.UserDAO;
@@ -32,6 +30,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -268,6 +267,44 @@ public class CalendarViewController implements Initializable {
     	
    	 data = FXCollections.observableArrayList(dao.getEvents());
      workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
+     startColumn.setCellFactory(column -> {
+         TableCell<EventModel, Date> cell = new TableCell<EventModel, Date>() {
+             private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+
+             @Override
+             protected void updateItem(Date item, boolean empty) {
+                 super.updateItem(item, empty);
+                 if(empty) {
+                     setText(null);
+                 }
+                 else {
+                     this.setText(format.format(item));
+
+                 }
+             }
+         };
+
+         return cell;
+     });
+     endColumn.setCellFactory(column -> {
+         TableCell<EventModel, Date> cell = new TableCell<EventModel, Date>() {
+             private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+
+             @Override
+             protected void updateItem(Date item, boolean empty) {
+                 super.updateItem(item, empty);
+                 if(empty) {
+                     setText(null);
+                 }
+                 else {
+                     this.setText(format.format(item));
+
+                 }
+             }
+         };
+
+         return cell;
+     });
      startColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("beginTime"));
      endColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("endTime"));
    	 FilteredList<EventModel> filteredData = new FilteredList<>(data, p -> true);

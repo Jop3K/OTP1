@@ -1,5 +1,6 @@
 package models;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -45,7 +46,7 @@ public class EventModel {
     private String endHour;
     @Transient
     private String endMinute;
-   
+
 
 
 	public EventModel() {
@@ -60,6 +61,7 @@ public class EventModel {
     }
 
     public Date getBeginTime() {
+
         return beginTime;
     }
 
@@ -81,7 +83,7 @@ public class EventModel {
 
     public void setBeginDay(LocalDate beginDay) {
         beginTime = new Date(beginDay.getYear() - 1900, beginDay.getMonthValue() - 1, beginDay.getDayOfMonth());
-        System.out.println(beginTime);
+
     }
 
     public String getBeginHour() {
@@ -134,11 +136,11 @@ public class EventModel {
     }
 
     public void setId(int id) {
-    	
+
         this.id = id;
     }
 
 
- 
+
 
 }
