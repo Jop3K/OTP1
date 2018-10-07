@@ -267,6 +267,7 @@ public class CalendarViewController implements Initializable {
     	
    	 data = FXCollections.observableArrayList(dao.getEvents());
      workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
+     //Formatoidaan "alkaa" kolumni näyttämää päivämäärän dd.mm.yy hh:mm muodossa
      startColumn.setCellFactory(column -> {
          TableCell<EventModel, Date> cell = new TableCell<EventModel, Date>() {
              private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
@@ -286,6 +287,8 @@ public class CalendarViewController implements Initializable {
 
          return cell;
      });
+     
+     //Formatoidaan "loppuu" kolumni myös samaan muotoon
      endColumn.setCellFactory(column -> {
          TableCell<EventModel, Date> cell = new TableCell<EventModel, Date>() {
              private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
@@ -307,6 +310,7 @@ public class CalendarViewController implements Initializable {
      });
      startColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("beginTime"));
      endColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("endTime"));
+     //Lisätään mahdollisuus filtteröidä taulussa näkyviä tapahtumia päivämäärän mukaan
    	 FilteredList<EventModel> filteredData = new FilteredList<>(data, p -> true);
    	 eventDatePicker.valueProperty().addListener((observable, oldValue,newValue) -> {
    		 System.out.println("äksöni");
@@ -343,8 +347,6 @@ public class CalendarViewController implements Initializable {
 
     }
 
-    public void populateTableByDate() {
 
-    }
 
 }
