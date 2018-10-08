@@ -3,11 +3,10 @@ package controllers;
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
-<<<<<<< HEAD
+
 import java.time.ZoneId;
 import java.util.Iterator;
-=======
->>>>>>> 74d9e5b1322b922f56d391e568ab751adbba5048
+
 import java.util.List;
 import java.util.ResourceBundle;
 import dataAccessObjects.UserDAO;
