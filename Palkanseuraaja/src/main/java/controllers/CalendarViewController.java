@@ -1,12 +1,18 @@
 package controllers;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
+<<<<<<< HEAD
 
 import java.time.ZoneId;
 import java.util.Iterator;
 
+=======
+import java.time.ZoneId;
+import java.util.Iterator;
+>>>>>>> 09d9419bd747a6ca70111964dec08795ad7a5da3
 import java.util.List;
 import java.util.ResourceBundle;
 import dataAccessObjects.UserDAO;
@@ -31,6 +37,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -267,8 +274,50 @@ public class CalendarViewController implements Initializable {
     	
    	 data = FXCollections.observableArrayList(dao.getEvents());
      workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
+     //Formatoidaan "alkaa" kolumni näyttämää päivämäärän dd.mm.yy hh:mm muodossa
+     startColumn.setCellFactory(column -> {
+         TableCell<EventModel, Date> cell = new TableCell<EventModel, Date>() {
+             private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+
+             @Override
+             protected void updateItem(Date item, boolean empty) {
+                 super.updateItem(item, empty);
+                 if(empty) {
+                     setText(null);
+                 }
+                 else {
+                     this.setText(format.format(item));
+
+                 }
+             }
+         };
+
+         return cell;
+     });
+     
+     //Formatoidaan "loppuu" kolumni myös samaan muotoon
+     endColumn.setCellFactory(column -> {
+         TableCell<EventModel, Date> cell = new TableCell<EventModel, Date>() {
+             private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+
+             @Override
+             protected void updateItem(Date item, boolean empty) {
+                 super.updateItem(item, empty);
+                 if(empty) {
+                     setText(null);
+                 }
+                 else {
+                     this.setText(format.format(item));
+
+                 }
+             }
+         };
+
+         return cell;
+     });
      startColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("beginTime"));
      endColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("endTime"));
+     //Lisätään mahdollisuus filtteröidä taulussa näkyviä tapahtumia päivämäärän mukaan
    	 FilteredList<EventModel> filteredData = new FilteredList<>(data, p -> true);
    	 eventDatePicker.valueProperty().addListener((observable, oldValue,newValue) -> {
    		 System.out.println("äksöni");
@@ -305,8 +354,6 @@ public class CalendarViewController implements Initializable {
 
     }
 
-    public void populateTableByDate() {
 
-    }
 
 }
