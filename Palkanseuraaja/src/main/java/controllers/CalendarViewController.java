@@ -120,7 +120,6 @@ public class CalendarViewController implements Initializable {
         //Täytetään taulu
         setTable();
 
-
         System.out.print("Alkaako");
         // Täytetään comboboxit
         for (int i = 0; i < 60; i++) {
@@ -215,6 +214,8 @@ public class CalendarViewController implements Initializable {
 
     public void loadWorkProfilesToProfileChooser() {
 
+        profileChooser.getItems().clear();
+
         profileList = new UserDAO().getUsersWorkProfiles();
 
         for (WorkProfile w : profileList) {
@@ -263,92 +264,81 @@ public class CalendarViewController implements Initializable {
             }
         });
 
-
-        }
-    public void setTable() {
-    	
-   	 data = FXCollections.observableArrayList(dao.getEvents());
-     workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
-     //Formatoidaan "alkaa" kolumni näyttämää päivämäärän dd.mm.yy hh:mm muodossa
-     startColumn.setCellFactory(column -> {
-         TableCell<EventModel, Date> cell = new TableCell<EventModel, Date>() {
-             private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-
-             @Override
-             protected void updateItem(Date item, boolean empty) {
-                 super.updateItem(item, empty);
-                 if(empty) {
-                     setText(null);
-                 }
-                 else {
-                     this.setText(format.format(item));
-
-                 }
-             }
-         };
-
-         return cell;
-     });
-     
-     //Formatoidaan "loppuu" kolumni myös samaan muotoon
-     endColumn.setCellFactory(column -> {
-         TableCell<EventModel, Date> cell = new TableCell<EventModel, Date>() {
-             private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-
-             @Override
-             protected void updateItem(Date item, boolean empty) {
-                 super.updateItem(item, empty);
-                 if(empty) {
-                     setText(null);
-                 }
-                 else {
-                     this.setText(format.format(item));
-
-                 }
-             }
-         };
-
-         return cell;
-     });
-     startColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("beginTime"));
-     endColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("endTime"));
-     //Lisätään mahdollisuus filtteröidä taulussa näkyviä tapahtumia päivämäärän mukaan
-   	 FilteredList<EventModel> filteredData = new FilteredList<>(data, p -> true);
-   	 eventDatePicker.valueProperty().addListener((observable, oldValue,newValue) -> {
-   		 System.out.println("äksöni");
-   		 filteredData.setPredicate(EventModel -> { 
-   			 
-   		if (newValue == null) {
-            return true;
-   	 };
-   	java.sql.Date newDate = java.sql.Date.valueOf(newValue);
-   	LocalDate ldate = EventModel.getBeginTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-   	java.sql.Date eventDate = java.sql.Date.valueOf(ldate);
-   	
-   	if(newDate == eventDate) {
-   		System.out.println("==");
-   		return true;
-   	}
-   	
-   	
-   	if(newDate.equals(eventDate)) {
-   		System.out.println("equal");
-   		return true;
-   	}
-   	return false;
-   		 });
-   	 });
-   	
-    eventTable.setItems(filteredData);
-    
-   	 
-   	
-   	 
-   
-        
-
     }
 
+    public void setTable() {
 
+        data = FXCollections.observableArrayList(dao.getEvents());
+        workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
+        //Formatoidaan "alkaa" kolumni näyttämää päivämäärän dd.mm.yy hh:mm muodossa
+        startColumn.setCellFactory(column -> {
+            TableCell<EventModel, Date> cell = new TableCell<EventModel, Date>() {
+                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+
+                @Override
+                protected void updateItem(Date item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setText(null);
+                    } else {
+                        this.setText(format.format(item));
+
+                    }
+                }
+            };
+
+            return cell;
+        });
+
+        //Formatoidaan "loppuu" kolumni myös samaan muotoon
+        endColumn.setCellFactory(column -> {
+            TableCell<EventModel, Date> cell = new TableCell<EventModel, Date>() {
+                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+
+                @Override
+                protected void updateItem(Date item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setText(null);
+                    } else {
+                        this.setText(format.format(item));
+
+                    }
+                }
+            };
+
+            return cell;
+        });
+        startColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("beginTime"));
+        endColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("endTime"));
+        //Lisätään mahdollisuus filtteröidä taulussa näkyviä tapahtumia päivämäärän mukaan
+        FilteredList<EventModel> filteredData = new FilteredList<>(data, p -> true);
+        eventDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("äksöni");
+            filteredData.setPredicate(EventModel -> {
+
+                if (newValue == null) {
+                    return true;
+                };
+                java.sql.Date newDate = java.sql.Date.valueOf(newValue);
+                LocalDate ldate = EventModel.getBeginTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                java.sql.Date eventDate = java.sql.Date.valueOf(ldate);
+
+                if (newDate == eventDate) {
+                    System.out.println("==");
+                    return true;
+                }
+
+                if (newDate.equals(eventDate)) {
+                    System.out.println("equal");
+                    return true;
+                }
+                return false;
+            });
+        });
+
+        eventTable.setItems(filteredData);
+
+    }
 
 }
