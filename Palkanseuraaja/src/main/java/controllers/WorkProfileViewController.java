@@ -27,6 +27,7 @@ import models.CurrentWorkProfile;
 import models.ExtraPay;
 import models.WeekDays;
 import models.WorkProfile;
+import models.CurrentCalendarViewController;
 
 /**
  * FXML Controller class
@@ -138,6 +139,7 @@ public class WorkProfileViewController implements Initializable {
             }
 
             disableFields();
+            editButton.setText("Muokkaa");
 
             dao.openCurrentSessionWithTransaction().saveOrUpdate(profileChooser.getSelectionModel().getSelectedItem());
             dao.closeCurrentSessionWithTransaction();
@@ -168,12 +170,15 @@ public class WorkProfileViewController implements Initializable {
 
                 profileChooser.getItems().add(workProfile);
                 profileChooser.getSelectionModel().selectLast();
+                
+                CurrentCalendarViewController.getCalendarViewController().loadWorkProfilesToProfileChooser();
 
                 loadValuesToProfileChooser();
                 profileChooser.getSelectionModel().selectLast();
 
                 disableFields();
                 editButton.setDisable(false);
+                editButton.setText("Muokkaa");
 
             }
         }

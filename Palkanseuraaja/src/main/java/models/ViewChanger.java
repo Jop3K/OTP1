@@ -27,7 +27,7 @@ public class ViewChanger {
 
         Parent root = null;
         Stage stage = new Stage();
-        stage.setTitle("Palkanseuraaja v0.01a");
+        stage.setTitle("Palkanseuraaja v0.01a // Käyttäjä: " + CurrentUser.getUser().getUsername());
 
         try {
             root = FXMLLoader.load(Main.class.getResource(name));
