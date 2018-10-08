@@ -21,14 +21,14 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CalendarViewController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CalendarViewController">
     <children>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1280.0">
             <children>
-                <GridPane prefHeight="600.0" prefWidth="800.0">
+                <GridPane layoutX="8.0" prefHeight="800.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="375.0" minWidth="10.0" prefWidth="330.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="432.0" minWidth="10.0" prefWidth="429.0" />
+                        <ColumnConstraints maxWidth="855.0" minWidth="10.0" prefWidth="696.0" />
+                        <ColumnConstraints maxWidth="870.0" minWidth="10.0" prefWidth="584.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints maxHeight="59.0" minHeight="10.0" prefHeight="44.0" vgrow="SOMETIMES" />
@@ -39,25 +39,22 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <Label alignment="CENTER" style="&#10;" text="Päivän tapahtumat" textAlignment="CENTER" wrapText="false">
+                        <Label alignment="CENTER" style="&#10;" text="Tapahtumat" textAlignment="CENTER" textFill="#3c3737" wrapText="false">
                             <font>
-                                <Font size="14.0" fx:id="x1" />
+                                <Font size="18.0" fx:id="x1" />
                             </font>
-                            <textFill>
-                                <Color blue="0.624" green="0.624" red="0.624" fx:id="x2" />
-                            </textFill>
                             <GridPane.margin>
                                 <Insets left="21.0" />
                             </GridPane.margin>
                         </Label>
                         <DatePicker fx:id="eventDatePicker">
                             <GridPane.margin>
-                                <Insets left="173.0" />
+                                <Insets left="400.0" />
                             </GridPane.margin>
                         </DatePicker>
                         <DatePicker fx:id="startDay" prefHeight="25.0" prefWidth="130.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets bottom="70.0" left="70.0" />
+                                <Insets bottom="70.0" left="145.0" />
                             </GridPane.margin>
                         </DatePicker>
                         <Label text="Valitse pvm" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -67,116 +64,118 @@
                         </Label>
                         <DatePicker fx:id="endDay" prefHeight="25.0" prefWidth="130.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets bottom="70.0" left="240.0" />
+                                <Insets bottom="70.0" left="375.0" />
                             </GridPane.margin>
                         </DatePicker>
                         <Label text="Alku" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets bottom="120.0" left="120.0" />
+                                <Insets bottom="120.0" left="195.0" />
                             </GridPane.margin>
                         </Label>
                         <Label text="Loppu" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets bottom="120.0" left="280.0" />
+                                <Insets bottom="120.0" left="420.0" />
                             </GridPane.margin>
                         </Label>
                         <Label text="Aikaväli(tunnit)" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label text="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets left="110.0" />
+                                <Insets left="160.0" />
                             </GridPane.margin>
                         </Label>
                         <Label text="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets left="170.0" />
+                                <Insets left="250.0" />
                             </GridPane.margin>
                         </Label>
                         <Label layoutX="455.0" layoutY="136.0" text="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets left="270.0" />
+                                <Insets left="395.0" />
                             </GridPane.margin>
                         </Label>
                         <Label layoutX="490.0" layoutY="136.0" text="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets left="330.0" />
+                                <Insets left="470.0" />
                             </GridPane.margin>
                         </Label>
-                        <Label alignment="CENTER" style="&#10;" text="Tee uusi tapahtuma" textAlignment="CENTER" wrapText="false" GridPane.columnIndex="1">
+                        <Label alignment="CENTER" style="&#10;" text="Tee uusi tapahtuma" textAlignment="CENTER" textFill="#3c3737" wrapText="false" GridPane.columnIndex="1">
                             <font>
-                                <Font size="14.0" fx:id="x11" />
+                                <Font size="18.0" fx:id="x11" />
                             </font>
-                            <textFill>
-                                <Color blue="0.624" green="0.624" red="0.624" fx:id="x21" />
-                            </textFill>
                         </Label>
                         <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="149.0" text="Vie google-kalenteriin" GridPane.columnIndex="1" GridPane.rowIndex="4">
                             <GridPane.margin>
-                                <Insets left="150.0" />
+                                <Insets left="220.0" />
                             </GridPane.margin>
                         </Button>
                         <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveEvent" text="Tallenna" GridPane.columnIndex="1" GridPane.rowIndex="2">
                             <GridPane.margin>
-                                <Insets left="192.0" />
+                                <Insets left="260.0" />
                             </GridPane.margin>
                         </Button>
                         <Label layoutX="625.0" layoutY="136.0" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets left="219.0" top="-12.0" />
+                                <Insets left="325.0" top="-12.0" />
                             </GridPane.margin>
                      <font>
                         <Font size="24.0" />
                      </font>
                         </Label>
-                        <ComboBox fx:id="startHour" editable="true" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <ComboBox fx:id="startHour" editable="true" prefHeight="25.0" prefWidth="75.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets left="70.0" top="50.0" />
+                                <Insets left="127.0" top="50.0" />
                             </GridPane.margin>
                         </ComboBox>
-                        <ComboBox fx:id="startMinute" editable="true" layoutX="430.0" layoutY="157.0" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <ComboBox fx:id="startMinute" editable="true" layoutX="430.0" layoutY="157.0" prefHeight="25.0" prefWidth="75.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets left="147.0" top="50.0" />
+                                <Insets left="220.0" top="50.0" />
                             </GridPane.margin>
                         </ComboBox>
-                        <ComboBox fx:id="endHour" editable="true" layoutX="430.0" layoutY="157.0" prefHeight="25.0" prefWidth="56.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <ComboBox fx:id="endHour" editable="true" layoutX="430.0" layoutY="157.0" prefHeight="25.0" prefWidth="75.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets left="240.0" top="50.0" />
+                                <Insets left="361.0" top="50.0" />
                             </GridPane.margin>
                         </ComboBox>
-                        <ComboBox fx:id="endMinute" editable="true" layoutX="590.0" layoutY="157.0" prefHeight="25.0" prefWidth="56.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <ComboBox fx:id="endMinute" editable="true" layoutX="590.0" layoutY="157.0" prefHeight="25.0" prefWidth="75.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets left="315.0" top="50.0" />
+                                <Insets left="450.0" top="50.0" />
                             </GridPane.margin>
                         </ComboBox>
                         <Label layoutX="450.0" layoutY="136.0" text=":" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets left="135.0" top="50.0" />
+                                <Insets left="210.0" top="50.0" />
                             </GridPane.margin>
                         </Label>
                         <Label layoutX="480.0" layoutY="161.0" text=":" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
-                                <Insets left="305.0" top="50.0" />
+                                <Insets left="440.0" top="50.0" />
                             </GridPane.margin>
                         </Label>
                         <ComboBox fx:id="profileChooser" layoutX="420.0" layoutY="157.0" prefHeight="25.0" prefWidth="96.0" GridPane.columnIndex="1">
                             <GridPane.margin>
-                                <Insets left="320.0" />
+                                <Insets left="450.0" />
                             </GridPane.margin>
                         </ComboBox>
                         <Label layoutX="340.0" layoutY="76.0" text="Työprofiili :" GridPane.columnIndex="1">
                             <GridPane.margin>
-                                <Insets left="250.0" />
+                                <Insets left="380.0" />
                             </GridPane.margin>
                         </Label>
                   <TableView fx:id="eventTable" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" GridPane.rowSpan="4">
                     <columns>
-                      <TableColumn fx:id="workProfileColumn" prefWidth="109.0" resizable="false" text="Työprofiili" />
-                      <TableColumn fx:id="startColumn" minWidth="0.0" prefWidth="97.0" resizable="false" text="Alkaa" />
-                        <TableColumn fx:id="endColumn" prefWidth="121.0" text="Loppuu" />
+                      <TableColumn fx:id="workProfileColumn" prefWidth="146.0" resizable="false" text="Työprofiili" />
+                      <TableColumn fx:id="startColumn" minWidth="0.0" prefWidth="250.0" resizable="false" text="Alkaa" />
+                        <TableColumn fx:id="endColumn" prefWidth="259.0" resizable="false" text="Loppuu" />
                     </columns>
                      <GridPane.margin>
                         <Insets left="20.0" right="20.0" />
                      </GridPane.margin>
                   </TableView>
+                  <Label layoutX="706.0" layoutY="76.0" text="Valitse pvm : ">
+                     <GridPane.margin>
+                        <Insets left="325.0" />
+                     </GridPane.margin>
+                  </Label>
                     </children>
                 </GridPane>
             </children>
