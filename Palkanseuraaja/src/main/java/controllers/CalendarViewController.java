@@ -4,15 +4,14 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
-<<<<<<< HEAD
+
 
 import java.time.ZoneId;
 import java.util.Iterator;
 
-=======
 import java.time.ZoneId;
 import java.util.Iterator;
->>>>>>> 09d9419bd747a6ca70111964dec08795ad7a5da3
+
 import java.util.List;
 import java.util.ResourceBundle;
 import dataAccessObjects.UserDAO;
