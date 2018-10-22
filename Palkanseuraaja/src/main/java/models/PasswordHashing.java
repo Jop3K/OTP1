@@ -7,8 +7,6 @@ import java.security.SecureRandom;
 
 public class PasswordHashing {
 
-    private String password;
-
     public PasswordHashing() {
     }
 

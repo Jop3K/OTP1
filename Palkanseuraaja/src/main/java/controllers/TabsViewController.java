@@ -15,8 +15,6 @@ import javafx.scene.control.TabPane;
 public class TabsViewController implements Initializable {
 
     @FXML
-    private TabPane tabPane;
-    @FXML
     private Tab calendarTab;
     @FXML
     private Tab profileTab;

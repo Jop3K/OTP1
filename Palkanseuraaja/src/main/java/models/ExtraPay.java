@@ -1,55 +1,42 @@
-
 package models;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "extrapay")
 
-
 public class ExtraPay {
-    
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "extrapay_id")
     private int id;
-    
+
     @Column(name = "name", nullable = false)
     private String name;
-    
+
     @Column(name = "extrapay")
     private double extrapay;
-    
+
     @Column(name = "beginhour")
     private String beginHour;
-    
+
     @Column(name = "beginminute")
     private String beginMinute;
-    
+
     @Column(name = "endhour")
     private String endHour;
-    
+
     @Column(name = "endminute")
     private String endMinute;
-    
+
     @ManyToOne(cascade = CascadeType.ALL, targetEntity = WorkProfile.class)
     @JoinColumn(name = "workprofile_id")
     private WorkProfile workProfile;
-    
+
     @OneToOne(cascade = CascadeType.ALL, targetEntity = WeekDays.class)
     @JoinColumn(name = "weekdays_id")
     private WeekDays weekdays;
-    
 
     public ExtraPay() {
     }
@@ -61,7 +48,7 @@ public class ExtraPay {
     public void setId(int id) {
         this.id = id;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -126,5 +113,4 @@ public class ExtraPay {
         this.weekdays = weekdays;
     }
 
-    
 }

@@ -170,7 +170,7 @@ public class WorkProfileViewController implements Initializable {
 
                 profileChooser.getItems().add(workProfile);
                 profileChooser.getSelectionModel().selectLast();
-                
+
                 CurrentCalendarViewController.getCalendarViewController().loadWorkProfilesToProfileChooser();
 
                 loadValuesToProfileChooser();

@@ -3,17 +3,7 @@ package models;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "events")
@@ -47,9 +37,7 @@ public class EventModel {
     @Transient
     private String endMinute;
 
-
-
-	public EventModel() {
+    public EventModel() {
     }
 
     public WorkProfile getWorkProfile() {
@@ -110,7 +98,7 @@ public class EventModel {
     }
 
     public void setEndDay(LocalDate endDay) {
-        endTime = new Date(endDay.getYear()-1900, endDay.getMonthValue() - 1, endDay.getDayOfMonth());
+        endTime = new Date(endDay.getYear() - 1900, endDay.getMonthValue() - 1, endDay.getDayOfMonth());
     }
 
     public String getEndHour() {
@@ -139,8 +127,5 @@ public class EventModel {
 
         this.id = id;
     }
-
-
-
 
 }
