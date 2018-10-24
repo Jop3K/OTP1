@@ -29,9 +29,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -120,7 +122,7 @@ public class CalendarViewController implements Initializable {
         //Täytetään taulu
         setTable();
 
-        System.out.print("Alkaako");
+      
         // Täytetään comboboxit
         for (int i = 0; i < 60; i++) {
             startMinute.getItems().add(Integer.toString(i));
@@ -336,9 +338,30 @@ public class CalendarViewController implements Initializable {
                 return false;
             });
         });
+       
+        // Adds menu for editing and deleting objects from eventTable. Fired by mouses right-click
+        MenuItem edit = new MenuItem("Muokkaa");
+        MenuItem delete = new MenuItem("Poista");
+        edit.setOnAction((ActionEvent event) -> {
+            
+            EventModel tmp = eventTable.getSelectionModel().getSelectedItem();
+            System.out.print(tmp.getEndMinute());
+        });
+        delete.setOnAction((ActionEvent event) -> {
+            
+            EventModel tmp = eventTable.getSelectionModel().getSelectedItem();
+            System.out.print(tmp.toString());
+            dao.delete(tmp);
+            data.remove(tmp);
+        });
 
+        ContextMenu menu = new ContextMenu();
+        menu.getItems().add(edit);
+        menu.getItems().add(delete);
+        eventTable.setContextMenu(menu);
+       
+        //Add items to table
         eventTable.setItems(filteredData);
-
     }
 
 }

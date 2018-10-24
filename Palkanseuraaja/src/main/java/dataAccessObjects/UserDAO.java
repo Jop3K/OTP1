@@ -105,6 +105,14 @@ public class UserDAO extends DataAccessObject {
 
         return true;
     }
+    
+    public boolean delete(EventModel event) {
+    	openCurrentSessionWithTransaction().delete(event);
+    	
+    	closeCurrentSessionWithTransaction();
+    	
+    	return true;
+    }
 
     // palauttaa falsen jos käyttäjänimi löytyy tietokannasta
     public boolean checkForDuplicateUser(User user) {

@@ -14,7 +14,7 @@ public class EventModel {
     @Column(name = "event_id")
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = WorkProfile.class)
+    @ManyToOne(targetEntity = WorkProfile.class)
     @JoinColumn(name = "workprofile_id")
     private WorkProfile workProfile;
 

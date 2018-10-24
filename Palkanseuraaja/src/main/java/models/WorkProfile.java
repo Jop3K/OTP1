@@ -22,7 +22,7 @@ public class WorkProfile {
     @Column(name = "pay")
     private double pay;
 
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
+    @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
