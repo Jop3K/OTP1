@@ -22,6 +22,7 @@ import javafx.scene.text.Font;
 import javafx.util.Callback;
 import models.Calculation;
 import models.CurrentCalendarViewController;
+import models.CurrentUser;
 import models.EventModel;
 import models.WorkProfile;
 
@@ -81,7 +82,7 @@ public class CalendarViewController implements Initializable {
     private DatePicker eventDatePicker;
 
     private ObservableList<EventModel> data;
-    private List<WorkProfile> profileList;
+    
 
     public CalendarViewController() {
         dao = new UserDAO();
@@ -125,7 +126,10 @@ public class CalendarViewController implements Initializable {
     }
 
     public boolean isValid() {
-        if (startDay.getValue() == null || endDay.getValue() == null || startHour.getSelectionModel().isEmpty() || endHour.getSelectionModel().isEmpty() || startMinute.getSelectionModel().isEmpty() || endMinute.getSelectionModel().isEmpty() || profileChooser.getSelectionModel().isEmpty()) {
+        if (startDay.getValue() == null || endDay.getValue() == null 
+                || startHour.getSelectionModel().isEmpty() || endHour.getSelectionModel().isEmpty() 
+                || startMinute.getSelectionModel().isEmpty() || endMinute.getSelectionModel().isEmpty() 
+                || profileChooser.getSelectionModel().isEmpty()) {
             return false;
 
         } else {
@@ -194,10 +198,8 @@ public class CalendarViewController implements Initializable {
     public void loadWorkProfilesToProfileChooser() {
 
         profileChooser.getItems().clear();
-
-        profileList = dao.getUsersWorkProfiles();
-
-        for (WorkProfile w : profileList) {
+        
+        for (WorkProfile w : CurrentUser.getWorkProfiles()) {
             profileChooser.getItems().add(w);
         }
 

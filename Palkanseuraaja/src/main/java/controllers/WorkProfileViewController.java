@@ -460,7 +460,7 @@ public class WorkProfileViewController implements Initializable {
     private void loadValuesToProfileChooser() { // Loads current users' values to "Valitse Profiili" dropdown
         profileChooser.getItems().clear();
 
-        profileList = dao.getUsersWorkProfiles();
+        profileList = CurrentUser.getWorkProfiles();
 
         for (WorkProfile w : profileList) {
             profileChooser.getItems().add(w);
