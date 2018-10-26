@@ -24,17 +24,17 @@ public class EventModel {
     @Column(name = "endTime")
     private Date endTime;
 
-    @Transient
+    @Column
     private LocalDate beginDay;
-    @Transient
+    @Column
     private String beginHour;
-    @Transient
+    @Column
     private String beginMinute;
-    @Transient
+    @Column
     private LocalDate endDay;
-    @Transient
+    @Column
     private String endHour;
-    @Transient
+    @Column
     private String endMinute;
 
     public EventModel() {

@@ -77,7 +77,13 @@ public class UserDAO extends DataAccessObject {
 
         return true;
     }
-
+    public boolean update(EventModel event) {
+    	
+    	openCurrentSessionWithTransaction().update(event);
+        closeCurrentSessionWithTransaction();	
+        
+        return true;
+    }
     public boolean save(EventModel event) {
 
         openCurrentSessionWithTransaction().saveOrUpdate(event);
