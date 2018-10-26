@@ -2,56 +2,31 @@ package controllers;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Iterator;
-import java.time.ZoneId;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import dataAccessObjects.UserDAO;
-
 import java.util.Date;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.swing.JOptionPane;
-
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
 import models.Calculation;
 import models.CurrentCalendarViewController;
+import models.CurrentUser;
 import models.EventModel;
 import models.WorkProfile;
 
-/**
- * FXML Controller class
- *
- * @author artur
- */
+
 public class CalendarViewController implements Initializable {
 
     private UserDAO dao;
@@ -107,7 +82,7 @@ public class CalendarViewController implements Initializable {
     private DatePicker eventDatePicker;
 
     private ObservableList<EventModel> data;
-    private List<WorkProfile> profileList;
+    
 
     public CalendarViewController() {
         dao = new UserDAO();
@@ -121,9 +96,18 @@ public class CalendarViewController implements Initializable {
 
         //Täytetään taulu
         setTable();
-
       
         // Täytetään comboboxit
+        generateTimeToComboboxes();
+
+        dao = new UserDAO();
+        dao.openCurrentSession();
+
+        loadWorkProfilesToProfileChooser();
+
+    }
+    
+    public void generateTimeToComboboxes() {
         for (int i = 0; i < 60; i++) {
             startMinute.getItems().add(Integer.toString(i));
             endMinute.getItems().add(Integer.toString(i));
@@ -139,16 +123,13 @@ public class CalendarViewController implements Initializable {
                 endHour.getItems().add(Integer.toString(i));
             }
         }
-
-        dao = new UserDAO();
-        dao.openCurrentSession();
-
-        loadWorkProfilesToProfileChooser();
-
     }
 
     public boolean isValid() {
-        if (startDay.getValue() == null || endDay.getValue() == null || startHour.getSelectionModel().isEmpty() || endHour.getSelectionModel().isEmpty() || startMinute.getSelectionModel().isEmpty() || endMinute.getSelectionModel().isEmpty() || profileChooser.getSelectionModel().isEmpty()) {
+        if (startDay.getValue() == null || endDay.getValue() == null 
+                || startHour.getSelectionModel().isEmpty() || endHour.getSelectionModel().isEmpty() 
+                || startMinute.getSelectionModel().isEmpty() || endMinute.getSelectionModel().isEmpty() 
+                || profileChooser.getSelectionModel().isEmpty()) {
             return false;
 
         } else {
@@ -217,10 +198,8 @@ public class CalendarViewController implements Initializable {
     public void loadWorkProfilesToProfileChooser() {
 
         profileChooser.getItems().clear();
-
-        profileList = new UserDAO().getUsersWorkProfiles();
-
-        for (WorkProfile w : profileList) {
+        
+        for (WorkProfile w : CurrentUser.getWorkProfiles()) {
             profileChooser.getItems().add(w);
         }
 
@@ -240,29 +219,6 @@ public class CalendarViewController implements Initializable {
                     }
                 };
                 return cell;
-            }
-        });
-
-        profileChooser.setConverter(
-                new StringConverter<WorkProfile>() {
-            private Map<String, WorkProfile> map = new HashMap<>();
-
-            @Override
-            public String toString(WorkProfile w) {
-                if (w != null) {
-                    String str = w.getNimi();
-                    map.put(w.getNimi(), w);
-                    return str;
-                } else {
-                    return "";
-                }
-
-            }
-
-            //  TODO
-            @Override
-            public WorkProfile fromString(String string) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         });
 

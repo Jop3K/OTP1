@@ -47,11 +47,12 @@ public class UserDAO extends DataAccessObject {
         }
 
         currentUser = new CurrentUser(user);
+        currentUser.setWorkProfiles(getUsersWorkProfilesFromDatabase());
 
         alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Kirjautuminen onnistui!");
         alert.setHeaderText("Tervetuloa!");
-
+        
         return true;
 
     }
@@ -96,6 +97,13 @@ public class UserDAO extends DataAccessObject {
         return true;
     }
 
+    public boolean save(WorkProfile profile) {
+        openCurrentSessionWithTransaction().saveOrUpdate(profile);
+        closeCurrentSessionWithTransaction();
+        
+        return true;
+    }
+
     public boolean save(ExtraPay extrapay) {
 
         openCurrentSessionWithTransaction().saveOrUpdate(extrapay);
@@ -103,7 +111,7 @@ public class UserDAO extends DataAccessObject {
 
         return true;
     }
-    
+
     public boolean save(WeekDays weekdays) {
 
         openCurrentSessionWithTransaction().saveOrUpdate(weekdays);
@@ -111,13 +119,13 @@ public class UserDAO extends DataAccessObject {
 
         return true;
     }
-    
+
     public boolean delete(EventModel event) {
-    	openCurrentSessionWithTransaction().delete(event);
-    	
-    	closeCurrentSessionWithTransaction();
-    	
-    	return true;
+        openCurrentSessionWithTransaction().delete(event);
+
+        closeCurrentSessionWithTransaction();
+
+        return true;
     }
 
     // palauttaa falsen jos käyttäjänimi löytyy tietokannasta
@@ -133,25 +141,26 @@ public class UserDAO extends DataAccessObject {
         }
         return false;
     }
-    public List<EventModel> getEvents() {
-    	
-    	List<WorkProfile> profiles = getUsersWorkProfiles();
-    	Iterator itr = profiles.iterator();
-    	List<EventModel>events = new ArrayList<EventModel>();
-    	while (itr.hasNext()) {
-    		WorkProfile tmp =(WorkProfile) itr.next();
-    		List<EventModel> eventlist =  (List<EventModel>) tmp.getEvents();
-    		Iterator itr1 = eventlist.iterator();
-    		while(itr1.hasNext()) {
-    			EventModel tmp2 = (EventModel) itr1.next();
-    			events.add(tmp2);
-    		}
-    		
-    	}
 
-    	 return events;
+    public List<EventModel> getEvents() {
+
+        Iterator itr = currentUser.getWorkProfiles().iterator();
+        List<EventModel> events = new ArrayList<EventModel>();
+        while (itr.hasNext()) {
+            WorkProfile tmp = (WorkProfile) itr.next();
+            List<EventModel> eventlist = (List<EventModel>) tmp.getEvents();
+            Iterator itr1 = eventlist.iterator();
+            while (itr1.hasNext()) {
+                EventModel tmp2 = (EventModel) itr1.next();
+                events.add(tmp2);
+            }
+
+        }
+
+        return events;
     }
-    public List<WorkProfile> getUsersWorkProfiles() {
+
+    public List<WorkProfile> getUsersWorkProfilesFromDatabase() {
 
         openCurrentSession();
         Query q = session.createQuery("FROM WorkProfile WHERE user_id='" + CurrentUser.getUser().getId() + "'");
@@ -163,7 +172,7 @@ public class UserDAO extends DataAccessObject {
         return profiles;
 
     }
-    
+
     public List<ExtraPay> getProfilesExtraPays() {
         openCurrentSession();
         Query q = session.createQuery("FROM ExtraPay WHERE workprofile_id='" + CurrentWorkProfile.getWorkProfile().getId() + "'");
