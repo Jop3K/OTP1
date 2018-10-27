@@ -3,6 +3,7 @@ package application;
 import models.ViewChanger;
 import controllers.LoginController;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -12,7 +13,7 @@ import views.LoginView;
 public class Main extends Application {
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws IOException, GeneralSecurityException {
         stage.setTitle("Tervetuloa Palkanseuraajaan");
 
         //Valjastetaan ensinmäin MVC-hommeli käyttöön. stage kulkee kokoajan mukana kirjautumisen

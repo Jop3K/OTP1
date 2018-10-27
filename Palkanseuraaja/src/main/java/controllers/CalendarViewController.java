@@ -1,5 +1,6 @@
 package controllers;
 
+import application.GoogleCalendarConnect;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -7,7 +8,11 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.ResourceBundle;
 import dataAccessObjects.UserDAO;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -80,6 +85,8 @@ public class CalendarViewController implements Initializable {
     private TableColumn<EventModel, String> workProfileColumn;
     @FXML
     private DatePicker eventDatePicker;
+    @FXML
+    private Button connect;
 
     private ObservableList<EventModel> data;
     
@@ -105,6 +112,11 @@ public class CalendarViewController implements Initializable {
 
         loadWorkProfilesToProfileChooser();
 
+    }
+    
+    @FXML
+    public void handleConnectButtonClick() throws IOException, GeneralSecurityException {
+        //TODO
     }
     
     public void generateTimeToComboboxes() {
