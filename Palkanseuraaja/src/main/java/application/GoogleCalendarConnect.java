@@ -122,22 +122,22 @@ public class GoogleCalendarConnect {
 // Change the scope to CalendarScopes.CALENDAR and delete any stored
 // credentials.
         Event event = new Event()
-                .setSummary("TEST444")
-                .setDescription("Testing Google Calendar API");
+                .setSummary("Hello World!")
+                .setDescription("Palkanseuraaja event");
 
-        DateTime startDateTime = new DateTime("2018-10-29T11:00:00");
+        DateTime startDateTime = new DateTime("2018-10-31T11:00:00");
         EventDateTime start = new EventDateTime()
                 .setDateTime(startDateTime)
                 .setTimeZone("Europe/Helsinki");
         event.setStart(start);
 
-        DateTime endDateTime = new DateTime("2018-10-29T17:00:00");
+        DateTime endDateTime = new DateTime("2018-10-31T17:00:00");
         EventDateTime end = new EventDateTime()
                 .setDateTime(endDateTime)
                 .setTimeZone("Europe/Helsinki");
         event.setEnd(end);
 
-        String calendarId = "primary";
+        String calendarId = "a4kp9cn4gh2vqrn9hukqrb99a4@group.calendar.google.com";
         event = service.events().insert(calendarId, event).execute();
         System.out.printf("Event created: %s\n", event.getHtmlLink());
     }
