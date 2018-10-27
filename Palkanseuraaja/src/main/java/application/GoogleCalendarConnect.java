@@ -14,6 +14,7 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.Events;
 
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class GoogleCalendarConnect {
      * Global instance of the scopes required by this quickstart. If modifying
      * these scopes, delete your previously saved tokens/ folder.
      */
-    private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
+    private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
 
     private static Calendar service;
@@ -56,7 +57,7 @@ public class GoogleCalendarConnect {
                 .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
                 .setAccessType("offline")
                 .build();
-        LocalServerReceiver receier = new LocalServerReceiver.Builder().setPort(8877).build();
+        LocalServerReceiver receier = new LocalServerReceiver.Builder().setPort(8888).build();
         return new AuthorizationCodeInstalledApp(flow, receier).authorize("user");
     }
 
@@ -113,8 +114,31 @@ public class GoogleCalendarConnect {
             }
         }
     }
-    
-    public static void sendEventsToGoogleCalendar() {
+
+    public static void sendEventsToGoogleCalendarTest() throws IOException {
         //TODO
+        // Refer to the Java quickstart on how to setup the environment:
+// https://developers.google.com/calendar/quickstart/java
+// Change the scope to CalendarScopes.CALENDAR and delete any stored
+// credentials.
+        Event event = new Event()
+                .setSummary("TEST444")
+                .setDescription("Testing Google Calendar API");
+
+        DateTime startDateTime = new DateTime("2018-10-29T11:00:00");
+        EventDateTime start = new EventDateTime()
+                .setDateTime(startDateTime)
+                .setTimeZone("Europe/Helsinki");
+        event.setStart(start);
+
+        DateTime endDateTime = new DateTime("2018-10-29T17:00:00");
+        EventDateTime end = new EventDateTime()
+                .setDateTime(endDateTime)
+                .setTimeZone("Europe/Helsinki");
+        event.setEnd(end);
+
+        String calendarId = "primary";
+        event = service.events().insert(calendarId, event).execute();
+        System.out.printf("Event created: %s\n", event.getHtmlLink());
     }
 }

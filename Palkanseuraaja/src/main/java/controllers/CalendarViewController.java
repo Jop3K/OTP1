@@ -85,7 +85,7 @@ public class CalendarViewController implements Initializable {
     @FXML
     private Button connect;
     @FXML
-    private Button getnext10;
+    private Button sendEvent;
 
     private ObservableList<EventModel> data;
     
@@ -120,9 +120,9 @@ public class CalendarViewController implements Initializable {
     }
     
     @FXML
-    public void getnext10Handler() throws IOException {
+    public void sendTestEvent() throws IOException {
         //TODO
-        GoogleCalendarConnect.getNextTenEvents();
+        GoogleCalendarConnect.sendEventsToGoogleCalendarTest();
     }
     
     public void generateTimeToComboboxes() {

@@ -166,7 +166,7 @@
                         <Insets left="325.0" />
                     </GridPane.margin>
                 </Label>
-            <Button fx:id="getnext10" mnemonicParsing="false" onAction="#getnext10Handler" text="get next 10 events from google calendar" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Button fx:id="sendEvent" mnemonicParsing="false" onAction="#sendTestEvent" text="get next 10 events from google calendar" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             </children>
         </GridPane>
     </children>
