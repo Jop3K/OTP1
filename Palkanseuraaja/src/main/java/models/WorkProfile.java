@@ -26,10 +26,10 @@ public class WorkProfile {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "workProfile")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "workProfile")
     private Set<ExtraPay> extrapays = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "workProfile")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<EventModel> events = new ArrayList<>();
 
     public WorkProfile() {

@@ -51,7 +51,6 @@ Contributor(s):
     <property name="show_sql">true</property>
     <mapping class="application.models.User"/>
     <mapping class="application.models.WorkProfile"/>
-    <mapping class="application.models.GoogleAccount"/>
     <mapping class="application.models.ExtraPay"/>
     <mapping class="application.models.EventModel"/>
     <mapping class="application.models.WeekDays"/>

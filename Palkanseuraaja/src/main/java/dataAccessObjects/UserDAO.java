@@ -2,12 +2,8 @@ package dataAccessObjects;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
 import org.hibernate.criterion.Restrictions;
-
 import javafx.scene.control.Alert;
 import models.CurrentUser;
 import models.CurrentWorkProfile;
@@ -34,11 +30,11 @@ public class UserDAO extends DataAccessObject {
 
         openCurrentSession();
         Query q = session.createQuery("FROM User WHERE username='" + username + "'");
-        User user = (User) q.uniqueResult();
-
+        currentUser = new CurrentUser((User) q.uniqueResult());
+        
         closeCurrentSession();
 
-        if (user == null || !(user.getPassword().equals(new PasswordHashing().get_SHA_256_SecurePassword(password, user.getSalt().getBytes())))) {
+        if (currentUser.getUser() == null || !(currentUser.getUser().getPassword().equals(new PasswordHashing().get_SHA_256_SecurePassword(password, currentUser.getUser().getSalt().getBytes())))) {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Kirjautuminen epäonnistui.");
             alert.setHeaderText("Tarkista käyttäjätunnus ja salasana");
@@ -46,7 +42,6 @@ public class UserDAO extends DataAccessObject {
             return false;
         }
 
-        currentUser = new CurrentUser(user);
         currentUser.setWorkProfiles(getUsersWorkProfilesFromDatabase());
 
         alert = new Alert(Alert.AlertType.INFORMATION);
@@ -144,18 +139,12 @@ public class UserDAO extends DataAccessObject {
 
     public List<EventModel> getEvents() {
 
-        Iterator itr = currentUser.getWorkProfiles().iterator();
-        List<EventModel> events = new ArrayList<EventModel>();
-        while (itr.hasNext()) {
-            WorkProfile tmp = (WorkProfile) itr.next();
-            List<EventModel> eventlist = (List<EventModel>) tmp.getEvents();
-            Iterator itr1 = eventlist.iterator();
-            while (itr1.hasNext()) {
-                EventModel tmp2 = (EventModel) itr1.next();
-                events.add(tmp2);
-            }
+        openCurrentSession();
+        Query q = session.createQuery("FROM EventModel WHERE user_id='" + CurrentUser.getUser().getId() + "'");
 
-        }
+        List<EventModel> events = q.list();
+
+        closeCurrentSession();
 
         return events;
     }

@@ -13,6 +13,10 @@ public class EventModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "event_id")
     private int id;
+    
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "user_id")
+    private WorkProfile user;
 
     @ManyToOne(targetEntity = WorkProfile.class)
     @JoinColumn(name = "workprofile_id")
@@ -38,6 +42,14 @@ public class EventModel {
     private String endMinute;
 
     public EventModel() {
+    }
+
+    public WorkProfile getUser() {
+        return user;
+    }
+
+    public void setUser(WorkProfile user) {
+        this.user = user;
     }
 
     public WorkProfile getWorkProfile() {

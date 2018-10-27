@@ -36,10 +36,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<WorkProfile> profiles;
-
-    @OneToOne
-    @JoinColumn(name = "google_id")
-    private GoogleAccount google;
+    
+    @OneToMany(mappedBy = "user")
+    private Set<EventModel> users;
 
     public User() throws NoSuchAlgorithmException, NoSuchProviderException {
         salt = new PasswordHashing().generateSalt().toString();
@@ -78,10 +77,6 @@ public class User {
         return this.gmail;
     }
 
-    public void getGoogle() {
-        this.google = google;
-    }
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -106,8 +101,12 @@ public class User {
         this.gmail = gmail;
     }
 
-    public void setGoogle(GoogleAccount google) {
-        this.google = google;
+    public Set<EventModel> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<EventModel> users) {
+        this.users = users;
     }
 
     public Set<WorkProfile> getProfiilit() {
