@@ -5,14 +5,11 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.ResourceBundle;
 import dataAccessObjects.UserDAO;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -87,6 +84,8 @@ public class CalendarViewController implements Initializable {
     private DatePicker eventDatePicker;
     @FXML
     private Button connect;
+    @FXML
+    private Button getnext10;
 
     private ObservableList<EventModel> data;
     
@@ -117,6 +116,13 @@ public class CalendarViewController implements Initializable {
     @FXML
     public void handleConnectButtonClick() throws IOException, GeneralSecurityException {
         //TODO
+        GoogleCalendarConnect.main();
+    }
+    
+    @FXML
+    public void getnext10Handler() throws IOException {
+        //TODO
+        GoogleCalendarConnect.getNextTenEvents();
     }
     
     public void generateTimeToComboboxes() {

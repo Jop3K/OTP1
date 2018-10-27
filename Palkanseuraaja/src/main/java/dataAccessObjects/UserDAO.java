@@ -16,6 +16,7 @@ import models.WeekDays;
 import models.WorkProfile;
 import org.hibernate.query.Query;
 
+
 public class UserDAO extends DataAccessObject {
 
     private CurrentUser currentUser;

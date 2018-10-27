@@ -7,6 +7,7 @@ import java.security.GeneralSecurityException;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import models.CurrentCalendarViewController;
 import models.LoginModel;
 import views.LoginView;
 
@@ -22,7 +23,7 @@ public class Main extends Application {
         LoginView loginView = new LoginView();
         LoginModel loginModel = new LoginModel();
         LoginController loginViewController = new LoginController(loginView, loginModel, viewChanger);
-
+        
         Scene window = new Scene(loginView.getView(), 800, 800);
 
         stage.setScene(window);
@@ -31,7 +32,7 @@ public class Main extends Application {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, GeneralSecurityException {
         launch(Main.class);
     }
 

@@ -109,14 +109,6 @@ public class User {
         this.users = users;
     }
 
-    public Set<WorkProfile> getProfiilit() {
-        return profiles;
-    }
-
-    public void setProfiilit(Set<WorkProfile> profiilit) {
-        this.profiles = profiilit;
-    }
-
     public Set<WorkProfile> getProfiles() {
         return profiles;
     }

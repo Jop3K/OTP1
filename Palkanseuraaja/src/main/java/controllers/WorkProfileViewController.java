@@ -23,11 +23,7 @@ import models.WeekDays;
 import models.WorkProfile;
 import models.CurrentCalendarViewController;
 
-/**
- * FXML Controller class
- *
- * @author artur, joni
- */
+
 public class WorkProfileViewController implements Initializable {
 
     private UserDAO dao;
