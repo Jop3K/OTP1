@@ -71,7 +71,7 @@ public class EventModel {
 
     public void setBeginDay(LocalDate beginDay) {
         beginTime = new Date(beginDay.getYear() - 1900, beginDay.getMonthValue() - 1, beginDay.getDayOfMonth());
-
+       this.beginDay = beginDay;
     }
 
     public String getBeginHour() {
@@ -99,6 +99,7 @@ public class EventModel {
 
     public void setEndDay(LocalDate endDay) {
         endTime = new Date(endDay.getYear() - 1900, endDay.getMonthValue() - 1, endDay.getDayOfMonth());
+        this.endDay = endDay;
     }
 
     public String getEndHour() {

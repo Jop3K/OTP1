@@ -79,7 +79,7 @@ public class UserDAO extends DataAccessObject {
         return true;
     }
     public boolean update(EventModel event) {
-    	
+    	System.out.print("**"+event.getId());
     	openCurrentSessionWithTransaction().update(event);
         closeCurrentSessionWithTransaction();	
         

@@ -83,9 +83,12 @@ public class CalendarViewController implements Initializable {
 
     private ObservableList<EventModel> data;
     
+    private EventModel eventModel;
+    
 
     public CalendarViewController() {
         dao = new UserDAO();
+        eventModel = new EventModel();
     }
 
     @Override
@@ -100,17 +103,21 @@ public class CalendarViewController implements Initializable {
         // Täytetään comboboxit
         generateTimeToComboboxes();
 
-        dao = new UserDAO();
-        dao.openCurrentSession();
-
         loadWorkProfilesToProfileChooser();
 
     }
     
     public void generateTimeToComboboxes() {
         for (int i = 0; i < 60; i++) {
+        	if(i < 10) {
+        		String tmp = "0" + i;
+        		startMinute.getItems().add(tmp);
+        		endMinute.getItems().add(tmp);
+        	}
+        	else {
             startMinute.getItems().add(Integer.toString(i));
             endMinute.getItems().add(Integer.toString(i));
+        	}
 
         }
         for (int i = 0; i < 24; i++) {
@@ -141,11 +148,12 @@ public class CalendarViewController implements Initializable {
     public void saveEvent(ActionEvent e) {
         LocalDate startDate = startDay.getValue();
         LocalDate endDate = endDay.getValue();
-        EventModel eventModel = new EventModel();
+        
 
         try {
 
             if (isValid() == false) {
+            	
                 JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
                 return;
             }
@@ -184,15 +192,28 @@ public class CalendarViewController implements Initializable {
         }
 
         if (isValid() == true) {
-            JOptionPane.showMessageDialog(null, "Luonti onnistui!");
+            if(eventModel.getId() == 0) {
+            	System.out.print(eventModel.getId());
             dao.save(eventModel);
             data.add(eventModel);
+            clearChoices();
+            JOptionPane.showMessageDialog(null, "Luonti onnistui!");
+            } else {
+            	dao.update(eventModel);      
+            	 eventTable.getColumns().get(0).setVisible(false); //Workaround for fireing changelistener in observablelist(updates object to table)
+            	 eventTable.getColumns().get(0).setVisible(true);
+            	eventModel = new EventModel();
+            	clearChoices();
+            }
+            
+            
+            
         } else {
             JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
             return;
         }
 
-        System.out.print(Calculation.Calculate(eventModel));
+        
     }
 
     public void loadWorkProfilesToProfileChooser() {
@@ -272,7 +293,7 @@ public class CalendarViewController implements Initializable {
         //Lisätään mahdollisuus filtteröidä taulussa näkyviä tapahtumia päivämäärän mukaan
         FilteredList<EventModel> filteredData = new FilteredList<>(data, p -> true);
         eventDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("äksöni");
+           
             filteredData.setPredicate(EventModel -> {
 
                 if (newValue == null) {
@@ -283,12 +304,12 @@ public class CalendarViewController implements Initializable {
                 java.sql.Date eventDate = java.sql.Date.valueOf(ldate);
 
                 if (newDate == eventDate) {
-                    System.out.println("==");
+                    
                     return true;
                 }
 
                 if (newDate.equals(eventDate)) {
-                    System.out.println("equal");
+                    
                     return true;
                 }
                 return false;
@@ -300,8 +321,16 @@ public class CalendarViewController implements Initializable {
         MenuItem delete = new MenuItem("Poista");
         edit.setOnAction((ActionEvent event) -> {
             
-            EventModel tmp = eventTable.getSelectionModel().getSelectedItem();
-            System.out.print(tmp.getEndMinute());
+            
+            eventModel = eventTable.getSelectionModel().getSelectedItem();
+            System.out.print(eventModel.getId());
+            startHour.setValue(eventModel.getBeginHour());
+            endHour.setValue(eventModel.getEndHour());
+            startMinute.setValue(eventModel.getBeginMinute());
+            endMinute.setValue(eventModel.getEndMinute());
+            startDay.setValue(eventModel.getBeginDay());
+            endDay.setValue(eventModel.getEndDay());
+            profileChooser.setValue(eventModel.getWorkProfile());
         });
         delete.setOnAction((ActionEvent event) -> {
             
@@ -319,5 +348,13 @@ public class CalendarViewController implements Initializable {
         //Add items to table
         eventTable.setItems(filteredData);
     }
-
+    public void clearChoices() {
+    	startDay.setValue(null);
+    	endDay.setValue(null);
+    	startHour.setValue(null);
+    	startMinute.setValue(null);
+    	endMinute.setValue(null);
+    	endHour.setValue(null);
+    	profileChooser.setValue(null);
+    }
 }
