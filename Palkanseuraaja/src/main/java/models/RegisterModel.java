@@ -12,21 +12,18 @@ public class RegisterModel {
     private String uName;
     private String pw1;
     private String pw2;
-    private String gmail;
 
     private Alert alert;
 
     public RegisterModel() {
-
     }
 
-    public RegisterModel(String fName, String lName, String uName, String pw1, String pw2, String gmail) {
+    public RegisterModel(String fName, String lName, String uName, String pw1, String pw2) {
         this.fName = fName;
         this.lName = lName;
         this.uName = uName;
         this.pw1 = pw1;
         this.pw2 = pw2;
-        this.gmail = gmail;
 
     }
     // Metodia käytetään tarkistamaan, että onko kaikki pakolliset kentät täytetty viewissä
@@ -49,18 +46,6 @@ public class RegisterModel {
             pwAlert.setHeaderText("Salasanat eivät täsmää!");
             this.alert = pwAlert;
             return false;
-        } //Sähköpostin validaation
-        else if (!tmp.getGmail().equals("")) {
-            String regex = "^[\\w.+\\-]+@gmail\\.com$";
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(tmp.getGmail());
-            if (!matcher.matches()) {
-                Alert emailAlert = new Alert(Alert.AlertType.ERROR);
-                emailAlert.setTitle("Virhe!");
-                emailAlert.setHeaderText("Sähköposti on virheellinen tai se ei ole Gmail-osoite");
-                this.alert = emailAlert;
-                return false;
-            }
         }
 
         //Jos käyttäjänimi on alle kolme merkkiä
@@ -115,14 +100,6 @@ public class RegisterModel {
 
     public void setPw2(String pw2) {
         this.pw2 = pw2;
-    }
-
-    public String getGmail() {
-        return gmail;
-    }
-
-    public void setGmail(String gmail) {
-        this.gmail = gmail;
     }
 
     public Alert getAlert() {

@@ -93,9 +93,9 @@
                         <Font size="18.0" fx:id="x11" />
                     </font>
                 </Label>
-                <Button fx:id="connect" disable="false" mnemonicParsing="false" onAction="#handleConnectButtonClick" prefHeight="27.0" prefWidth="149.0" text="Connect to Google" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                <Button fx:id="sendToGoogle" disable="false" mnemonicParsing="false" onAction="#sendSelectedEventToGoogleCalendar" text="Vie valittu tapahtuma Google Kalenteriin" GridPane.columnIndex="1" GridPane.rowIndex="4">
                     <GridPane.margin>
-                        <Insets left="220.0" />
+                        <Insets left="150.0" />
                     </GridPane.margin>
                 </Button>
                 <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveEvent" text="Tallenna" GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -166,7 +166,6 @@
                         <Insets left="325.0" />
                     </GridPane.margin>
                 </Label>
-            <Button fx:id="sendEvent" mnemonicParsing="false" onAction="#sendTestEvent" text="get next 10 events from google calendar" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             </children>
         </GridPane>
     </children>

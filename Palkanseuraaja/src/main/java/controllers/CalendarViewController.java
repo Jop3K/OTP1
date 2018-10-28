@@ -47,8 +47,6 @@ public class CalendarViewController implements Initializable {
     @FXML
     private Font x11;
     @FXML
-    private Button sendToGoogleCalendar;
-    @FXML
     private Button saveButton;
     @FXML
     private ComboBox<?> hourStart;
@@ -83,9 +81,7 @@ public class CalendarViewController implements Initializable {
     @FXML
     private DatePicker eventDatePicker;
     @FXML
-    private Button connect;
-    @FXML
-    private Button sendEvent;
+    private Button sendToGoogle;
 
     private ObservableList<EventModel> data;
     
@@ -114,15 +110,10 @@ public class CalendarViewController implements Initializable {
     }
     
     @FXML
-    public void handleConnectButtonClick() throws IOException, GeneralSecurityException {
+    public void sendSelectedEventToGoogleCalendar() throws IOException, GeneralSecurityException {
         //TODO
         GoogleCalendarConnect.main();
-    }
-    
-    @FXML
-    public void sendTestEvent() throws IOException {
-        //TODO
-        GoogleCalendarConnect.sendEventsToGoogleCalendarTest();
+        GoogleCalendarConnect.sendSelectedEventToGoogleCalendar(eventTable.getSelectionModel().getSelectedItem());
     }
     
     public void generateTimeToComboboxes() {

@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
+import models.EventModel;
 
 public class GoogleCalendarConnect {
 
@@ -68,27 +69,6 @@ public class GoogleCalendarConnect {
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
-        // List the next 10 events from the primary calendar.
-        DateTime now = new DateTime(System.currentTimeMillis());
-        Events events = service.events().list("primary")
-                .setMaxResults(10)
-                .setTimeMin(now)
-                .setOrderBy("startTime")
-                .setSingleEvents(true)
-                .execute();
-        List<Event> items = events.getItems();
-        if (items.isEmpty()) {
-            System.out.println("No upcoming events found.");
-        } else {
-            System.out.println("Upcoming events");
-            for (Event event : items) {
-                DateTime start = event.getStart().getDateTime();
-                if (start == null) {
-                    start = event.getStart().getDate();
-                }
-                System.out.printf("%s (%s)\n", event.getSummary(), start);
-            }
-        }
     }
 
     public static void getNextTenEvents() throws IOException {
@@ -115,15 +95,16 @@ public class GoogleCalendarConnect {
         }
     }
 
-    public static void sendEventsToGoogleCalendarTest() throws IOException {
+    public static void sendSelectedEventToGoogleCalendar(EventModel eventModel) throws IOException {
         //TODO
         // Refer to the Java quickstart on how to setup the environment:
 // https://developers.google.com/calendar/quickstart/java
 // Change the scope to CalendarScopes.CALENDAR and delete any stored
 // credentials.
+
         Event event = new Event()
-                .setSummary("Hello World!")
-                .setDescription("Palkanseuraaja event");
+                .setSummary("Palkanseuraaja Event")
+                .setDescription("Palkanseuraaja test event");
 
         DateTime startDateTime = new DateTime("2018-10-31T11:00:00");
         EventDateTime start = new EventDateTime()

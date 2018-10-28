@@ -31,14 +31,9 @@ public class User {
     @Column(name = "salt", nullable = false)
     private String salt;
 
-    @Column(name = "gmail")
-    private String gmail;
-
     @OneToMany(mappedBy = "user")
     private Set<WorkProfile> profiles;
     
-    @OneToMany(mappedBy = "user")
-    private Set<EventModel> users;
 
     public User() throws NoSuchAlgorithmException, NoSuchProviderException {
         salt = new PasswordHashing().generateSalt().toString();
@@ -73,10 +68,6 @@ public class User {
         return this.lastname;
     }
 
-    public String getGmail() {
-        return this.gmail;
-    }
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -95,18 +86,6 @@ public class User {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
-    }
-
-    public void setGmail(String gmail) {
-        this.gmail = gmail;
-    }
-
-    public Set<EventModel> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<EventModel> users) {
-        this.users = users;
     }
 
     public Set<WorkProfile> getProfiles() {
