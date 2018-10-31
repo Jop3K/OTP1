@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="430.0" layoutY="237.0" prefHeight="288.0" prefWidth="434.0">
+         <children>
+            <Label layoutX="80.0" layoutY="75.0" text="Käyttäjätunnus:" />
+            <Label layoutX="80.0" layoutY="136.0" text="Salasana:" />
+            <TextField fx:id="username" layoutX="188.0" layoutY="71.0" />
+            <TextField fx:id="password" layoutX="188.0" layoutY="132.0" />
+            <Button fx:id="loginButton" defaultButton="true" layoutX="121.0" layoutY="208.0" mnemonicParsing="false" text="Kirjaudu" />
+            <Button fx:id="registerButton" layoutX="237.0" layoutY="208.0" mnemonicParsing="false" text="Rekisteröidy" />
+         </children>
+      </Pane>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="572.0" layoutY="87.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@salarypal.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
