@@ -5,6 +5,7 @@ import controllers.LoginController;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import models.LoginModel;
 import views.LoginView;
@@ -14,7 +15,8 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         stage.setTitle("Tervetuloa Palkanseuraajaan");
-
+        stage.getIcons().add(new Image("/img/salarypal.png"));
+        
         //Valjastetaan ensinmäin MVC-hommeli käyttöön. stage kulkee kokoajan mukana kirjautumisen
         //ja rekisteröinnin välissä
         ViewChanger viewChanger = new ViewChanger(stage);

@@ -28,7 +28,7 @@
       </Pane>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="572.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@salarypal.png" />
+            <Image url="/img/salarypal.png" />
          </image>
       </ImageView>
       <Label layoutX="580.0" layoutY="195.0" text="Rekisteröinti" underline="true">

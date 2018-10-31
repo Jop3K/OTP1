@@ -21,7 +21,7 @@
       </Pane>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="572.0" layoutY="87.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@salarypal.png" />
+            <Image url="/img/salarypal.png" />
          </image>
       </ImageView>
    </children>
