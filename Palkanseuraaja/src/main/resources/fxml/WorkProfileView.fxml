@@ -18,7 +18,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.WorkProfileViewController">
     <children>
         <GridPane gridLinesVisible="true" prefHeight="800.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -165,7 +164,7 @@
                 </Label>
                 <Label layoutX="400.0" layoutY="106.0" text="Valitse profiili :">
                     <GridPane.margin>
-                        <Insets left="310.0" top="50.0" />
+                        <Insets left="300.0" top="50.0" />
                     </GridPane.margin>
                 </Label>
                 <ComboBox fx:id="profileChooser" layoutX="630.0" layoutY="132.0" onAction="#handleProfileChooserClick" prefHeight="26.0" prefWidth="91.0">
@@ -218,7 +217,7 @@
                         <Insets left="280.0" top="270.0" />
                     </GridPane.margin>
                 </Button>
-                <Button fx:id="newProfile" mnemonicParsing="false" onAction="#handleNewProfileButtonClick" text="Uusi profiili">
+                <Button fx:id="newProfile" mnemonicParsing="false" onAction="#handleNewProfileButtonClick" prefHeight="25.0" prefWidth="90.0" text="Uusi profiili">
                     <GridPane.margin>
                         <Insets bottom="30.0" left="400.0" />
                     </GridPane.margin>

@@ -47,7 +47,7 @@
                 </Label>
                 <DatePicker fx:id="eventDatePicker">
                     <GridPane.margin>
-                        <Insets left="400.0" />
+                        <Insets left="420.0" />
                     </GridPane.margin>
                 </DatePicker>
                 <DatePicker fx:id="startDay" prefHeight="25.0" prefWidth="130.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -151,7 +151,7 @@
                 </Label>
                 <ComboBox fx:id="profileChooser" layoutX="420.0" layoutY="157.0" prefHeight="25.0" prefWidth="96.0" GridPane.columnIndex="1">
                     <GridPane.margin>
-                        <Insets left="450.0" />
+                        <Insets left="460.0" />
                     </GridPane.margin>
                 </ComboBox>
                 <Label layoutX="340.0" layoutY="76.0" text="Työprofiili :" GridPane.columnIndex="1">

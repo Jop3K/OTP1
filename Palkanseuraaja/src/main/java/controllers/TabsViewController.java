@@ -10,7 +10,7 @@ import javafx.scene.control.TabPane;
 /**
  * FXML Controller class
  *
- * @author artur
+ * @author artur, joni
  */
 public class TabsViewController implements Initializable {
 
@@ -18,7 +18,8 @@ public class TabsViewController implements Initializable {
     private Tab calendarTab;
     @FXML
     private Tab profileTab;
-
+    @FXML
+    private Tab statsTab;
     /**
      * Initializes the controller class.
      */
