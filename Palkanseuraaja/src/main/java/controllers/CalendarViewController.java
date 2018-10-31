@@ -344,6 +344,7 @@ public class CalendarViewController implements Initializable {
 
         //Add items to table
         eventTable.setItems(filteredData);
+        eventTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
 }
