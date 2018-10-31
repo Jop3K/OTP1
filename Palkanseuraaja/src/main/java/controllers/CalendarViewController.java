@@ -1,6 +1,6 @@
 package controllers;
 
-import application.GoogleCalendarConnect;
+import application.GoogleCalendar;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import dataAccessObjects.UserDAO;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javafx.collections.FXCollections;
@@ -27,7 +28,6 @@ import models.CurrentCalendarViewController;
 import models.CurrentUser;
 import models.EventModel;
 import models.WorkProfile;
-
 
 public class CalendarViewController implements Initializable {
 
@@ -84,7 +84,6 @@ public class CalendarViewController implements Initializable {
     private Button sendToGoogle;
 
     private ObservableList<EventModel> data;
-    
 
     public CalendarViewController() {
         dao = new UserDAO();
@@ -98,7 +97,7 @@ public class CalendarViewController implements Initializable {
 
         //Täytetään taulu
         setTable();
-      
+
         // Täytetään comboboxit
         generateTimeToComboboxes();
 
@@ -108,19 +107,24 @@ public class CalendarViewController implements Initializable {
         loadWorkProfilesToProfileChooser();
 
     }
-    
+
     @FXML
     public void sendSelectedEventToGoogleCalendar() throws IOException, GeneralSecurityException {
         //TODO
-        GoogleCalendarConnect.main();
-        GoogleCalendarConnect.sendSelectedEventToGoogleCalendar(eventTable.getSelectionModel().getSelectedItem());
+        GoogleCalendar.main();
+        GoogleCalendar.sendSelectedEventToGoogleCalendar(eventTable.getSelectionModel().getSelectedItem());
     }
-    
+
     public void generateTimeToComboboxes() {
         for (int i = 0; i < 60; i++) {
-            startMinute.getItems().add(Integer.toString(i));
-            endMinute.getItems().add(Integer.toString(i));
-
+            if (i < 10) {
+                String tmp = "0" + i;
+                startMinute.getItems().add(tmp);
+                endMinute.getItems().add(tmp);
+            } else {
+                startMinute.getItems().add(Integer.toString(i));
+                endMinute.getItems().add(Integer.toString(i));
+            }
         }
         for (int i = 0; i < 24; i++) {
             if (i < 10) {
@@ -135,9 +139,9 @@ public class CalendarViewController implements Initializable {
     }
 
     public boolean isValid() {
-        if (startDay.getValue() == null || endDay.getValue() == null 
-                || startHour.getSelectionModel().isEmpty() || endHour.getSelectionModel().isEmpty() 
-                || startMinute.getSelectionModel().isEmpty() || endMinute.getSelectionModel().isEmpty() 
+        if (startDay.getValue() == null || endDay.getValue() == null
+                || startHour.getSelectionModel().isEmpty() || endHour.getSelectionModel().isEmpty()
+                || startMinute.getSelectionModel().isEmpty() || endMinute.getSelectionModel().isEmpty()
                 || profileChooser.getSelectionModel().isEmpty()) {
             return false;
 
@@ -149,49 +153,62 @@ public class CalendarViewController implements Initializable {
 
     public void saveEvent(ActionEvent e) {
         LocalDate startDate = startDay.getValue();
+        System.out.println(startDate.format(DateTimeFormatter.ISO_DATE));
         LocalDate endDate = endDay.getValue();
+        System.out.println(endDate.getYear());
         EventModel eventModel = new EventModel();
 
         try {
+        if (isValid() == false) {
+            JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
+            return;
+        }
 
-            if (isValid() == false) {
-                JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
-                return;
-            }
+        if (startDate.isBefore(endDate)) {
+            eventModel.setBeginDay(startDay.getValue());
+            eventModel.setEndDay(endDay.getValue());
+            
+        } else if (startDate.isAfter(endDate)) {
+            JOptionPane.showMessageDialog(null, "Lopetusajan pitää olla aloitusajan jälkeen (päivä)");
+            return;
+        } else if (startDate.equals(endDate)) { // jos aloitus pvm ja lopetus pvm sama niin...
+            eventModel.setBeginDay(startDay.getValue());
+            eventModel.setEndDay(endDay.getValue());
 
-            if (startDate.isBefore(endDate)) {
-                eventModel.setBeginDay(startDay.getValue());
-                eventModel.setEndDay(endDay.getValue());
-            } else if (startDate.isAfter(endDate)) {
-                JOptionPane.showMessageDialog(null, "Lopetusajan pitää olla aloitusajan jälkeen (päivä)");
+            if (Integer.parseInt(startHour.getValue()) > Integer.parseInt(endHour.getValue())) { // jos aloitusaika on isompi kuin lopetusaika
+                JOptionPane.showMessageDialog(null, "Aloitusaika ei voi olla lopetusajan jälkeen, tarkista tunnit");
                 return;
-            } else if (startDate.equals(endDate)) { // jos aloitus pvm ja lopetus pvm sama niin...
-                eventModel.setBeginDay(startDay.getValue());
-                eventModel.setEndDay(endDay.getValue());
-                if (Integer.parseInt(startHour.getValue()) > Integer.parseInt(endHour.getValue())) { // jos aloitusaika on isompi kuin lopetusaika
-                    JOptionPane.showMessageDialog(null, "Aloitusaika ei voi olla lopetusajan jälkeen, tarkista tunnit");
+            } else if (Integer.parseInt(startHour.getValue()) == Integer.parseInt(endHour.getValue())) { // jos aloitustunti on sama kuin lopetustunti
+                if (Integer.parseInt(startMinute.getValue()) >= Integer.parseInt(endMinute.getValue())) {
+                    JOptionPane.showMessageDialog(null, "Aloitusaika ei voi olla lopetusajan jälkeen, tarkista minuutit");
                     return;
-                } else if (Integer.parseInt(startHour.getValue()) == Integer.parseInt(endHour.getValue())) { // jos aloitustunti on sama kuin lopetustunti
-                    if (Integer.parseInt(startMinute.getValue()) >= Integer.parseInt(endMinute.getValue())) {
-                        JOptionPane.showMessageDialog(null, "Aloitusaika ei voi olla lopetusajan jälkeen, tarkista minuutit");
-                        return;
-                    }
                 }
             }
+        }
 
-            eventModel.setBeginHour(startHour.getValue());
-            eventModel.setBeginMinute(startMinute.getValue());
-            eventModel.setEndHour(endHour.getValue());
-            eventModel.setEndMinute(endMinute.getValue());
-            // Etsitään oikea workprofile-olio eventtiin
+        eventModel.setBeginHour(startHour.getValue());
+        eventModel.setBeginMinute(startMinute.getValue());
+        eventModel.setEndHour(endHour.getValue());
+        eventModel.setEndMinute(endMinute.getValue());
+        eventModel.setBeginDateTime(startDay.getValue());
+            System.out.println(eventModel.getBeginDateTime());
+            eventModel.setEndDateTime(endDay.getValue());
+            System.out.println(eventModel.getEndDateTime());
 
-            eventModel.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
+        System.out.println(eventModel.getBeginDateTime());
+        System.out.println(eventModel.getEndDateTime());
+        
+            System.out.println(eventModel.getBeginDay());
+            System.out.println(eventModel.getBeginHour());
+            System.out.println(eventModel.getBeginTime());
+        // Etsitään oikea workprofile-olio eventtiin
+
+        eventModel.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
 
         } catch (Exception err) {
             JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
             return;
         }
-
         if (isValid() == true) {
             JOptionPane.showMessageDialog(null, "Luonti onnistui!");
             dao.save(eventModel);
@@ -207,7 +224,7 @@ public class CalendarViewController implements Initializable {
     public void loadWorkProfilesToProfileChooser() {
 
         profileChooser.getItems().clear();
-        
+
         for (WorkProfile w : CurrentUser.getWorkProfiles()) {
             profileChooser.getItems().add(w);
         }
@@ -303,17 +320,17 @@ public class CalendarViewController implements Initializable {
                 return false;
             });
         });
-       
+
         // Adds menu for editing and deleting objects from eventTable. Fired by mouses right-click
         MenuItem edit = new MenuItem("Muokkaa");
         MenuItem delete = new MenuItem("Poista");
         edit.setOnAction((ActionEvent event) -> {
-            
+
             EventModel tmp = eventTable.getSelectionModel().getSelectedItem();
             System.out.print(tmp.getEndMinute());
         });
         delete.setOnAction((ActionEvent event) -> {
-            
+
             EventModel tmp = eventTable.getSelectionModel().getSelectedItem();
             System.out.print(tmp.toString());
             dao.delete(tmp);
@@ -324,7 +341,7 @@ public class CalendarViewController implements Initializable {
         menu.getItems().add(edit);
         menu.getItems().add(delete);
         eventTable.setContextMenu(menu);
-       
+
         //Add items to table
         eventTable.setItems(filteredData);
     }

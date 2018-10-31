@@ -3,6 +3,8 @@ package models;
 import java.time.LocalDate;
 import java.util.Date;
 import javax.persistence.*;
+import com.google.api.client.util.DateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "events")
@@ -22,6 +24,12 @@ public class EventModel {
 
     @Column(name = "endTime")
     private Date endTime;
+    
+    @Column(name = "beginDateTime")
+    private String beginDateTime;
+    
+    @Column(name = "endDateTime")
+    private String endDateTime;
 
     @Column
     private LocalDate beginDay;
@@ -69,17 +77,28 @@ public class EventModel {
 
     public void setBeginDay(LocalDate beginDay) {
         beginTime = new Date(beginDay.getYear() - 1900, beginDay.getMonthValue() - 1, beginDay.getDayOfMonth());
-
     }
+
+    public void setBeginDateTime(LocalDate beginDay) {
+        beginDateTime = (beginDay.format(DateTimeFormatter.ISO_DATE) + "T" + beginHour + ":" + beginMinute + ":" + "00");
+    }
+
+    public void setEndDateTime(LocalDate endDay) {
+        endDateTime = (endDay.format(DateTimeFormatter.ISO_DATE) + "T" + endHour + ":" + endMinute + ":" + "00");
+    }
+    
+    
 
     public String getBeginHour() {
         return beginHour;
     }
 
     public void setBeginHour(String beginHour) {
-        beginTime.setHours(Integer.parseInt(beginHour));
-        System.out.println(beginTime);
-        this.beginHour = beginHour;
+        if (beginHour.length() < 2) {
+            this.beginHour = "0" + beginHour;
+        } else {
+            this.beginHour = beginHour;
+        }
     }
 
     public String getBeginMinute() {
@@ -87,8 +106,11 @@ public class EventModel {
     }
 
     public void setBeginMinute(String beginMinute) {
-        beginTime.setMinutes(Integer.parseInt(beginMinute));
-        this.beginMinute = beginMinute;
+        if (beginMinute.length() < 2) {
+            this.beginMinute = "0" + beginMinute;
+        } else {
+            this.beginMinute = beginMinute;
+        }
     }
 
     public LocalDate getEndDay() {
@@ -97,6 +119,7 @@ public class EventModel {
 
     public void setEndDay(LocalDate endDay) {
         endTime = new Date(endDay.getYear() - 1900, endDay.getMonthValue() - 1, endDay.getDayOfMonth());
+        
     }
 
     public String getEndHour() {
@@ -104,8 +127,11 @@ public class EventModel {
     }
 
     public void setEndHour(String endHour) {
-        endTime.setHours(Integer.parseInt(endHour));
-        this.endHour = endHour;
+        if (endHour.length() < 2) {
+            this.endHour = "0" + endHour;
+        } else {
+            this.endHour = endHour;
+        }
     }
 
     public String getEndMinute() {
@@ -113,8 +139,11 @@ public class EventModel {
     }
 
     public void setEndMinute(String endMinute) {
-        endTime.setMinutes(Integer.parseInt(endMinute));
-        this.endMinute = endMinute;
+        if (endMinute.length() < 2) {
+            this.endMinute = "0" + endMinute;
+        } else {
+            this.endMinute = endMinute;
+        }
     }
 
     public int getId() {
@@ -125,4 +154,12 @@ public class EventModel {
         this.id = id;
     }
 
+    public String getBeginDateTime() {
+        return beginDateTime;
+    }
+
+    public String getEndDateTime() {
+        return endDateTime;
+    }
+    
 }

@@ -1,8 +1,10 @@
 package dataAccessObjects;
 
-import application.GoogleCalendarConnect;
+import application.GoogleCalendar;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import org.hibernate.criterion.Restrictions;
 import javafx.scene.control.Alert;
@@ -140,12 +142,25 @@ public class UserDAO extends DataAccessObject {
     }
 
     public List<EventModel> getEvents() {
-
+        
         openCurrentSession();
-        Query q = session.createQuery("FROM EventModel WHERE user_id='" + CurrentUser.getUser().getId() + "'");
+        Query q = session.createQuery("FROM WorkProfile WHERE user_id='" + CurrentUser.getUser().getId() + "'");
 
-        List<EventModel> events = q.list();
+        List<WorkProfile> profiles = q.list();
 
+        Iterator itr = profiles.iterator();
+        List<EventModel> events = new ArrayList<EventModel>();
+        while (itr.hasNext()) {
+            WorkProfile tmp = (WorkProfile) itr.next();
+            List<EventModel> eventlist = (List<EventModel>) tmp.getEvents();
+            Iterator itr1 = eventlist.iterator();
+            while (itr1.hasNext()) {
+                EventModel tmp2 = (EventModel) itr1.next();
+                events.add(tmp2);
+            }
+
+        }
+        
         closeCurrentSession();
 
         return events;

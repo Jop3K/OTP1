@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import models.EventModel;
 
-public class GoogleCalendarConnect {
+public class GoogleCalendar {
 
     private static final String APPLICATION_NAME = "Google Calendar API Java Quickstart";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
@@ -49,7 +49,7 @@ public class GoogleCalendarConnect {
      */
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
         // Load client secrets.
-        InputStream in = GoogleCalendarConnect.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+        InputStream in = GoogleCalendar.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.
@@ -102,17 +102,21 @@ public class GoogleCalendarConnect {
 // Change the scope to CalendarScopes.CALENDAR and delete any stored
 // credentials.
 
+        System.out.println(eventModel.getWorkProfile().getNimi());
+        System.out.println(eventModel.getBeginDateTime());
+        System.out.println(eventModel.getEndDateTime());
+
         Event event = new Event()
-                .setSummary("Palkanseuraaja Event")
+                .setSummary(eventModel.getWorkProfile().getNimi())
                 .setDescription("Palkanseuraaja test event");
 
-        DateTime startDateTime = new DateTime("2018-10-31T11:00:00");
+        DateTime startDateTime = new DateTime(eventModel.getBeginDateTime());
         EventDateTime start = new EventDateTime()
                 .setDateTime(startDateTime)
                 .setTimeZone("Europe/Helsinki");
         event.setStart(start);
 
-        DateTime endDateTime = new DateTime("2018-10-31T17:00:00");
+        DateTime endDateTime = new DateTime(eventModel.getEndDateTime());
         EventDateTime end = new EventDateTime()
                 .setDateTime(endDateTime)
                 .setTimeZone("Europe/Helsinki");
