@@ -32,7 +32,7 @@
                   <Insets bottom="150.0" left="50.0" />
                </GridPane.margin>
             </Label>
-            <TextField editable="false" promptText="TBD" GridPane.rowIndex="1">
+            <TextField fx:id="incomeToday" editable="false" promptText="TBD" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets bottom="100.0" left="50.0" right="400.0" />
                </GridPane.margin>
@@ -42,7 +42,7 @@
                   <Insets bottom="150.0" left="350.0" />
                </GridPane.margin>
             </Label>
-            <TextField editable="false" layoutX="60.0" layoutY="348.0" promptText="TBD" GridPane.rowIndex="1">
+            <TextField fx:id="incomeMonthly" editable="false" layoutX="60.0" layoutY="348.0" promptText="TBD" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="50.0" right="400.0" top="20.0" />
                </GridPane.margin>
@@ -52,7 +52,7 @@
                   <Insets bottom="100.0" left="250.0" />
                </GridPane.margin>
             </Label>
-            <TextField editable="false" layoutX="60.0" layoutY="348.0" promptText="TBD" GridPane.rowIndex="1">
+            <TextField fx:id="incomeYearly" editable="false" layoutX="60.0" layoutY="348.0" promptText="TBD" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="50.0" right="400.0" top="140.0" />
                </GridPane.margin>
@@ -62,7 +62,7 @@
                   <Insets bottom="30.0" left="50.0" />
                </GridPane.margin>
             </Label>
-            <TextField editable="false" layoutX="60.0" layoutY="348.0" promptText="TBD" GridPane.rowIndex="1">
+            <TextField fx:id="workshiftUpcoming" editable="false" layoutX="60.0" layoutY="348.0" promptText="TBD" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets bottom="100.0" left="350.0" right="100.0" />
                </GridPane.margin>
@@ -95,7 +95,7 @@
                   <Insets bottom="150.0" left="50.0" />
                </GridPane.margin>
             </Label>
-            <TextField editable="false" layoutX="360.0" layoutY="348.0" promptText="TBD" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TextField fx:id="incomeLimit" editable="false" layoutX="360.0" layoutY="348.0" promptText="TBD" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets bottom="100.0" left="50.0" right="400.0" />
                </GridPane.margin>
@@ -115,7 +115,7 @@
                   <Insets bottom="40.0" left="50.0" />
                </GridPane.margin>
             </Label>
-            <ComboBox disable="true" prefHeight="25.0" prefWidth="80.0" promptText="EUR(€)" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <ComboBox fx:id="currencyDrop" disable="true" prefHeight="25.0" prefWidth="80.0" promptText="EUR(€)" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="50.0" top="10.0" />
                </GridPane.margin>
