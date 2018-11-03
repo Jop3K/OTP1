@@ -30,6 +30,9 @@ public class EventModel {
     
     @Column(name = "endDateTime")
     private String endDateTime;
+    
+    @Column(name = "googleId")
+    private String googleId;
 
     @Column
     private LocalDate beginDay;
@@ -86,8 +89,14 @@ public class EventModel {
     public void setEndDateTime(LocalDate endDay) {
         endDateTime = (endDay.format(DateTimeFormatter.ISO_DATE) + "T" + endHour + ":" + endMinute + ":" + "00");
     }
-    
-    
+
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
+    }
 
     public String getBeginHour() {
         return beginHour;
@@ -160,6 +169,14 @@ public class EventModel {
 
     public String getEndDateTime() {
         return endDateTime;
+    }
+
+    public void setBeginDateTime(String beginDateTime) {
+        this.beginDateTime = beginDateTime;
+    }
+
+    public void setEndDateTime(String endDateTime) {
+        this.endDateTime = endDateTime;
     }
     
 }

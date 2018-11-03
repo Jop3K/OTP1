@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import models.EventModel;
@@ -102,28 +103,63 @@ public class GoogleCalendar {
 // Change the scope to CalendarScopes.CALENDAR and delete any stored
 // credentials.
 
-        System.out.println(eventModel.getWorkProfile().getNimi());
-        System.out.println(eventModel.getBeginDateTime());
-        System.out.println(eventModel.getEndDateTime());
+        if (eventModel.getGoogleId() == null) {
 
-        Event event = new Event()
-                .setSummary(eventModel.getWorkProfile().getNimi())
-                .setDescription("Palkanseuraaja test event");
+            Event event = new Event()
+                    .setSummary(eventModel.getWorkProfile().getNimi())
+                    .setDescription("Palkanseuraaja test event");
 
-        DateTime startDateTime = new DateTime(eventModel.getBeginDateTime());
-        EventDateTime start = new EventDateTime()
-                .setDateTime(startDateTime)
-                .setTimeZone("Europe/Helsinki");
-        event.setStart(start);
+            DateTime startDateTime = new DateTime(eventModel.getBeginDateTime());
+            EventDateTime start = new EventDateTime()
+                    .setDateTime(startDateTime)
+                    .setTimeZone("Europe/Helsinki");
+            event.setStart(start);
 
-        DateTime endDateTime = new DateTime(eventModel.getEndDateTime());
-        EventDateTime end = new EventDateTime()
-                .setDateTime(endDateTime)
-                .setTimeZone("Europe/Helsinki");
-        event.setEnd(end);
+            DateTime endDateTime = new DateTime(eventModel.getEndDateTime());
+            EventDateTime end = new EventDateTime()
+                    .setDateTime(endDateTime)
+                    .setTimeZone("Europe/Helsinki");
+            event.setEnd(end);
+
+            String calendarId = "a4kp9cn4gh2vqrn9hukqrb99a4@group.calendar.google.com";
+            event = service.events().insert(calendarId, event).execute();
+            System.out.printf("Event created: %s\n", event.getHtmlLink());
+
+            eventModel.setGoogleId(event.getId());
+
+        } else {
+            editSelectedEvent(eventModel);
+        }
+
+    }
+
+    public static void editSelectedEvent(EventModel eventModel) throws IOException {
 
         String calendarId = "a4kp9cn4gh2vqrn9hukqrb99a4@group.calendar.google.com";
-        event = service.events().insert(calendarId, event).execute();
-        System.out.printf("Event created: %s\n", event.getHtmlLink());
+        // Retrieve the event from the API
+        Event event = service.events().get(calendarId, eventModel.getGoogleId()).execute();
+
+        // Make a change
+        DateTime startDateTime = new DateTime(eventModel.getBeginDateTime());
+            EventDateTime start = new EventDateTime()
+                    .setDateTime(startDateTime)
+                    .setTimeZone("Europe/Helsinki");
+            event.setStart(start);
+
+            DateTime endDateTime = new DateTime(eventModel.getEndDateTime());
+            EventDateTime end = new EventDateTime()
+                    .setDateTime(endDateTime)
+                    .setTimeZone("Europe/Helsinki");
+            event.setEnd(end);
+
+            event = service.events().insert(calendarId, event).execute();
+            System.out.printf("Event created: %s\n", event.getHtmlLink());
+
+            eventModel.setGoogleId(event.getId());
+
+        // Update the event
+        Event updatedEvent = service.events().update("primary", event.getId(), event).execute();
+
     }
+
 }
