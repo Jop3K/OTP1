@@ -140,25 +140,24 @@ public class GoogleCalendar {
 
     public static void updateSelectedEvent(EventModel eventModel) throws IOException {
 
+        System.out.println(eventModel.getGoogleId());
         String calendarId = "a4kp9cn4gh2vqrn9hukqrb99a4@group.calendar.google.com";
         // Retrieve the event from the API
-        Event updatedEvent = service.events().get(calendarId, eventModel.getGoogleId()).execute();
+        Event event = service.events().get(calendarId, eventModel.getGoogleId()).execute();
 
         // Make a change
         DateTime startDateTime = new DateTime(eventModel.getBeginDateTime());
         EventDateTime start = new EventDateTime()
-                .setDateTime(startDateTime)
-                .setTimeZone("Europe/Helsinki");
-        updatedEvent.setStart(start);
+                .setDateTime(startDateTime);
+        event.setStart(start);
 
         DateTime endDateTime = new DateTime(eventModel.getEndDateTime());
         EventDateTime end = new EventDateTime()
-                .setDateTime(endDateTime)
-                .setTimeZone("Europe/Helsinki");
-        updatedEvent.setEnd(end);
+                .setDateTime(endDateTime);
+        event.setEnd(end);
 
         // Update the event
-        updatedEvent = service.events().update("primary", updatedEvent.getId(), updatedEvent).execute();
+        Event updatedEvent = service.events().update(calendarId, event.getId(), event).execute();
 
     }
 

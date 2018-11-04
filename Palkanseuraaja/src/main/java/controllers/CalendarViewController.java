@@ -88,8 +88,11 @@ public class CalendarViewController implements Initializable {
 
     private ObservableList<EventModel> data;
 
+    private EventModel eventModel;
+
     public CalendarViewController() {
         dao = new UserDAO();
+        eventModel = new EventModel();
     }
 
     @Override
@@ -156,7 +159,6 @@ public class CalendarViewController implements Initializable {
     public void saveEvent(ActionEvent e) throws IOException {
         LocalDate startDate = startDay.getValue();
         LocalDate endDate = endDay.getValue();
-        EventModel eventModel = new EventModel();
 
         try {
             if (isValid() == false) {
@@ -203,7 +205,6 @@ public class CalendarViewController implements Initializable {
 
         if (isValid() == true) {
             if (eventModel.getId() == 0) {
-                System.out.print(eventModel.getId());
                 dao.save(eventModel);
                 data.add(eventModel);
                 clearChoices();
@@ -215,7 +216,6 @@ public class CalendarViewController implements Initializable {
                 GoogleCalendar.updateSelectedEvent(eventModel);
                 eventTable.getColumns().get(0).setVisible(false); //Workaround for fireing changelistener in observablelist(updates object to table)
                 eventTable.getColumns().get(0).setVisible(true);
-                eventModel = new EventModel();
                 clearChoices();
             }
 
@@ -328,7 +328,7 @@ public class CalendarViewController implements Initializable {
         MenuItem delete = new MenuItem("Poista");
         MenuItem sendToGoogle = new MenuItem("Vie Google Kalenteriin");
         edit.setOnAction((ActionEvent event) -> {
-            EventModel eventModel = eventTable.getSelectionModel().getSelectedItem();
+            eventModel = eventTable.getSelectionModel().getSelectedItem();
             System.out.print(eventModel.getId());
             startHour.setValue(eventModel.getBeginHour());
             endHour.setValue(eventModel.getEndHour());
@@ -340,9 +340,11 @@ public class CalendarViewController implements Initializable {
         });
         delete.setOnAction((ActionEvent event) -> {
             for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
+                data.remove(e);
+            }
+            for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
                 dao.delete(e);
             }
-            eventTable.getSelectionModel().getSelectedItems().removeAll(data);
         });
         sendToGoogle.setOnAction((ActionEvent event) -> {
 
