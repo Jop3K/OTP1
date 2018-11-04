@@ -16,6 +16,7 @@ import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.Events;
+import dataAccessObjects.UserDAO;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,11 +25,12 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import models.CurrentUser;
 import models.EventModel;
 
 public class GoogleCalendar {
 
-    private static final String APPLICATION_NAME = "Google Calendar API Java Quickstart";
+    private static final String APPLICATION_NAME = "Palkanseuraaja";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
 
@@ -61,6 +63,7 @@ public class GoogleCalendar {
                 .build();
         LocalServerReceiver receier = new LocalServerReceiver.Builder().setPort(8888).build();
         return new AuthorizationCodeInstalledApp(flow, receier).authorize("user");
+
     }
 
     public static void main(String... args) throws IOException, GeneralSecurityException {
@@ -111,14 +114,12 @@ public class GoogleCalendar {
 
             DateTime startDateTime = new DateTime(eventModel.getBeginDateTime());
             EventDateTime start = new EventDateTime()
-                    .setDateTime(startDateTime)
-                    .setTimeZone("Europe/Helsinki");
+                    .setDateTime(startDateTime);
             event.setStart(start);
 
             DateTime endDateTime = new DateTime(eventModel.getEndDateTime());
             EventDateTime end = new EventDateTime()
-                    .setDateTime(endDateTime)
-                    .setTimeZone("Europe/Helsinki");
+                    .setDateTime(endDateTime);
             event.setEnd(end);
 
             String calendarId = "a4kp9cn4gh2vqrn9hukqrb99a4@group.calendar.google.com";
@@ -126,39 +127,38 @@ public class GoogleCalendar {
             System.out.printf("Event created: %s\n", event.getHtmlLink());
 
             eventModel.setGoogleId(event.getId());
+            System.out.println(eventModel.getGoogleId());
+            UserDAO dao = new UserDAO();
+            dao.update(eventModel);
+            System.out.println(event.getSummary());
 
         } else {
-            editSelectedEvent(eventModel);
+            updateSelectedEvent(eventModel);
         }
 
     }
 
-    public static void editSelectedEvent(EventModel eventModel) throws IOException {
+    public static void updateSelectedEvent(EventModel eventModel) throws IOException {
 
         String calendarId = "a4kp9cn4gh2vqrn9hukqrb99a4@group.calendar.google.com";
         // Retrieve the event from the API
-        Event event = service.events().get(calendarId, eventModel.getGoogleId()).execute();
+        Event updatedEvent = service.events().get(calendarId, eventModel.getGoogleId()).execute();
 
         // Make a change
         DateTime startDateTime = new DateTime(eventModel.getBeginDateTime());
-            EventDateTime start = new EventDateTime()
-                    .setDateTime(startDateTime)
-                    .setTimeZone("Europe/Helsinki");
-            event.setStart(start);
+        EventDateTime start = new EventDateTime()
+                .setDateTime(startDateTime)
+                .setTimeZone("Europe/Helsinki");
+        updatedEvent.setStart(start);
 
-            DateTime endDateTime = new DateTime(eventModel.getEndDateTime());
-            EventDateTime end = new EventDateTime()
-                    .setDateTime(endDateTime)
-                    .setTimeZone("Europe/Helsinki");
-            event.setEnd(end);
-
-            event = service.events().insert(calendarId, event).execute();
-            System.out.printf("Event created: %s\n", event.getHtmlLink());
-
-            eventModel.setGoogleId(event.getId());
+        DateTime endDateTime = new DateTime(eventModel.getEndDateTime());
+        EventDateTime end = new EventDateTime()
+                .setDateTime(endDateTime)
+                .setTimeZone("Europe/Helsinki");
+        updatedEvent.setEnd(end);
 
         // Update the event
-        Event updatedEvent = service.events().update("primary", event.getId(), event).execute();
+        updatedEvent = service.events().update("primary", updatedEvent.getId(), updatedEvent).execute();
 
     }
 

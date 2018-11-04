@@ -153,11 +153,9 @@ public class CalendarViewController implements Initializable {
         //startDay != null || endDay != null || startHour != null || endHour != null || startMinute != null || endMinute != null || profileChooser != null;
     }
 
-    public void saveEvent(ActionEvent e) {
+    public void saveEvent(ActionEvent e) throws IOException {
         LocalDate startDate = startDay.getValue();
-        System.out.println(startDate.format(DateTimeFormatter.ISO_DATE));
         LocalDate endDate = endDay.getValue();
-        System.out.println(endDate.getYear());
         EventModel eventModel = new EventModel();
 
         try {
@@ -193,16 +191,7 @@ public class CalendarViewController implements Initializable {
             eventModel.setEndHour(endHour.getValue());
             eventModel.setEndMinute(endMinute.getValue());
             eventModel.setBeginDateTime(startDay.getValue());
-            System.out.println(eventModel.getBeginDateTime());
             eventModel.setEndDateTime(endDay.getValue());
-            System.out.println(eventModel.getEndDateTime());
-
-            System.out.println(eventModel.getBeginDateTime());
-            System.out.println(eventModel.getEndDateTime());
-
-            System.out.println(eventModel.getBeginDay());
-            System.out.println(eventModel.getBeginHour());
-            System.out.println(eventModel.getBeginTime());
             // Etsitään oikea workprofile-olio eventtiin
 
             eventModel.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
@@ -211,16 +200,29 @@ public class CalendarViewController implements Initializable {
             JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
             return;
         }
+
         if (isValid() == true) {
-            JOptionPane.showMessageDialog(null, "Luonti onnistui!");
-            dao.save(eventModel);
-            data.add(eventModel);
+            if (eventModel.getId() == 0) {
+                System.out.print(eventModel.getId());
+                dao.save(eventModel);
+                data.add(eventModel);
+                clearChoices();
+                JOptionPane.showMessageDialog(null, "Luonti onnistui!");
+                System.out.println(eventModel.getBeginDateTime());
+                System.out.println(eventModel.getEndDateTime());
+            } else {
+                dao.update(eventModel);
+                GoogleCalendar.updateSelectedEvent(eventModel);
+                eventTable.getColumns().get(0).setVisible(false); //Workaround for fireing changelistener in observablelist(updates object to table)
+                eventTable.getColumns().get(0).setVisible(true);
+                eventModel = new EventModel();
+                clearChoices();
+            }
+
         } else {
             JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
             return;
         }
-
-        System.out.print(Calculation.Calculate(eventModel));
     }
 
     public void loadWorkProfilesToProfileChooser() {
@@ -300,7 +302,7 @@ public class CalendarViewController implements Initializable {
         //Lisätään mahdollisuus filtteröidä taulussa näkyviä tapahtumia päivämäärän mukaan
         FilteredList<EventModel> filteredData = new FilteredList<>(data, p -> true);
         eventDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-            
+
             filteredData.setPredicate(EventModel -> {
 
                 if (newValue == null) {
@@ -326,21 +328,27 @@ public class CalendarViewController implements Initializable {
         MenuItem delete = new MenuItem("Poista");
         MenuItem sendToGoogle = new MenuItem("Vie Google Kalenteriin");
         edit.setOnAction((ActionEvent event) -> {
-
-            EventModel tmp = eventTable.getSelectionModel().getSelectedItem();
-            System.out.print(tmp.getEndMinute());
+            EventModel eventModel = eventTable.getSelectionModel().getSelectedItem();
+            System.out.print(eventModel.getId());
+            startHour.setValue(eventModel.getBeginHour());
+            endHour.setValue(eventModel.getEndHour());
+            startMinute.setValue(eventModel.getBeginMinute());
+            endMinute.setValue(eventModel.getEndMinute());
+            startDay.setValue(eventModel.getBeginDay());
+            endDay.setValue(eventModel.getEndDay());
+            profileChooser.setValue(eventModel.getWorkProfile());
         });
         delete.setOnAction((ActionEvent event) -> {
             for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
                 dao.delete(e);
-                data.remove(e);
             }
+            eventTable.getSelectionModel().getSelectedItems().removeAll(data);
         });
         sendToGoogle.setOnAction((ActionEvent event) -> {
 
             try {
                 GoogleCalendar.main();
-                
+
                 for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
                     GoogleCalendar.sendSelectedEventToGoogleCalendar(e);
                 }
@@ -361,6 +369,16 @@ public class CalendarViewController implements Initializable {
         //Add items to table
         eventTable.setItems(filteredData);
         eventTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    }
+
+    public void clearChoices() {
+        startDay.setValue(null);
+        endDay.setValue(null);
+        startHour.setValue(null);
+        startMinute.setValue(null);
+        endMinute.setValue(null);
+        endHour.setValue(null);
+        profileChooser.setValue(null);
     }
 
 }

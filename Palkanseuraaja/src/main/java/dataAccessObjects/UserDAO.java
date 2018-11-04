@@ -1,6 +1,7 @@
 package dataAccessObjects;
 
 import application.GoogleCalendar;
+import com.google.api.client.auth.oauth2.Credential;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.ArrayList;
@@ -18,7 +19,6 @@ import models.WeekDays;
 import models.WorkProfile;
 import org.hibernate.query.Query;
 
-
 public class UserDAO extends DataAccessObject {
 
     private CurrentUser currentUser;
@@ -35,7 +35,7 @@ public class UserDAO extends DataAccessObject {
         openCurrentSession();
         Query q = session.createQuery("FROM User WHERE username='" + username + "'");
         currentUser = new CurrentUser((User) q.uniqueResult());
-        
+
         closeCurrentSession();
 
         if (currentUser.getUser() == null || !(currentUser.getUser().getPassword().equals(new PasswordHashing().get_SHA_256_SecurePassword(password, currentUser.getUser().getSalt().getBytes())))) {
@@ -51,7 +51,7 @@ public class UserDAO extends DataAccessObject {
         alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Kirjautuminen onnistui!");
         alert.setHeaderText("Tervetuloa!");
-        
+
         return true;
 
     }
@@ -77,13 +77,23 @@ public class UserDAO extends DataAccessObject {
 
         return true;
     }
-    public boolean update(EventModel event) {
-    	
-    	openCurrentSessionWithTransaction().update(event);
-        closeCurrentSessionWithTransaction();	
-        
+    
+    public boolean update(User user) {
+
+        openCurrentSessionWithTransaction().update(user);
+        closeCurrentSessionWithTransaction();
+
         return true;
     }
+
+    public boolean update(EventModel event) {
+
+        openCurrentSessionWithTransaction().update(event);
+        closeCurrentSessionWithTransaction();
+
+        return true;
+    }
+
     public boolean save(EventModel event) {
 
         openCurrentSessionWithTransaction().saveOrUpdate(event);
@@ -99,7 +109,7 @@ public class UserDAO extends DataAccessObject {
     public boolean save(WorkProfile profile) {
         openCurrentSessionWithTransaction().saveOrUpdate(profile);
         closeCurrentSessionWithTransaction();
-        
+
         return true;
     }
 
@@ -142,7 +152,7 @@ public class UserDAO extends DataAccessObject {
     }
 
     public List<EventModel> getEvents() {
-        
+
         openCurrentSession();
         Query q = session.createQuery("FROM WorkProfile WHERE user_id='" + CurrentUser.getUser().getId() + "'");
 
@@ -160,7 +170,7 @@ public class UserDAO extends DataAccessObject {
             }
 
         }
-        
+
         closeCurrentSession();
 
         return events;

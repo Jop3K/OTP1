@@ -103,24 +103,19 @@ public class EventModel {
     }
 
     public void setBeginHour(String beginHour) {
-        if (beginHour.length() < 2) {
-            this.beginHour = "0" + beginHour;
-        } else {
-            this.beginHour = beginHour;
-        }
-    }
+        beginTime.setHours(Integer.parseInt(beginHour));
+        System.out.println(beginTime);
+        this.beginHour = beginHour;
+}
 
     public String getBeginMinute() {
         return beginMinute;
     }
 
     public void setBeginMinute(String beginMinute) {
-        if (beginMinute.length() < 2) {
-            this.beginMinute = "0" + beginMinute;
-        } else {
-            this.beginMinute = beginMinute;
-        }
-    }
+        beginTime.setMinutes(Integer.parseInt(beginMinute));
+        this.beginMinute = beginMinute;
+}
 
     public LocalDate getEndDay() {
         return endDay;
@@ -136,24 +131,18 @@ public class EventModel {
     }
 
     public void setEndHour(String endHour) {
-        if (endHour.length() < 2) {
-            this.endHour = "0" + endHour;
-        } else {
-            this.endHour = endHour;
-        }
-    }
+        endTime.setHours(Integer.parseInt(endHour));
+        this.endHour = endHour;
+}
 
     public String getEndMinute() {
         return endMinute;
     }
 
     public void setEndMinute(String endMinute) {
-        if (endMinute.length() < 2) {
-            this.endMinute = "0" + endMinute;
-        } else {
-            this.endMinute = endMinute;
-        }
-    }
+        endTime.setMinutes(Integer.parseInt(endMinute));
+        this.endMinute = endMinute;
+}
 
     public int getId() {
         return id;
