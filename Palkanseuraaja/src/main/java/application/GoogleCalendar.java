@@ -114,12 +114,14 @@ public class GoogleCalendar {
 
             DateTime startDateTime = new DateTime(eventModel.getBeginDateTime());
             EventDateTime start = new EventDateTime()
-                    .setDateTime(startDateTime);
+                    .setDateTime(startDateTime)
+                    .setTimeZone("Europe/Helsinki");
             event.setStart(start);
 
             DateTime endDateTime = new DateTime(eventModel.getEndDateTime());
             EventDateTime end = new EventDateTime()
-                    .setDateTime(endDateTime);
+                    .setDateTime(endDateTime)
+                    .setTimeZone("Europe/Helsinki");
             event.setEnd(end);
 
             String calendarId = "a4kp9cn4gh2vqrn9hukqrb99a4@group.calendar.google.com";
@@ -148,12 +150,14 @@ public class GoogleCalendar {
         // Make a change
         DateTime startDateTime = new DateTime(eventModel.getBeginDateTime());
         EventDateTime start = new EventDateTime()
-                .setDateTime(startDateTime);
+                .setDateTime(startDateTime)
+                .setTimeZone("Europe/Helsinki");
         event.setStart(start);
 
         DateTime endDateTime = new DateTime(eventModel.getEndDateTime());
         EventDateTime end = new EventDateTime()
-                .setDateTime(endDateTime);
+                .setDateTime(endDateTime)
+                .setTimeZone("Europe/Helsinki");
         event.setEnd(end);
 
         // Update the event

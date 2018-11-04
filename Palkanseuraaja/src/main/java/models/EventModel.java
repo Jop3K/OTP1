@@ -84,11 +84,11 @@ public class EventModel {
     }
 
     public void setBeginDateTime(LocalDate beginDay) {
-        beginDateTime = (beginDay.format(DateTimeFormatter.ISO_DATE) + "T" + beginHour + ":" + beginMinute + ":" + "00");
+        beginDateTime = (beginDay.format(DateTimeFormatter.ISO_DATE) + "T" + beginHour + ":" + beginMinute + ":" + "00" + "+02:00");
     }
 
     public void setEndDateTime(LocalDate endDay) {
-        endDateTime = (endDay.format(DateTimeFormatter.ISO_DATE) + "T" + endHour + ":" + endMinute + ":" + "00");
+        endDateTime = (endDay.format(DateTimeFormatter.ISO_DATE) + "T" + endHour + ":" + endMinute + ":" + "00" + "+02:00");
     }
 
     public String getGoogleId() {
