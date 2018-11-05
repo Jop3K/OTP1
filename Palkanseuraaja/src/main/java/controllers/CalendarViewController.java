@@ -340,8 +340,6 @@ public class CalendarViewController implements Initializable {
         delete.setOnAction((ActionEvent event) -> {
             for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
                 data.remove(e);
-            }
-            for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
                 dao.delete(e);
             }
         });
@@ -349,7 +347,6 @@ public class CalendarViewController implements Initializable {
 
             try {
                 GoogleCalendar.main();
-
                 for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
                     GoogleCalendar.sendSelectedEventToGoogleCalendar(e);
                 }

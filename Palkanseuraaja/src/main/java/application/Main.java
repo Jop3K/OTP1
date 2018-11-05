@@ -17,7 +17,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException, GeneralSecurityException {
         stage.setTitle("Tervetuloa Palkanseuraajaan");
-        stage.getIcons().add(new Image("/img/salarypal.png"));
+//        stage.getIcons().add(new Image("/img/salarypal.png"));
         
         //Valjastetaan ensinmäin MVC-hommeli käyttöön. stage kulkee kokoajan mukana kirjautumisen
         //ja rekisteröinnin välissä
