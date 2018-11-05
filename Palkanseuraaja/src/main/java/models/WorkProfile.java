@@ -65,7 +65,6 @@ public class WorkProfile {
 
     public void setPay(double pay) {
         this.pay = pay;
-        calculateEventPays();
     }
     
     public void calculateEventPays() {
@@ -97,7 +96,6 @@ public class WorkProfile {
 
     public void setExtraPays(Set<ExtraPay> extrapays) {
         this.extrapays = extrapays;
-        calculateEventPays();
     }
 
     public ExtraPay getYolisa() {

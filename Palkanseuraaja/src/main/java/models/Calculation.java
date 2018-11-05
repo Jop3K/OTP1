@@ -41,7 +41,7 @@ public class Calculation {
 
         totalPay = basicPay + extraPay;
 
-        return totalPay;
+        return (double) Math.round(totalPay * 100d) / 100d;
     }
 
     /**
@@ -66,6 +66,9 @@ public class Calculation {
         pay = event.getWorkProfile().getPay() / 60;
         //lasketaan kokonaisansiot
         pay = pay * minutes;
+        
+        // Päivitetään tuntimäärä eventtiin
+        event.setHours((double) Math.round((minutes / 60) * 100d) / 100d);
 
         return pay;
     }

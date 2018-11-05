@@ -25,7 +25,10 @@ public class EventModel {
     private Date endTime;
     
     @Column
-    private double eventPay = 0;
+    private double eventPay;
+    
+    @Column
+    private double hours;
 
     @Column
     private LocalDate beginDay;
@@ -49,6 +52,14 @@ public class EventModel {
     
     public double getEventPay() {
         return eventPay;
+    }
+    
+    public double getHours() {
+        return hours;
+    }
+    
+    public void setHours(double hours) {
+        this.hours = hours;
     }
     
     public void setEventPay(double pay) {
