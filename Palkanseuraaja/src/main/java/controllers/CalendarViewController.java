@@ -80,6 +80,8 @@ public class CalendarViewController implements Initializable {
     private TableColumn<EventModel, String> workProfileColumn;
     @FXML
     private DatePicker eventDatePicker;
+    @FXML
+    private Label eventCountLabel;
 
     private ObservableList<EventModel> data;
     
@@ -215,7 +217,7 @@ public class CalendarViewController implements Initializable {
 
         
     }
-
+    // tuodaan työprofiilit dropdown valikkoon
     public void loadWorkProfilesToProfileChooser() {
 
         profileChooser.getItems().clear();
@@ -248,6 +250,10 @@ public class CalendarViewController implements Initializable {
     public void setTable() {
 
         data = FXCollections.observableArrayList(dao.getEvents());
+        
+        
+        eventCountLabel.setText(Integer.toString(data.size()));
+        
         workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
         //Formatoidaan "alkaa" kolumni näyttämää päivämäärän dd.mm.yy hh:mm muodossa
         startColumn.setCellFactory(column -> {
@@ -314,6 +320,8 @@ public class CalendarViewController implements Initializable {
                 }
                 return false;
             });
+            
+            eventCountLabel.setText(Integer.toString(filteredData.size()));
         });
        
         // Adds menu for editing and deleting objects from eventTable. Fired by mouses right-click
