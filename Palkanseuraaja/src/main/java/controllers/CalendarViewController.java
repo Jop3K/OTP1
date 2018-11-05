@@ -344,7 +344,7 @@ public class CalendarViewController implements Initializable {
         	
         	EventModel tmp = eventTable.getSelectionModel().getSelectedItem();
         	
-        	JOptionPane.showMessageDialog(null, "Tapahtuman kesto: " + " tuntia" 
+        	JOptionPane.showMessageDialog(null, "Tapahtuman kesto: " + tmp.getHours() +  " tuntia" 
         									+ "\nPalkka: " + tmp.getEventPay() + " euroa"
         									, "Tapahtuman tiedot", JOptionPane.INFORMATION_MESSAGE);
         	
