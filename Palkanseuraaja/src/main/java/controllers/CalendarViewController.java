@@ -339,6 +339,7 @@ public class CalendarViewController implements Initializable {
         MenuItem edit = new MenuItem("Muokkaa");
         MenuItem delete = new MenuItem("Poista");
         
+        // Showing useful information to user
         info.setOnAction((ActionEvent event) -> {
         	
         	EventModel tmp = eventTable.getSelectionModel().getSelectedItem();
@@ -396,12 +397,14 @@ public class CalendarViewController implements Initializable {
     	profileChooser.setValue(null);
     }
     
+    // Tyhjennetään tapahtuman etsimisen päivämäärä -hakukenttä
     public void clearEventDatePicker(ActionEvent e) {
     	
     	eventDatePicker.setValue(null);
     	clearEventsBtn.setDisable(true);
     }
     
+    // Peruutetaan tapahtuman muokkaus -nappi
     public void cancelEventEdit(ActionEvent e) {
     	
     	
