@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -15,6 +20,7 @@
 
 
 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CalendarViewController">
+
     <children>
         <GridPane layoutX="8.0" prefHeight="800.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
@@ -167,15 +173,15 @@
                         <Insets left="325.0" />
                     </GridPane.margin>
                 </Label>
-            <Button disable="true" mnemonicParsing="false" text="X">
+            <Button fx:id="clearEventsBtn" disable="true" mnemonicParsing="false" onAction="#clearEventDatePicker" text="X">
                <font>
                   <Font name="System Bold" size="11.0" />
                </font>
                <GridPane.margin>
-                  <Insets left="610.0" />
+                  <Insets left="630.0" />
                </GridPane.margin>
             </Button>
-            <Button disable="true" layoutX="620.0" layoutY="28.0" mnemonicParsing="false" text="Peruuta" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <Button fx:id="cancelEventEditBtn" disable="true" layoutX="620.0" layoutY="28.0" mnemonicParsing="false" onAction="#cancelEventEdit" text="Peruuta" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="350.0" />
                </GridPane.margin>
@@ -188,9 +194,9 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label text="TBA" GridPane.rowIndex="5">
+            <Label fx:id="eventCountLabel" text="TBA" GridPane.rowIndex="5">
                <GridPane.margin>
-                  <Insets bottom="118.0" left="170.0" />
+                  <Insets bottom="118.0" left="200.0" />
                </GridPane.margin>
                <font>
                   <Font name="System Bold" size="18.0" />

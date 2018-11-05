@@ -33,6 +33,11 @@ public class EventModel {
     
     @Column(name = "googleId")
     private String googleId;
+    @Column
+    private double eventPay;
+    
+    @Column
+    private double hours;
 
     @Column
     private LocalDate beginDay;
@@ -48,6 +53,26 @@ public class EventModel {
     private String endMinute;
 
     public EventModel() {
+    }
+    
+    public void calcPay() {
+        eventPay = Calculation.Calculate(this);
+    }
+    
+    public double getEventPay() {
+        return eventPay;
+    }
+    
+    public double getHours() {
+        return hours;
+    }
+    
+    public void setHours(double hours) {
+        this.hours = hours;
+    }
+    
+    public void setEventPay(double pay) {
+        eventPay = pay;
     }
 
     public WorkProfile getWorkProfile() {

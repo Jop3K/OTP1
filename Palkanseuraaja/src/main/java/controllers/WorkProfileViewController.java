@@ -22,6 +22,7 @@ import models.ExtraPay;
 import models.WeekDays;
 import models.WorkProfile;
 import models.CurrentCalendarViewController;
+import models.EventModel;
 
 public class WorkProfileViewController implements Initializable {
 
@@ -142,6 +143,17 @@ public class WorkProfileViewController implements Initializable {
                 }
 
                 dao.save(workProfile);
+                
+                // Tallennetaan eventit uudelleen jos palkka extrapayt vaihtuu (palkka lasketaan tässä tilanteessa uudelleen)
+                if(!tuntipalkka.getText().isEmpty() || extrapayChooser.getSelectionModel().getSelectedItem() != null) {
+                    
+                    for(EventModel profileEvent : workProfile.getEvents()) {
+                     
+                        profileEvent.calcPay();
+                        dao.update(profileEvent);
+                        
+                    }
+                }
 
                 profileChooser.getItems().add(workProfile);
                 profileChooser.getSelectionModel().selectLast();

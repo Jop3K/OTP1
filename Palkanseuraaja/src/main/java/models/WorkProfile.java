@@ -66,6 +66,13 @@ public class WorkProfile {
     public void setPay(double pay) {
         this.pay = pay;
     }
+    
+    public void calculateEventPays() {
+        for(EventModel event : events) {
+            event.calcPay();
+        }
+    }
+
 
     public Set<ExtraPay> getPalkkalisat() {
         return extrapays;

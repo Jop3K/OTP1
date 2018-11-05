@@ -52,6 +52,10 @@ public class CalendarViewController implements Initializable {
     @FXML
     private Button saveButton;
     @FXML
+    private Button clearEventsBtn;
+    @FXML
+    private Button cancelEventEditBtn;
+    @FXML
     private ComboBox<?> hourStart;
     @FXML
     private ComboBox<?> minuteStart;
@@ -85,6 +89,8 @@ public class CalendarViewController implements Initializable {
     private DatePicker eventDatePicker;
     @FXML
     private Button connectToGoogle;
+    @FXML
+    private Label eventCountLabel;
 
     private ObservableList<EventModel> data;
 
@@ -204,17 +210,23 @@ public class CalendarViewController implements Initializable {
         }
 
         if (isValid() == true) {
-            if (eventModel.getId() == 0) {
-                dao.save(eventModel);
-                data.add(eventModel);
-                clearChoices();
-                JOptionPane.showMessageDialog(null, "Luonti onnistui!");
+
+            if(eventModel.getId() == 0) {
+            	System.out.print(eventModel.getId());
+            // Lasketaan palkka ennen tallennusta
+            eventModel.calcPay();
+            dao.save(eventModel);
+            data.add(eventModel);
+            clearChoices();
+            JOptionPane.showMessageDialog(null, "Luonti onnistui!");
             } else {
-                dao.update(eventModel);
-                GoogleCalendar.updateSelectedEvent(eventModel);
-                eventTable.getColumns().get(0).setVisible(false); //Workaround for fireing changelistener in observablelist(updates object to table)
-                eventTable.getColumns().get(0).setVisible(true);
-                clearChoices();
+                // Lasketaan palkka ennen tallennusta
+                eventModel.calcPay();
+            	dao.update(eventModel);      
+            	 eventTable.getColumns().get(0).setVisible(false); //Workaround for fireing changelistener in observablelist(updates object to table)
+            	 eventTable.getColumns().get(0).setVisible(true);
+            	eventModel = new EventModel();
+            	clearChoices();
             }
 
         } else {
@@ -223,7 +235,7 @@ public class CalendarViewController implements Initializable {
         }
 
     }
-
+    // tuodaan työprofiilit dropdown valikkoon
     public void loadWorkProfilesToProfileChooser() {
 
         profileChooser.getItems().clear();
@@ -256,6 +268,10 @@ public class CalendarViewController implements Initializable {
     public void setTable() {
 
         data = FXCollections.observableArrayList(dao.getEvents());
+        
+        
+        eventCountLabel.setText(Integer.toString(data.size()));
+        
         workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
         //Formatoidaan "alkaa" kolumni näyttämää päivämäärän dd.mm.yy hh:mm muodossa
         startColumn.setCellFactory(column -> {
@@ -320,13 +336,32 @@ public class CalendarViewController implements Initializable {
                 }
                 return false;
             });
+            
+            clearEventsBtn.setDisable(false);
+            eventCountLabel.setText(Integer.toString(filteredData.size()));
+            
         });
 
         // Adds menu for editing and deleting objects from eventTable. Fired by mouses right-click
+        MenuItem info = new MenuItem("Tiedot");
         MenuItem edit = new MenuItem("Muokkaa");
         MenuItem delete = new MenuItem("Poista");
         MenuItem sendToGoogle = new MenuItem("Vie Google Kalenteriin");
+        
+        // Showing useful information to user
+        info.setOnAction((ActionEvent event) -> {
+        	
+        	EventModel tmp = eventTable.getSelectionModel().getSelectedItem();
+        	
+        	JOptionPane.showMessageDialog(null, "Tapahtuman kesto: " + tmp.getHours() +  " tuntia" 
+        									+ "\nPalkka: " + tmp.getEventPay() + " euroa"
+        									, "Tapahtuman tiedot", JOptionPane.INFORMATION_MESSAGE);
+        	
+        });
         edit.setOnAction((ActionEvent event) -> {
+            
+        	cancelEventEditBtn.setDisable(false);
+            
             eventModel = eventTable.getSelectionModel().getSelectedItem();
             System.out.print(eventModel.getId());
             startHour.setValue(eventModel.getBeginHour());
@@ -336,6 +371,8 @@ public class CalendarViewController implements Initializable {
             startDay.setValue(eventModel.getBeginDay());
             endDay.setValue(eventModel.getEndDay());
             profileChooser.setValue(eventModel.getWorkProfile());
+            
+            
         });
         delete.setOnAction((ActionEvent event) -> {
             for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
@@ -357,8 +394,15 @@ public class CalendarViewController implements Initializable {
             }
 
         });
+        
+        // Palkanlaskennan testausta varten
+        eventTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            EventModel event = eventTable.getSelectionModel().getSelectedItem();
+            System.out.println("Palkka: " + event.getEventPay() + "€" + " Tunnit: " + event.getHours());
+        });
 
         ContextMenu menu = new ContextMenu();
+        menu.getItems().add(info);
         menu.getItems().add(edit);
         menu.getItems().add(delete);
         menu.getItems().add(sendToGoogle);
@@ -378,5 +422,22 @@ public class CalendarViewController implements Initializable {
         endHour.setValue(null);
         profileChooser.setValue(null);
     }
-
+    
+    // Tyhjennetään tapahtuman etsimisen päivämäärä -hakukenttä
+    public void clearEventDatePicker(ActionEvent e) {
+    	
+    	eventDatePicker.setValue(null);
+    	clearEventsBtn.setDisable(true);
+    }
+    
+    // Peruutetaan tapahtuman muokkaus -nappi
+    public void cancelEventEdit(ActionEvent e) {
+    	
+    	
+    	eventModel = null;
+    	clearChoices();
+    	
+    	cancelEventEditBtn.setDisable(true);
+    }
+    
 }
