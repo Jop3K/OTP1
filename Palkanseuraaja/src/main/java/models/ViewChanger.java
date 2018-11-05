@@ -29,7 +29,7 @@ public class ViewChanger {
         Parent root = null;
         Stage stage = new Stage();
         stage.setTitle("Palkanseuraaja v0.01a // Käyttäjä: " + CurrentUser.getUser().getUsername());
-        stage.getIcons().add(new Image("/img/salarypal.png"));
+//        stage.getIcons().add(new Image("/img/salarypal.png"));
         try {
             root = FXMLLoader.load(Main.class.getResource(name));
             Scene window = new Scene(root);
