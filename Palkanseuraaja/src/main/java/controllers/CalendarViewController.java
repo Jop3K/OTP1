@@ -219,6 +219,7 @@ public class CalendarViewController implements Initializable {
             data.add(eventModel);
             clearChoices();
             JOptionPane.showMessageDialog(null, "Luonti onnistui!");
+            eventCountLabel.setText(Integer.toString(data.size()));
             } else {
                 // Lasketaan palkka ennen tallennusta
                 eventModel.calcPay();
