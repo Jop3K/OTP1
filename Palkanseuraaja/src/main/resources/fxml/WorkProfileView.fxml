@@ -167,7 +167,7 @@
                         <Insets left="300.0" top="50.0" />
                     </GridPane.margin>
                 </Label>
-                <ComboBox fx:id="profileChooser" layoutX="630.0" layoutY="132.0" onAction="#handleProfileChooserClick" prefHeight="26.0" prefWidth="91.0">
+                <ComboBox fx:id="profileChooser" layoutX="630.0" layoutY="132.0" onAction="#handleProfileChooserClick" prefHeight="26.0" prefWidth="120.0">
                     <GridPane.margin>
                         <Insets left="400.0" top="50.0" />
                     </GridPane.margin>
@@ -217,7 +217,7 @@
                         <Insets left="280.0" top="270.0" />
                     </GridPane.margin>
                 </Button>
-                <Button fx:id="newProfile" mnemonicParsing="false" onAction="#handleNewProfileButtonClick" prefHeight="25.0" prefWidth="90.0" text="Uusi profiili">
+                <Button fx:id="newProfile" mnemonicParsing="false" onAction="#handleNewProfileButtonClick" prefHeight="25.0" prefWidth="120.0" text="Uusi profiili">
                     <GridPane.margin>
                         <Insets bottom="30.0" left="400.0" />
                     </GridPane.margin>
