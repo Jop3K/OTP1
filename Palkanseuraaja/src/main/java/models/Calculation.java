@@ -37,12 +37,12 @@ public class Calculation {
 		pay = event.getWorkProfile().getPay()/60;
 		//lasketaan kokonaisansiot
 		pay = pay * minutes;
-
+		return (double)Math.round(pay * 100d) / 100d;
 		/*
 		 * Raakile palkkalisän laskemiselle
 		 *
 		 *
-		 * return (double)Math.round(pay * 100d) / 100d;
+		 * 
 		Date EAlku = new Date(2018 + 1900, 9, 20, 14,0,0 );
 		Date ELoppu = new Date(2018 + 1900, 9, 21, 2,0,0);
 		Date LAlku = new Date(2018 + 1900, 9, 20, 18,0,0);
