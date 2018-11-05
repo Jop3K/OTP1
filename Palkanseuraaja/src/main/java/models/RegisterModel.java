@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class RegisterModel {
 
@@ -27,6 +28,7 @@ public class RegisterModel {
         this.pw1 = pw1;
         this.pw2 = pw2;
         this.gmail = gmail;
+        alert = new Alert(null);
 
     }
     // Metodia käytetään tarkistamaan, että onko kaikki pakolliset kentät täytetty viewissä
@@ -35,11 +37,10 @@ public class RegisterModel {
         //Tarkistetaan, onko kaikki kentät täytetty
         if (tmp.getfName().equals("") || tmp.getlName().equals("") || tmp.getuName().equals("") || tmp.getPw1().equals("")
                 || tmp.getPw2().equals("")) {
-
-            Alert fieldAlert = new Alert(Alert.AlertType.ERROR);
-            fieldAlert.setTitle("Virhe!");
-            fieldAlert.setHeaderText("Täytä pakolliset kentät!");
-            this.alert = fieldAlert;
+           alert.setAlertType(AlertType.ERROR);
+            alert.setTitle("Virhe!");
+            alert.setHeaderText("Täytä pakolliset kentät!");
+            
             return false;
         } //Salasanan validaation
         else if (!tmp.getPw1().equals(tmp.getPw2())) {
@@ -77,7 +78,13 @@ public class RegisterModel {
 
     }
 
-    public String getfName() {
+    @Override
+	public String toString() {
+		return "RegisterModel [fName=" + fName + ", lName=" + lName + ", uName=" + uName + ", pw1=" + pw1 + ", pw2="
+				+ pw2 + ", gmail=" + gmail + ", alert=" + alert + "]";
+	}
+
+	public String getfName() {
         return fName;
     }
 

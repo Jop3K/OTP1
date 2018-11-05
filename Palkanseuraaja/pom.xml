@@ -13,10 +13,15 @@
     </properties>
 
     <dependencies>
+    <dependency>
+        <groupId>de.saxsys</groupId>
+        <artifactId>jfx-testrunner</artifactId>
+        <version>1.0</version>
+	</dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
