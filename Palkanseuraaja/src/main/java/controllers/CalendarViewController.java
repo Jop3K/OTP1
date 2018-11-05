@@ -90,6 +90,7 @@ public class CalendarViewController implements Initializable {
 
     private EventModel eventModel;
 
+
     public CalendarViewController() {
         dao = new UserDAO();
         eventModel = new EventModel();
@@ -106,9 +107,6 @@ public class CalendarViewController implements Initializable {
 
         // Täytetään comboboxit
         generateTimeToComboboxes();
-
-        dao = new UserDAO();
-        dao.openCurrentSession();
 
         loadWorkProfilesToProfileChooser();
 
@@ -130,6 +128,7 @@ public class CalendarViewController implements Initializable {
                 startMinute.getItems().add(Integer.toString(i));
                 endMinute.getItems().add(Integer.toString(i));
             }
+
         }
         for (int i = 0; i < 24; i++) {
             if (i < 10) {
@@ -162,6 +161,7 @@ public class CalendarViewController implements Initializable {
 
         try {
             if (isValid() == false) {
+            	
                 JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
                 return;
             }
@@ -209,8 +209,6 @@ public class CalendarViewController implements Initializable {
                 data.add(eventModel);
                 clearChoices();
                 JOptionPane.showMessageDialog(null, "Luonti onnistui!");
-                System.out.println(eventModel.getBeginDateTime());
-                System.out.println(eventModel.getEndDateTime());
             } else {
                 dao.update(eventModel);
                 GoogleCalendar.updateSelectedEvent(eventModel);
@@ -223,6 +221,7 @@ public class CalendarViewController implements Initializable {
             JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
             return;
         }
+
     }
 
     public void loadWorkProfilesToProfileChooser() {
@@ -302,7 +301,7 @@ public class CalendarViewController implements Initializable {
         //Lisätään mahdollisuus filtteröidä taulussa näkyviä tapahtumia päivämäärän mukaan
         FilteredList<EventModel> filteredData = new FilteredList<>(data, p -> true);
         eventDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-
+           
             filteredData.setPredicate(EventModel -> {
 
                 if (newValue == null) {

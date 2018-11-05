@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="460.0" layoutY="235.0" prefHeight="432.0" prefWidth="366.0">
+         <children>
+            <Label layoutX="32.0" layoutY="32.0" text="Etunimi:" />
+            <Label layoutX="32.0" layoutY="68.0" text="Sukunimi:" />
+            <Label layoutX="32.0" layoutY="105.0" text="Käyttäjätunnus:" />
+            <Label layoutX="34.0" layoutY="144.0" text="Salasana:" />
+            <Label layoutX="34.0" layoutY="185.0" text="Salasana uudelleen:" />
+            <Label layoutX="43.0" layoutY="245.0" text="* Täytä kaikki kentät ennen luontia *" />
+            <Button fx:id="createUserButton" layoutX="81.0" layoutY="306.0" mnemonicParsing="false" text="Luo käyttäjä" />
+            <Button fx:id="registerReturnButton" layoutX="213.0" layoutY="306.0" mnemonicParsing="false" text="Palaa" />
+            <TextField fx:id="username" layoutX="183.0" layoutY="101.0" />
+            <TextField fx:id="password" layoutX="183.0" layoutY="140.0" />
+            <TextField fx:id="passwordAgain" layoutX="183.0" layoutY="181.0" />
+            <TextField fx:id="lastName" layoutX="183.0" layoutY="64.0" />
+            <TextField fx:id="firstName" layoutX="183.0" layoutY="28.0" />
+         </children>
+      </Pane>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="572.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/img/salarypal.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="580.0" layoutY="195.0" text="Rekisteröinti" underline="true">
+         <font>
+            <Font name="System Bold" size="21.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

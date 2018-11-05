@@ -125,6 +125,7 @@ public class EventModel {
     public void setEndDay(LocalDate endDay) {
         this.endDay = endDay;
         endTime = new Date(endDay.getYear() - 1900, endDay.getMonthValue() - 1, endDay.getDayOfMonth());
+        this.endDay = endDay;
     }
 
     public String getEndHour() {

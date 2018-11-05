@@ -18,6 +18,9 @@
                         <fx:include fx:id="workProfileView" source="WorkProfileView.fxml" />
                     </content>
                 </Tab>
+                <Tab fx:id="statsTab" text="Tilastot">
+                 <fx:include fx:id="statsView" source="StatsView.fxml" /> 
+                </Tab>
             </tabs>
         </TabPane>
     </children>

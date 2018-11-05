@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import models.CurrentCalendarViewController;
 import models.LoginModel;
@@ -16,7 +17,8 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException, GeneralSecurityException {
         stage.setTitle("Tervetuloa Palkanseuraajaan");
-
+        stage.getIcons().add(new Image("/img/salarypal.png"));
+        
         //Valjastetaan ensinmäin MVC-hommeli käyttöön. stage kulkee kokoajan mukana kirjautumisen
         //ja rekisteröinnin välissä
         ViewChanger viewChanger = new ViewChanger(stage);

@@ -88,9 +88,9 @@ public class UserDAO extends DataAccessObject {
 
     public boolean update(EventModel event) {
 
-        openCurrentSessionWithTransaction().update(event);
-        closeCurrentSessionWithTransaction();
-
+    	openCurrentSessionWithTransaction().update(event);
+        closeCurrentSessionWithTransaction();	
+        
         return true;
     }
 
