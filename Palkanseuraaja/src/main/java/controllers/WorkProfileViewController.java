@@ -151,6 +151,7 @@ public class WorkProfileViewController implements Initializable {
                     
                     for(EventModel profileEvent : workProfile.getEvents()) {
                      
+                        profileEvent.calcPay();
                         dao.update(profileEvent);
                         
                     }
