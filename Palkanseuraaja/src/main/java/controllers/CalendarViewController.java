@@ -335,8 +335,18 @@ public class CalendarViewController implements Initializable {
         });
        
         // Adds menu for editing and deleting objects from eventTable. Fired by mouses right-click
+        MenuItem info = new MenuItem("Tiedot");
         MenuItem edit = new MenuItem("Muokkaa");
         MenuItem delete = new MenuItem("Poista");
+        
+        info.setOnAction((ActionEvent event) -> {
+        	
+        	EventModel tmp = eventTable.getSelectionModel().getSelectedItem();
+        	
+        	JOptionPane.showMessageDialog(null, "Tapahtuman kesto: " + " tuntia" 
+        									+ "\nPalkka: " + tmp.getEventPay() + " euroa");
+        	
+        });
         edit.setOnAction((ActionEvent event) -> {
             
         	cancelEventEditBtn.setDisable(false);
@@ -368,6 +378,7 @@ public class CalendarViewController implements Initializable {
         });
 
         ContextMenu menu = new ContextMenu();
+        menu.getItems().add(info);
         menu.getItems().add(edit);
         menu.getItems().add(delete);
         eventTable.setContextMenu(menu);
