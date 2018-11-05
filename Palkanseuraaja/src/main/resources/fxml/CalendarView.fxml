@@ -171,7 +171,7 @@
                         <Insets left="325.0" />
                     </GridPane.margin>
                 </Label>
-            <Button fx:id="clearEventsBtn" disable="true" mnemonicParsing="false" text="X">
+            <Button fx:id="clearEventsBtn" disable="true" mnemonicParsing="false" onAction="#clearEventDatePicker" text="X">
                <font>
                   <Font name="System Bold" size="11.0" />
                </font>
@@ -179,7 +179,7 @@
                   <Insets left="630.0" />
                </GridPane.margin>
             </Button>
-            <Button disable="true" layoutX="620.0" layoutY="28.0" mnemonicParsing="false" text="Peruuta" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <Button fx:id="cancelEventEditBtn" disable="true" layoutX="620.0" layoutY="28.0" mnemonicParsing="false" onAction="#cancelEventEdit" text="Peruuta" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="350.0" />
                </GridPane.margin>

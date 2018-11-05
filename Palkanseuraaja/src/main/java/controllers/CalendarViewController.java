@@ -49,6 +49,10 @@ public class CalendarViewController implements Initializable {
     @FXML
     private Button saveButton;
     @FXML
+    private Button clearEventsBtn;
+    @FXML
+    private Button cancelEventEditBtn;
+    @FXML
     private ComboBox<?> hourStart;
     @FXML
     private ComboBox<?> minuteStart;
@@ -321,7 +325,9 @@ public class CalendarViewController implements Initializable {
                 return false;
             });
             
+            clearEventsBtn.setDisable(false);
             eventCountLabel.setText(Integer.toString(filteredData.size()));
+            
         });
        
         // Adds menu for editing and deleting objects from eventTable. Fired by mouses right-click
@@ -329,6 +335,7 @@ public class CalendarViewController implements Initializable {
         MenuItem delete = new MenuItem("Poista");
         edit.setOnAction((ActionEvent event) -> {
             
+        	cancelEventEditBtn.setDisable(false);
             
             eventModel = eventTable.getSelectionModel().getSelectedItem();
             System.out.print(eventModel.getId());
@@ -339,6 +346,8 @@ public class CalendarViewController implements Initializable {
             startDay.setValue(eventModel.getBeginDay());
             endDay.setValue(eventModel.getEndDay());
             profileChooser.setValue(eventModel.getWorkProfile());
+            
+            
         });
         delete.setOnAction((ActionEvent event) -> {
             
@@ -365,4 +374,22 @@ public class CalendarViewController implements Initializable {
     	endHour.setValue(null);
     	profileChooser.setValue(null);
     }
+    
+    public void clearEventDatePicker(ActionEvent e) {
+    	
+    	eventDatePicker.setValue(null);
+    	clearEventsBtn.setDisable(true);
+    }
+    
+    public void cancelEventEdit(ActionEvent e) {
+    	
+    	
+    	eventModel = null;
+    	clearChoices();
+    	
+    	cancelEventEditBtn.setDisable(true);
+    }
+    
+    
+    
 }
