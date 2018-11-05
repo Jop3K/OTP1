@@ -194,11 +194,15 @@ public class CalendarViewController implements Initializable {
         if (isValid() == true) {
             if(eventModel.getId() == 0) {
             	System.out.print(eventModel.getId());
+            // Lasketaan palkka ennen tallennusta
+            eventModel.calcPay();
             dao.save(eventModel);
             data.add(eventModel);
             clearChoices();
             JOptionPane.showMessageDialog(null, "Luonti onnistui!");
             } else {
+                // Lasketaan palkka ennen tallennusta
+                eventModel.calcPay();
             	dao.update(eventModel);      
             	 eventTable.getColumns().get(0).setVisible(false); //Workaround for fireing changelistener in observablelist(updates object to table)
             	 eventTable.getColumns().get(0).setVisible(true);
@@ -338,6 +342,12 @@ public class CalendarViewController implements Initializable {
             System.out.print(tmp.toString());
             dao.delete(tmp);
             data.remove(tmp);
+        });
+        
+        // Palkanlaskennan testausta varten
+        eventTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            EventModel event = eventTable.getSelectionModel().getSelectedItem();
+            System.out.println("Palkka: " + event.getEventPay() + "€");
         });
 
         ContextMenu menu = new ContextMenu();

@@ -23,6 +23,9 @@ public class EventModel {
 
     @Column(name = "endTime")
     private Date endTime;
+    
+    @Column
+    private double eventPay = 0;
 
     @Column
     private LocalDate beginDay;
@@ -38,6 +41,18 @@ public class EventModel {
     private String endMinute;
 
     public EventModel() {
+    }
+    
+    public void calcPay() {
+        eventPay = Calculation.Calculate(this);
+    }
+    
+    public double getEventPay() {
+        return eventPay;
+    }
+    
+    public void setEventPay(double pay) {
+        eventPay = pay;
     }
 
     public WorkProfile getWorkProfile() {

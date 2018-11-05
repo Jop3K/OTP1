@@ -1,5 +1,6 @@
 package models;
 
+import java.time.DayOfWeek;
 import javax.persistence.*;
 
 @Entity
@@ -38,6 +39,27 @@ public class WeekDays {
     private ExtraPay extrapay;
 
     public WeekDays() {
+    }
+    
+        public boolean isDayOfWeek(DayOfWeek dow) {
+        switch(dow) {
+            case MONDAY:
+                return isMonday();
+            case TUESDAY:
+                return isTuesday();
+            case WEDNESDAY:
+                return isWednesday();
+            case THURSDAY:
+                return isThursday();
+            case FRIDAY:
+                return isFriday();
+            case SATURDAY:
+                return isSaturday();
+            case SUNDAY:
+                return isSunday();
+            default:
+                return false;
+        }
     }
 
     public boolean isMonday() {
