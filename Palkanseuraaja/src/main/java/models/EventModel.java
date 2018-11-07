@@ -1,9 +1,10 @@
 package models;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import javax.persistence.*;
+import com.google.api.client.util.DateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "events")
@@ -24,6 +25,14 @@ public class EventModel {
     @Column(name = "endTime")
     private Date endTime;
     
+    @Column(name = "beginDateTime")
+    private String beginDateTime;
+    
+    @Column(name = "endDateTime")
+    private String endDateTime;
+    
+    @Column(name = "googleId")
+    private String googleId;
     @Column
     private double eventPay;
     
@@ -75,7 +84,6 @@ public class EventModel {
     }
 
     public Date getBeginTime() {
-
         return beginTime;
     }
 
@@ -96,8 +104,24 @@ public class EventModel {
     }
 
     public void setBeginDay(LocalDate beginDay) {
+        this.beginDay = beginDay;
         beginTime = new Date(beginDay.getYear() - 1900, beginDay.getMonthValue() - 1, beginDay.getDayOfMonth());
-       this.beginDay = beginDay;
+    }
+
+    public void setBeginDateTime(LocalDate beginDay) {
+        beginDateTime = (beginDay.format(DateTimeFormatter.ISO_DATE) + "T" + beginHour + ":" + beginMinute + ":" + "00" + "+02:00");
+    }
+
+    public void setEndDateTime(LocalDate endDay) {
+        endDateTime = (endDay.format(DateTimeFormatter.ISO_DATE) + "T" + endHour + ":" + endMinute + ":" + "00" + "+02:00");
+    }
+
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
     }
 
     public String getBeginHour() {
@@ -108,7 +132,7 @@ public class EventModel {
         beginTime.setHours(Integer.parseInt(beginHour));
         System.out.println(beginTime);
         this.beginHour = beginHour;
-    }
+}
 
     public String getBeginMinute() {
         return beginMinute;
@@ -117,13 +141,14 @@ public class EventModel {
     public void setBeginMinute(String beginMinute) {
         beginTime.setMinutes(Integer.parseInt(beginMinute));
         this.beginMinute = beginMinute;
-    }
+}
 
     public LocalDate getEndDay() {
         return endDay;
     }
 
     public void setEndDay(LocalDate endDay) {
+        this.endDay = endDay;
         endTime = new Date(endDay.getYear() - 1900, endDay.getMonthValue() - 1, endDay.getDayOfMonth());
         this.endDay = endDay;
     }
@@ -135,7 +160,7 @@ public class EventModel {
     public void setEndHour(String endHour) {
         endTime.setHours(Integer.parseInt(endHour));
         this.endHour = endHour;
-    }
+}
 
     public String getEndMinute() {
         return endMinute;
@@ -144,15 +169,30 @@ public class EventModel {
     public void setEndMinute(String endMinute) {
         endTime.setMinutes(Integer.parseInt(endMinute));
         this.endMinute = endMinute;
-    }
+}
 
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
-
         this.id = id;
     }
 
+    public String getBeginDateTime() {
+        return beginDateTime;
+    }
+
+    public String getEndDateTime() {
+        return endDateTime;
+    }
+
+    public void setBeginDateTime(String beginDateTime) {
+        this.beginDateTime = beginDateTime;
+    }
+
+    public void setEndDateTime(String endDateTime) {
+        this.endDateTime = endDateTime;
+    }
+    
 }

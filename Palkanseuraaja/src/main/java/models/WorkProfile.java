@@ -29,7 +29,7 @@ public class WorkProfile {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "workProfile")
     private Set<ExtraPay> extrapays = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "workProfile")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "workProfile")
     private List<EventModel> events = new ArrayList<>();
 
     public WorkProfile() {
@@ -96,17 +96,6 @@ public class WorkProfile {
 
     public void setExtraPays(Set<ExtraPay> extrapays) {
         this.extrapays = extrapays;
-    }
-
-    public ExtraPay getYolisa() {
-        if (extrapays != null) {
-            for (ExtraPay e : extrapays) {
-                if (e.getName().equals("Yölisä")) {
-                    return e;
-                }
-            }
-        }
-        return null;
     }
 
     public List<EventModel> getEvents() {

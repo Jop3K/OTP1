@@ -71,7 +71,7 @@ public class RegisterController {
 
             //Luodaan uusi RegisterModel-olio, joka varastoi tietoonsa registerViewin textfieldien
             RegisterModel tmpRegisterModel = new RegisterModel(registerView.getFname(), registerView.getLname(), registerView.getUname(),
-                    registerView.getPword1(), registerView.getPword2(), registerView.getGmail());
+                    registerView.getPword1(), registerView.getPword2());
 
             //Tarkistetaan formi
             if (tmpRegisterModel.formValidation(tmpRegisterModel)) {
@@ -82,7 +82,6 @@ public class RegisterController {
                     user.setLastname(tmpRegisterModel.getlName());
                     user.setPassword(new PasswordHashing().get_SHA_256_SecurePassword(tmpRegisterModel.getPw1(), user.getSalt().getBytes()));
                     user.setUsername(tmpRegisterModel.getuName());
-                    user.setGmail(tmpRegisterModel.getGmail());
                     
                     //luodaan käyttäjä tietokantaan, jos käyttäjänimeä ei ole varattu.
                     if (UserDAO.save(user)) {

@@ -8,7 +8,6 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 import models.EventModel;
-import models.GoogleAccount;
 import models.ExtraPay;
 import models.User;
 import models.WeekDays;
@@ -21,17 +20,19 @@ public class DataAccessObject {
     private static SessionFactory sessionFactory;
 
     public DataAccessObject() {
+
     	Configuration con = new Configuration().configure().addAnnotatedClass(User.class)
-    	        .addAnnotatedClass(GoogleAccount.class)
     	        .addAnnotatedClass(WorkProfile.class)
     	        .addAnnotatedClass(ExtraPay.class)
     	        .addAnnotatedClass(EventModel.class)
     	        .addAnnotatedClass(WeekDays.class);
     	        ServiceRegistry reg = new StandardServiceRegistryBuilder().applySettings(con.getProperties()).build();
     	        sessionFactory = con.buildSessionFactory(reg);
+
     }
 
     private static SessionFactory getSessionFactory() {
+
        return sessionFactory;
     }
 

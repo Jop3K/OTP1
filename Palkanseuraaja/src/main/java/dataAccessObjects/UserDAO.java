@@ -1,13 +1,13 @@
 package dataAccessObjects;
 
+import application.GoogleCalendar;
+import com.google.api.client.auth.oauth2.Credential;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.hibernate.criterion.Restrictions;
-
 import javafx.scene.control.Alert;
 import models.CurrentUser;
 import models.CurrentWorkProfile;
@@ -35,11 +35,11 @@ public class UserDAO extends DataAccessObject {
 
         openCurrentSession();
         Query q = getCurrentSession().createQuery("FROM User WHERE username='" + username + "'");
-        User user = (User) q.uniqueResult();
+        currentUser = new CurrentUser((User) q.uniqueResult());
 
         closeCurrentSession();
 
-        if (user == null || !(user.getPassword().equals(new PasswordHashing().get_SHA_256_SecurePassword(password, user.getSalt().getBytes())))) {
+        if (currentUser.getUser() == null || !(currentUser.getUser().getPassword().equals(new PasswordHashing().get_SHA_256_SecurePassword(password, currentUser.getUser().getSalt().getBytes())))) {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Kirjautuminen epäonnistui.");
             alert.setHeaderText("Tarkista käyttäjätunnus ja salasana");
@@ -47,13 +47,12 @@ public class UserDAO extends DataAccessObject {
             return false;
         }
 
-        currentUser = new CurrentUser(user);
         currentUser.setWorkProfiles(getUsersWorkProfilesFromDatabase());
 
         alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Kirjautuminen onnistui!");
         alert.setHeaderText("Tervetuloa!");
-        
+
         return true;
 
     }
@@ -79,14 +78,26 @@ public class UserDAO extends DataAccessObject {
 
         return true;
     }
+
+    public static boolean update(User user) {
+
+        openCurrentSessionWithTransaction().update(user);
+        closeCurrentSessionWithTransaction();
+
+        return true;
+    }
+
     public static boolean update(EventModel event) {
-    	System.out.print("**"+event.getId());
+    
+    
     	openCurrentSessionWithTransaction().update(event);
         closeCurrentSessionWithTransaction();	
         
         return true;
     }
-    public static boolean save(EventModel event) {
+
+    public static  boolean save(EventModel event) {
+
 
         openCurrentSessionWithTransaction().saveOrUpdate(event);
         closeCurrentSessionWithTransaction();
@@ -101,7 +112,7 @@ public class UserDAO extends DataAccessObject {
     public static boolean save(WorkProfile profile) {
         openCurrentSessionWithTransaction().saveOrUpdate(profile);
         closeCurrentSessionWithTransaction();
-        
+
         return true;
     }
 
@@ -145,7 +156,12 @@ public class UserDAO extends DataAccessObject {
 
     public static List<EventModel> getEvents() {
 
-        Iterator itr = currentUser.getWorkProfiles().iterator();
+        openCurrentSession();
+        Query q = getCurrentSession().createQuery("FROM WorkProfile WHERE user_id='" + CurrentUser.getUser().getId() + "'");
+
+        List<WorkProfile> profiles = q.list();
+
+        Iterator itr = profiles.iterator();
         List<EventModel> events = new ArrayList<EventModel>();
         while (itr.hasNext()) {
             WorkProfile tmp = (WorkProfile) itr.next();
@@ -157,6 +173,8 @@ public class UserDAO extends DataAccessObject {
             }
 
         }
+
+        closeCurrentSession();
 
         return events;
     }

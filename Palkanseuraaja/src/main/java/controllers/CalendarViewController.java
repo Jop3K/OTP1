@@ -1,13 +1,19 @@
 package controllers;
 
+import application.GoogleCalendar;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.ResourceBundle;
 import dataAccessObjects.UserDAO;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,7 +31,6 @@ import models.CurrentCalendarViewController;
 import models.CurrentUser;
 import models.EventModel;
 import models.WorkProfile;
-
 
 public class CalendarViewController implements Initializable {
 
@@ -45,8 +50,6 @@ public class CalendarViewController implements Initializable {
     @FXML
     private Font x11;
     @FXML
-    private Button sendToGoogleCalendar;
-    @FXML
     private Button saveButton;
     @FXML
     private Button clearEventsBtn;
@@ -61,7 +64,7 @@ public class CalendarViewController implements Initializable {
     @FXML
     private ComboBox<?> minuteEnd;
     @FXML
-    private ComboBox<WorkProfile> profileChooser;
+    public ComboBox<WorkProfile> profileChooser;
     @FXML
     private DatePicker startDay;
     @FXML
@@ -85,12 +88,14 @@ public class CalendarViewController implements Initializable {
     @FXML
     private DatePicker eventDatePicker;
     @FXML
+    private Button connectToGoogle;
+    @FXML
     private Label eventCountLabel;
 
     private ObservableList<EventModel> data;
-    
+
     private EventModel eventModel;
-    
+
 
     public CalendarViewController() {
         
@@ -105,25 +110,30 @@ public class CalendarViewController implements Initializable {
 
         //Täytetään taulu
         setTable();
-      
+
         // Täytetään comboboxit
         generateTimeToComboboxes();
 
         loadWorkProfilesToProfileChooser();
 
     }
-    
+
+    @FXML
+    public void connectToGoogle() throws IOException, GeneralSecurityException {
+        //TODO
+        GoogleCalendar.main();
+    }
+
     public void generateTimeToComboboxes() {
         for (int i = 0; i < 60; i++) {
-        	if(i < 10) {
-        		String tmp = "0" + i;
-        		startMinute.getItems().add(tmp);
-        		endMinute.getItems().add(tmp);
-        	}
-        	else {
-            startMinute.getItems().add(Integer.toString(i));
-            endMinute.getItems().add(Integer.toString(i));
-        	}
+            if (i < 10) {
+                String tmp = "0" + i;
+                startMinute.getItems().add(tmp);
+                endMinute.getItems().add(tmp);
+            } else {
+                startMinute.getItems().add(Integer.toString(i));
+                endMinute.getItems().add(Integer.toString(i));
+            }
 
         }
         for (int i = 0; i < 24; i++) {
@@ -139,9 +149,9 @@ public class CalendarViewController implements Initializable {
     }
 
     public boolean isValid() {
-        if (startDay.getValue() == null || endDay.getValue() == null 
-                || startHour.getSelectionModel().isEmpty() || endHour.getSelectionModel().isEmpty() 
-                || startMinute.getSelectionModel().isEmpty() || endMinute.getSelectionModel().isEmpty() 
+        if (startDay.getValue() == null || endDay.getValue() == null
+                || startHour.getSelectionModel().isEmpty() || endHour.getSelectionModel().isEmpty()
+                || startMinute.getSelectionModel().isEmpty() || endMinute.getSelectionModel().isEmpty()
                 || profileChooser.getSelectionModel().isEmpty()) {
             return false;
 
@@ -151,13 +161,11 @@ public class CalendarViewController implements Initializable {
         //startDay != null || endDay != null || startHour != null || endHour != null || startMinute != null || endMinute != null || profileChooser != null;
     }
 
-    public void saveEvent(ActionEvent e) {
+    public void saveEvent(ActionEvent e) throws IOException {
         LocalDate startDate = startDay.getValue();
         LocalDate endDate = endDay.getValue();
-        
 
         try {
-
             if (isValid() == false) {
             	
                 JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
@@ -167,12 +175,14 @@ public class CalendarViewController implements Initializable {
             if (startDate.isBefore(endDate)) {
                 eventModel.setBeginDay(startDay.getValue());
                 eventModel.setEndDay(endDay.getValue());
+
             } else if (startDate.isAfter(endDate)) {
                 JOptionPane.showMessageDialog(null, "Lopetusajan pitää olla aloitusajan jälkeen (päivä)");
                 return;
             } else if (startDate.equals(endDate)) { // jos aloitus pvm ja lopetus pvm sama niin...
                 eventModel.setBeginDay(startDay.getValue());
                 eventModel.setEndDay(endDay.getValue());
+
                 if (Integer.parseInt(startHour.getValue()) > Integer.parseInt(endHour.getValue())) { // jos aloitusaika on isompi kuin lopetusaika
                     JOptionPane.showMessageDialog(null, "Aloitusaika ei voi olla lopetusajan jälkeen, tarkista tunnit");
                     return;
@@ -188,6 +198,8 @@ public class CalendarViewController implements Initializable {
             eventModel.setBeginMinute(startMinute.getValue());
             eventModel.setEndHour(endHour.getValue());
             eventModel.setEndMinute(endMinute.getValue());
+            eventModel.setBeginDateTime(startDay.getValue());
+            eventModel.setEndDateTime(endDay.getValue());
             // Etsitään oikea workprofile-olio eventtiin
 
             eventModel.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
@@ -198,6 +210,7 @@ public class CalendarViewController implements Initializable {
         }
 
         if (isValid() == true) {
+
             if(eventModel.getId() == 0) {
             	System.out.print(eventModel.getId());
             // Lasketaan palkka ennen tallennusta
@@ -206,6 +219,7 @@ public class CalendarViewController implements Initializable {
             data.add(eventModel);
             clearChoices();
             JOptionPane.showMessageDialog(null, "Luonti onnistui!");
+            eventCountLabel.setText(Integer.toString(data.size()));
             } else {
                 // Lasketaan palkka ennen tallennusta
                 eventModel.calcPay();
@@ -215,21 +229,18 @@ public class CalendarViewController implements Initializable {
             	eventModel = new EventModel();
             	clearChoices();
             }
-            
-            
-            
+
         } else {
             JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
             return;
         }
 
-        
     }
     // tuodaan työprofiilit dropdown valikkoon
     public void loadWorkProfilesToProfileChooser() {
 
         profileChooser.getItems().clear();
-        
+
         for (WorkProfile w : CurrentUser.getWorkProfiles()) {
             profileChooser.getItems().add(w);
         }
@@ -318,12 +329,10 @@ public class CalendarViewController implements Initializable {
                 java.sql.Date eventDate = java.sql.Date.valueOf(ldate);
 
                 if (newDate == eventDate) {
-                    
                     return true;
                 }
 
                 if (newDate.equals(eventDate)) {
-                    
                     return true;
                 }
                 return false;
@@ -333,11 +342,12 @@ public class CalendarViewController implements Initializable {
             eventCountLabel.setText(Integer.toString(filteredData.size()));
             
         });
-       
+
         // Adds menu for editing and deleting objects from eventTable. Fired by mouses right-click
         MenuItem info = new MenuItem("Tiedot");
         MenuItem edit = new MenuItem("Muokkaa");
         MenuItem delete = new MenuItem("Poista");
+        MenuItem sendToGoogle = new MenuItem("Vie Google Kalenteriin");
         
         // Showing useful information to user
         info.setOnAction((ActionEvent event) -> {
@@ -371,6 +381,25 @@ public class CalendarViewController implements Initializable {
             System.out.print(tmp.toString());
             UserDAO.delete(tmp);
             data.remove(tmp);
+            for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
+                data.remove(e);
+                UserDAO.delete(e);
+            }
+        });
+        sendToGoogle.setOnAction((ActionEvent event) -> {
+
+            try {
+                GoogleCalendar.main();
+                for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
+                    GoogleCalendar.sendSelectedEventToGoogleCalendar(e);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(CalendarViewController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (GeneralSecurityException ex) {
+                Logger.getLogger(CalendarViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+
         });
         
         // Palkanlaskennan testausta varten
@@ -383,19 +412,22 @@ public class CalendarViewController implements Initializable {
         menu.getItems().add(info);
         menu.getItems().add(edit);
         menu.getItems().add(delete);
+        menu.getItems().add(sendToGoogle);
         eventTable.setContextMenu(menu);
-       
+
         //Add items to table
         eventTable.setItems(filteredData);
+        eventTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
+
     public void clearChoices() {
-    	startDay.setValue(null);
-    	endDay.setValue(null);
-    	startHour.setValue(null);
-    	startMinute.setValue(null);
-    	endMinute.setValue(null);
-    	endHour.setValue(null);
-    	profileChooser.setValue(null);
+        startDay.setValue(null);
+        endDay.setValue(null);
+        startHour.setValue(null);
+        startMinute.setValue(null);
+        endMinute.setValue(null);
+        endHour.setValue(null);
+        profileChooser.setValue(null);
     }
     
     // Tyhjennetään tapahtuman etsimisen päivämäärä -hakukenttä
@@ -414,7 +446,5 @@ public class CalendarViewController implements Initializable {
     	
     	cancelEventEditBtn.setDisable(true);
     }
-    
-    
     
 }

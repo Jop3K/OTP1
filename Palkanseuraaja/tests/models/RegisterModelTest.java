@@ -23,7 +23,7 @@ public class RegisterModelTest extends TestCase{
 
 	@Before
     public void setUp() throws Exception {
-    	fail = new RegisterModel("name", "lastname", "username", "password","password","gmail@gmail.com");
+    	fail = new RegisterModel("name", "lastname", "username", "password","password");
     	
     }
 	@Test
@@ -78,7 +78,7 @@ public class RegisterModelTest extends TestCase{
     @TestInJfxThread
 	public void testEmptyRegisterForm() {
         
-		fail = new RegisterModel("","","","","","");
+		fail = new RegisterModel("","","","","");
 		Assert.assertFalse(fail.formValidation(fail));
 		Assert.assertEquals(fail.getAlert().getHeaderText(), "Täytä pakolliset kentät!");
 		
@@ -86,8 +86,8 @@ public class RegisterModelTest extends TestCase{
     @Test
     @TestInJfxThread
     public void testMandatoryFieldFilledInRegisterForm() {
-    	// Gmail not mandatory field
-    	fail.setGmail("");
+    	
+    	
     	assertTrue(fail.formValidation(fail));
     }
     @Test
@@ -115,29 +115,7 @@ public class RegisterModelTest extends TestCase{
     	assertFalse(fail.formValidation(fail));
     	assertEquals(fail.getAlert().getHeaderText(), "Käyttäjänimen pitää olla vähintään kolme merkkiä!");
     }
-    @Test
-    @TestInJfxThread
-    public void testEmail() {
-    	fail.setGmail("Moi@hotmail.fi");
-    	assertFalse(fail.formValidation(fail));
-    	assertEquals(fail.getAlert().getHeaderText(), "Sähköposti on virheellinen tai se ei ole Gmail-osoite");
-    	
-    	fail.setGmail("Moi.fi");
-    	assertFalse(fail.formValidation(fail));
-    	assertEquals(fail.getAlert().getHeaderText(), "Sähköposti on virheellinen tai se ei ole Gmail-osoite");
-    	
-    	fail.setGmail("M@M.fi");
-    	assertFalse(fail.formValidation(fail));
-    	assertEquals(fail.getAlert().getHeaderText(), "Sähköposti on virheellinen tai se ei ole Gmail-osoite");
-    	
-    	fail.setGmail("Gmail@gmal.com");
-    	assertFalse(fail.formValidation(fail));
-    	assertEquals(fail.getAlert().getHeaderText(), "Sähköposti on virheellinen tai se ei ole Gmail-osoite");
-    	
-    	fail.setGmail("gmail@gmail.com");
-    	assertTrue(fail.formValidation(fail));
-    	
-    }
+
     
     
     

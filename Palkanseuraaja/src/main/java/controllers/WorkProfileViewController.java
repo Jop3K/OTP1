@@ -24,11 +24,6 @@ import models.WorkProfile;
 import models.CurrentCalendarViewController;
 import models.EventModel;
 
-/**
- * FXML Controller class
- *
- * @author artur, joni
- */
 public class WorkProfileViewController implements Initializable {
 
    
@@ -117,12 +112,15 @@ public class WorkProfileViewController implements Initializable {
 
             UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
 
+            profileChooser.getItems().add(profileChooser.getSelectionModel().getSelectedItem());
+            profileChooser.getSelectionModel().selectLast();
+
             disableFields();
             editButton.setText("Muokkaa");
 
         } else {
 
-            if (!profileName.getText().isEmpty()) { // if profile is chosen, updates it
+            if (!profileName.getText().isEmpty()) { // verifies that profiles' name is entered
 
                 WorkProfile workProfile = new WorkProfile();
 
@@ -157,14 +155,11 @@ public class WorkProfileViewController implements Initializable {
                 profileChooser.getItems().add(workProfile);
                 profileChooser.getSelectionModel().selectLast();
 
-                CurrentCalendarViewController.getCalendarViewController().loadWorkProfilesToProfileChooser();
-
-                loadValuesToProfileChooser();
-                profileChooser.getSelectionModel().selectLast();
-
                 disableFields();
                 editButton.setDisable(false);
                 editButton.setText("Muokkaa");
+                
+                CurrentCalendarViewController.getCalendarViewController().profileChooser.getItems().add(workProfile);
 
             }
         }

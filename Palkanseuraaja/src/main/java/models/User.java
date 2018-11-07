@@ -1,5 +1,6 @@
 package models;
 
+import com.google.api.client.auth.oauth2.Credential;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.HashSet;
@@ -31,15 +32,9 @@ public class User {
     @Column(name = "salt", nullable = false)
     private String salt;
 
-    @Column(name = "gmail")
-    private String gmail;
-
     @OneToMany(mappedBy = "user")
     private Set<WorkProfile> profiles;
-
-    @OneToOne
-    @JoinColumn(name = "google_id")
-    private GoogleAccount google;
+    
 
     public User() throws NoSuchAlgorithmException, NoSuchProviderException {
         salt = new PasswordHashing().generateSalt().toString();
@@ -74,14 +69,6 @@ public class User {
         return this.lastname;
     }
 
-    public String getGmail() {
-        return this.gmail;
-    }
-
-    public void getGoogle() {
-        this.google = google;
-    }
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -100,22 +87,6 @@ public class User {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
-    }
-
-    public void setGmail(String gmail) {
-        this.gmail = gmail;
-    }
-
-    public void setGoogle(GoogleAccount google) {
-        this.google = google;
-    }
-
-    public Set<WorkProfile> getProfiilit() {
-        return profiles;
-    }
-
-    public void setProfiilit(Set<WorkProfile> profiilit) {
-        this.profiles = profiilit;
     }
 
     public Set<WorkProfile> getProfiles() {

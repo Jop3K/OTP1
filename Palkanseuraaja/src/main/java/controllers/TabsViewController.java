@@ -5,13 +5,14 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+
 
 /**
  * FXML Controller class
  *
  * @author artur, joni
  */
+
 public class TabsViewController implements Initializable {
 
     @FXML

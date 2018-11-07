@@ -18,7 +18,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CalendarViewController">
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CalendarViewController">
+
     <children>
         <GridPane layoutX="8.0" prefHeight="800.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
@@ -98,9 +100,9 @@
                         <Font size="18.0" fx:id="x11" />
                     </font>
                 </Label>
-                <Button disable="true" mnemonicParsing="false" prefHeight="27.0" prefWidth="149.0" text="Vie google-kalenteriin" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                <Button fx:id="connectToGoogle" disable="false" mnemonicParsing="false" onAction="#connectToGoogle" text="Connect to Google" GridPane.columnIndex="1" GridPane.rowIndex="4">
                     <GridPane.margin>
-                        <Insets left="220.0" />
+                        <Insets left="150.0" />
                     </GridPane.margin>
                 </Button>
                 <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveEvent" text="Tallenna" GridPane.columnIndex="1" GridPane.rowIndex="2">

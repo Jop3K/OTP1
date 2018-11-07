@@ -18,6 +18,7 @@ import java.util.Set;
  */
 public class Calculation {
 
+
     private Calculation() {
         // TODO Auto-generated constructor stub
     }
@@ -66,6 +67,7 @@ public class Calculation {
         pay = event.getWorkProfile().getPay() / 60;
         //lasketaan kokonaisansiot
         pay = pay * minutes;
+
         
         // Päivitetään tuntimäärä eventtiin
         event.setHours((double) Math.round((minutes / 60) * 100d) / 100d);
