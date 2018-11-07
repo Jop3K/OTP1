@@ -21,8 +21,9 @@ import org.hibernate.query.Query;
 
 public class UserDAO extends DataAccessObject {
 
-    private CurrentUser currentUser;
-    private Alert alert;
+	
+    private static CurrentUser currentUser;
+    private static Alert alert;
 
     public UserDAO() {
 
@@ -30,10 +31,10 @@ public class UserDAO extends DataAccessObject {
 
     }
 
-    public boolean login(String username, String password) throws NoSuchAlgorithmException, NoSuchProviderException {
+    public static boolean login(String username, String password) throws NoSuchAlgorithmException, NoSuchProviderException {
 
         openCurrentSession();
-        Query q = session.createQuery("FROM User WHERE username='" + username + "'");
+        Query q = getCurrentSession().createQuery("FROM User WHERE username='" + username + "'");
         User user = (User) q.uniqueResult();
 
         closeCurrentSession();
@@ -58,7 +59,7 @@ public class UserDAO extends DataAccessObject {
     }
     //Metodi palauttaa truen, jos käyttäjän lisäys onnistuu.
 
-    public boolean save(User user) {
+    public static boolean save(User user) {
         //Katsotaan löytyykö tietokannasta käyttäjää
         if (!checkForDuplicateUser(user)) {
             // Luodaan uusi alert, koska käyttäjätunnus on varattu
@@ -78,14 +79,14 @@ public class UserDAO extends DataAccessObject {
 
         return true;
     }
-    public boolean update(EventModel event) {
+    public static boolean update(EventModel event) {
     	System.out.print("**"+event.getId());
     	openCurrentSessionWithTransaction().update(event);
         closeCurrentSessionWithTransaction();	
         
         return true;
     }
-    public boolean save(EventModel event) {
+    public static boolean save(EventModel event) {
 
         openCurrentSessionWithTransaction().saveOrUpdate(event);
         closeCurrentSessionWithTransaction();
@@ -97,14 +98,14 @@ public class UserDAO extends DataAccessObject {
         return true;
     }
 
-    public boolean save(WorkProfile profile) {
+    public static boolean save(WorkProfile profile) {
         openCurrentSessionWithTransaction().saveOrUpdate(profile);
         closeCurrentSessionWithTransaction();
         
         return true;
     }
 
-    public boolean save(ExtraPay extrapay) {
+    public static boolean save(ExtraPay extrapay) {
 
         openCurrentSessionWithTransaction().saveOrUpdate(extrapay);
         closeCurrentSessionWithTransaction();
@@ -112,7 +113,7 @@ public class UserDAO extends DataAccessObject {
         return true;
     }
 
-    public boolean save(WeekDays weekdays) {
+    public static boolean save(WeekDays weekdays) {
 
         openCurrentSessionWithTransaction().saveOrUpdate(weekdays);
         closeCurrentSessionWithTransaction();
@@ -120,7 +121,7 @@ public class UserDAO extends DataAccessObject {
         return true;
     }
 
-    public boolean delete(EventModel event) {
+    public static boolean delete(EventModel event) {
         openCurrentSessionWithTransaction().delete(event);
 
         closeCurrentSessionWithTransaction();
@@ -129,7 +130,7 @@ public class UserDAO extends DataAccessObject {
     }
 
     // palauttaa falsen jos käyttäjänimi löytyy tietokannasta
-    public boolean checkForDuplicateUser(User user) {
+    public static boolean checkForDuplicateUser(User user) {
 
         List users = openCurrentSession().createCriteria(User.class)
                 .add(Restrictions.eq("username", user.getUsername())).list();
@@ -142,7 +143,7 @@ public class UserDAO extends DataAccessObject {
         return false;
     }
 
-    public List<EventModel> getEvents() {
+    public static List<EventModel> getEvents() {
 
         Iterator itr = currentUser.getWorkProfiles().iterator();
         List<EventModel> events = new ArrayList<EventModel>();
@@ -160,10 +161,10 @@ public class UserDAO extends DataAccessObject {
         return events;
     }
 
-    public List<WorkProfile> getUsersWorkProfilesFromDatabase() {
+    public static List<WorkProfile> getUsersWorkProfilesFromDatabase() {
 
         openCurrentSession();
-        Query q = session.createQuery("FROM WorkProfile WHERE user_id='" + CurrentUser.getUser().getId() + "'");
+        Query q = getCurrentSession().createQuery("FROM WorkProfile WHERE user_id='" + CurrentUser.getUser().getId() + "'");
 
         List<WorkProfile> profiles = q.list();
 
@@ -173,9 +174,9 @@ public class UserDAO extends DataAccessObject {
 
     }
 
-    public List<ExtraPay> getProfilesExtraPays() {
+    public static List<ExtraPay> getProfilesExtraPays() {
         openCurrentSession();
-        Query q = session.createQuery("FROM ExtraPay WHERE workprofile_id='" + CurrentWorkProfile.getWorkProfile().getId() + "'");
+        Query q = getCurrentSession().createQuery("FROM ExtraPay WHERE workprofile_id='" + CurrentWorkProfile.getWorkProfile().getId() + "'");
 
         List<ExtraPay> profiles = q.list();
 
@@ -184,8 +185,8 @@ public class UserDAO extends DataAccessObject {
         return profiles;
     }
 
-    public Alert getAlert() {
-        return this.alert;
+    public static Alert getAlert() {
+       return alert;
     }
 
 }

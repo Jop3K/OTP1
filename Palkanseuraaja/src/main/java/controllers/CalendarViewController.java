@@ -29,7 +29,7 @@ import models.WorkProfile;
 
 public class CalendarViewController implements Initializable {
 
-    private UserDAO dao;
+   
     @FXML
     private Color x2;
     @FXML
@@ -93,7 +93,7 @@ public class CalendarViewController implements Initializable {
     
 
     public CalendarViewController() {
-        dao = new UserDAO();
+        
         eventModel = new EventModel();
     }
 
@@ -202,14 +202,14 @@ public class CalendarViewController implements Initializable {
             	System.out.print(eventModel.getId());
             // Lasketaan palkka ennen tallennusta
             eventModel.calcPay();
-            dao.save(eventModel);
+            UserDAO.save(eventModel);
             data.add(eventModel);
             clearChoices();
             JOptionPane.showMessageDialog(null, "Luonti onnistui!");
             } else {
                 // Lasketaan palkka ennen tallennusta
                 eventModel.calcPay();
-            	dao.update(eventModel);      
+            	UserDAO.update(eventModel);      
             	 eventTable.getColumns().get(0).setVisible(false); //Workaround for fireing changelistener in observablelist(updates object to table)
             	 eventTable.getColumns().get(0).setVisible(true);
             	eventModel = new EventModel();
@@ -257,7 +257,7 @@ public class CalendarViewController implements Initializable {
 
     public void setTable() {
 
-        data = FXCollections.observableArrayList(dao.getEvents());
+        data = FXCollections.observableArrayList(UserDAO.getEvents());
         
         
         eventCountLabel.setText(Integer.toString(data.size()));
@@ -369,7 +369,7 @@ public class CalendarViewController implements Initializable {
             
             EventModel tmp = eventTable.getSelectionModel().getSelectedItem();
             System.out.print(tmp.toString());
-            dao.delete(tmp);
+            UserDAO.delete(tmp);
             data.remove(tmp);
         });
         

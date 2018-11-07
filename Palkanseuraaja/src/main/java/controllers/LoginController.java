@@ -16,13 +16,13 @@ import views.RegisterView;
 
 public class LoginController {
 
-    private UserDAO dao;
+    
     private ViewChanger viewChanger;
     private LoginView loginView;
     private LoginModel loginModel;
 
     public LoginController(LoginView loginView, LoginModel loginModel, ViewChanger viewChanger) {
-        this.dao = new UserDAO();
+        
         this.viewChanger = viewChanger;
         this.loginModel = loginModel;
         this.loginView = loginView;
@@ -57,7 +57,7 @@ public class LoginController {
                 try {
                     // new PasswordHashing(loginView.getPasswordField()).get_SHA_256_SecurePassword()
                     //Yritetään sisäänkirjaumista ottamalla yhteys tietokantaan
-                    if (dao.login(loginView.getUsernameField(), loginView.getPasswordField())) {
+                    if (UserDAO.login(loginView.getUsernameField(), loginView.getPasswordField())) {
                         //Kirjautuminen onnistui ja luodaan ilmoitus siitä.
                         //loginView.showAlert(dao.getAlert());
                         //Ohjataan ohjelmaan
@@ -67,7 +67,7 @@ public class LoginController {
 
                     } else {
                         //Kirjautuminen epäonnistui. Ilmoitetaan siitä
-                        loginView.showAlert(dao.getAlert());
+                        loginView.showAlert(UserDAO.getAlert());
                     }
                 } catch (NoSuchAlgorithmException ex) {
                     Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);

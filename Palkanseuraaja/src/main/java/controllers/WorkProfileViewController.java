@@ -31,7 +31,7 @@ import models.EventModel;
  */
 public class WorkProfileViewController implements Initializable {
 
-    private UserDAO dao;
+   
 
     @FXML
     private TextField tuntipalkka;
@@ -92,9 +92,6 @@ public class WorkProfileViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        dao = new UserDAO();
-        dao.openCurrentSession();
-
         loadValuesToProfileChooser();
         generateTimes();
 
@@ -115,10 +112,10 @@ public class WorkProfileViewController implements Initializable {
             }
             if (!extrapay.getText().isEmpty()) {
                 extrapayChooser.getSelectionModel().getSelectedItem().setExtraPay(Double.parseDouble(extrapay.getText()));
-                dao.save(extrapayChooser.getSelectionModel().getSelectedItem());
+                UserDAO.save(extrapayChooser.getSelectionModel().getSelectedItem());
             }
 
-            dao.save(profileChooser.getSelectionModel().getSelectedItem());
+            UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
 
             disableFields();
             editButton.setText("Muokkaa");
@@ -140,11 +137,11 @@ public class WorkProfileViewController implements Initializable {
 
                     extrapayChooser.getSelectionModel().getSelectedItem().setExtraPay(Double.parseDouble(extrapay.getText()));
 
-                    dao.save(extrapayChooser.getSelectionModel().getSelectedItem());
+                    UserDAO.save(extrapayChooser.getSelectionModel().getSelectedItem());
 
                 }
 
-                dao.save(workProfile);
+                UserDAO.save(workProfile);
                 
                 // Tallennetaan eventit uudelleen jos palkka extrapayt vaihtuu (palkka lasketaan tässä tilanteessa uudelleen)
                 if(!tuntipalkka.getText().isEmpty() || extrapayChooser.getSelectionModel().getSelectedItem() != null) {
@@ -152,7 +149,7 @@ public class WorkProfileViewController implements Initializable {
                     for(EventModel profileEvent : workProfile.getEvents()) {
                      
                         profileEvent.calcPay();
-                        dao.update(profileEvent);
+                        UserDAO.update(profileEvent);
                         
                     }
                 }
@@ -224,7 +221,7 @@ public class WorkProfileViewController implements Initializable {
                 extrapayChooser.getSelectionModel().getSelectedItem().setEndHour(setEndHour.getSelectionModel().getSelectedItem());
                 extrapayChooser.getSelectionModel().getSelectedItem().setEndMinute(setEndMinute.getSelectionModel().getSelectedItem());
 
-                dao.save(extrapayChooser.getSelectionModel().getSelectedItem());
+                UserDAO.save(extrapayChooser.getSelectionModel().getSelectedItem());
 
             } else { // when no ExtraPay is selected, creates a new ExtraPay
 
@@ -277,7 +274,7 @@ public class WorkProfileViewController implements Initializable {
                     lisa.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
                     lisa.setWeekdays(weekdays);
                     weekdays.setExtrapay(lisa);
-                    dao.save(lisa);
+                    UserDAO.save(lisa);
 
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -503,7 +500,7 @@ public class WorkProfileViewController implements Initializable {
 
         extrapayChooser.getItems().clear();
 
-        extrapayList = dao.getProfilesExtraPays();
+        extrapayList = UserDAO.getProfilesExtraPays();
 
         if (!extrapayList.isEmpty()) {
 

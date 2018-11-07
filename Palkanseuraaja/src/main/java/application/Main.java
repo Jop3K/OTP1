@@ -2,6 +2,8 @@ package application;
 
 import models.ViewChanger;
 import controllers.LoginController;
+import dataAccessObjects.UserDAO;
+
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -23,6 +25,7 @@ public class Main extends Application {
         LoginView loginView = new LoginView();
         LoginModel loginModel = new LoginModel();
         LoginController loginViewController = new LoginController(loginView, loginModel, viewChanger);
+        UserDAO dao = new UserDAO();
 
         Scene window = new Scene(loginView.getView(), 800, 800);
 

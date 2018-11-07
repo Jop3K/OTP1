@@ -20,7 +20,7 @@ import models.PasswordHashing;
 
 public class RegisterController {
 
-    private UserDAO dao;
+  
     private RegisterView registerView;
     private RegisterModel registerModel;
     private ViewChanger viewChanger;
@@ -33,7 +33,7 @@ public class RegisterController {
         SessionFactory sf = con.buildSessionFactory();
         session = sf.getCurrentSession();
         tx = session.beginTransaction();*/
-        this.dao = new UserDAO();
+        
         this.registerView = registerView;
         this.registerModel = registerModel;
         this.viewChanger = viewChanger;
@@ -85,9 +85,9 @@ public class RegisterController {
                     user.setGmail(tmpRegisterModel.getGmail());
                     
                     //luodaan käyttäjä tietokantaan, jos käyttäjänimeä ei ole varattu.
-                    if (dao.save(user)) {
+                    if (UserDAO.save(user)) {
                         //ilmoitetaan onnistumisesta
-                        registerView.showAlert(dao.getAlert());
+                        registerView.showAlert(UserDAO.getAlert());
                         //Ohjataan takaisin loginiin
                         /*
                         * TODO: Joku builderi, jolla saadaan luotua controllerit yhdellä rivillä koodia nätisti.
@@ -103,7 +103,7 @@ public class RegisterController {
                         
                     } else {
                         //Ilmoitetaan käyttäjätunnuksen olevan varattu
-                        registerView.showAlert(dao.getAlert());
+                        registerView.showAlert(UserDAO.getAlert());
                     }} catch (NoSuchAlgorithmException ex) {
                     Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (NoSuchProviderException ex) {
