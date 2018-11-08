@@ -32,6 +32,13 @@ import models.CurrentUser;
 import models.EventModel;
 import models.WorkProfile;
 
+/**
+ * This is the controller for the "Calendar Tab" -View
+ * 
+ * @author Joni, Artur, Joonas
+ *
+ */
+
 public class CalendarViewController implements Initializable {
 
    
@@ -97,13 +104,19 @@ public class CalendarViewController implements Initializable {
     private EventModel eventModel;
 
 
+    /**
+     *  The constructor for "eventModel"
+     */
     public CalendarViewController() {
         
         eventModel = new EventModel();
     }
 
+    /**
+     * (non-Javadoc)
+     * @see javafx.fxml.Initializable#initialize(java.net.URL, java.util.ResourceBundle)
+     */
     @Override
-
     public void initialize(URL location, ResourceBundle resources) {
         // TODO Auto-generated method stub
         CurrentCalendarViewController.setCalendarViewController(this);
@@ -117,13 +130,21 @@ public class CalendarViewController implements Initializable {
         loadWorkProfilesToProfileChooser();
 
     }
-
+    /**
+     * The method we use for connecting to google's calendar
+     * 
+     * @throws IOException error handling for google calendar
+     * @throws GeneralSecurityException error handling for google calendar
+     */
     @FXML
     public void connectToGoogle() throws IOException, GeneralSecurityException {
         //TODO
         GoogleCalendar.main();
     }
 
+    /**
+     * This method is for generating the numbers for the comboboxes with a simple loop
+     */
     public void generateTimeToComboboxes() {
         for (int i = 0; i < 60; i++) {
             if (i < 10) {
@@ -148,6 +169,10 @@ public class CalendarViewController implements Initializable {
         }
     }
 
+    /**
+     * We use this method for validating the creation of a workshift event
+     * @return we return the boolean value for the validation
+     */
     public boolean isValid() {
         if (startDay.getValue() == null || endDay.getValue() == null
                 || startHour.getSelectionModel().isEmpty() || endHour.getSelectionModel().isEmpty()
@@ -161,6 +186,11 @@ public class CalendarViewController implements Initializable {
         //startDay != null || endDay != null || startHour != null || endHour != null || startMinute != null || endMinute != null || profileChooser != null;
     }
 
+    /**
+     * The method for saving an event when pressing "Save" button
+     * @param e ActionEvent parameter that is required when creating an ActionEvent
+     * @throws IOException error handling for saving an event
+     */
     public void saveEvent(ActionEvent e) throws IOException {
         LocalDate startDate = startDay.getValue();
         LocalDate endDate = endDay.getValue();
@@ -236,7 +266,11 @@ public class CalendarViewController implements Initializable {
         }
 
     }
-    // tuodaan työprofiilit dropdown valikkoon
+     
+    /**
+     * We use this method to get the workprofiles to the Dropdown menu
+     * 
+     */
     public void loadWorkProfilesToProfileChooser() {
 
         profileChooser.getItems().clear();
@@ -265,7 +299,9 @@ public class CalendarViewController implements Initializable {
         });
 
     }
-
+    /**
+     * This method is for getting the events from the database to the table on the Calendar Tab
+     */
     public void setTable() {
 
         data = FXCollections.observableArrayList(UserDAO.getEvents());
@@ -386,6 +422,7 @@ public class CalendarViewController implements Initializable {
                 UserDAO.delete(e);
             }
         });
+        
         sendToGoogle.setOnAction((ActionEvent event) -> {
 
             try {
@@ -420,6 +457,9 @@ public class CalendarViewController implements Initializable {
         eventTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
+    /**
+     * We use this method to clear the values on the event creation fields
+     */
     public void clearChoices() {
         startDay.setValue(null);
         endDay.setValue(null);
@@ -430,14 +470,21 @@ public class CalendarViewController implements Initializable {
         profileChooser.setValue(null);
     }
     
-    // Tyhjennetään tapahtuman etsimisen päivämäärä -hakukenttä
+    
+    /**
+     * This method is for clearing the Event search with DatePicker field when the ClearEvents button is pressed
+     * @param e a required parameter for defining an ActionEvent
+     */
     public void clearEventDatePicker(ActionEvent e) {
     	
     	eventDatePicker.setValue(null);
     	clearEventsBtn.setDisable(true);
     }
     
-    // Peruutetaan tapahtuman muokkaus -nappi
+    /**
+     * Canceling the editing of an event when pressing the "Cancel" button
+     * @param e a required parameter for defining an ActionEvent
+     */
     public void cancelEventEdit(ActionEvent e) {
     	
     	

@@ -21,6 +21,12 @@ public class LoginController {
     private LoginView loginView;
     private LoginModel loginModel;
 
+    /**
+     * The constructor for LoginController
+     * @param loginView 
+     * @param loginModel 
+     * @param viewChanger for changing the View when logging in successfully 
+     */
     public LoginController(LoginView loginView, LoginModel loginModel, ViewChanger viewChanger) {
         
         this.viewChanger = viewChanger;
@@ -32,6 +38,11 @@ public class LoginController {
     }
     //Kuuntelee register-buttonia
 
+    /**
+     * The class we use for handling the register button onclick event
+     * @author Joni, Artur, Joonas
+     *
+     */
     class RegisterButtonListener implements EventHandler {
 
         @Override
@@ -48,8 +59,16 @@ public class LoginController {
     }
     //Kuuntelee login-buttonia
 
+    /**
+     * The class we use for handling the "Login" button onclick event
+     * @author Joni, Artur, Joonas
+     * 
+     */
     class LoginButtonListener implements EventHandler {
 
+    	/**
+    	 * Method for handling the login event
+    	 */
         @Override
         public void handle(Event arg0) {
             //Varmistaa, että kumpikaan kentistä ei ole tyhjä

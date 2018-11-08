@@ -12,8 +12,21 @@ import javafx.stage.Stage;
 import models.LoginModel;
 import views.LoginView;
 
+/**
+ * 
+ * @author Joni, Artur, Joonas
+ * @version 0.01a
+ *
+ */
+
 public class Main extends Application {
 
+	/**
+	 * This method launches the Login view 
+	 * 
+	 * @param stage we give this parameter to start method for it to know what we are starting
+	 */
+	
     @Override
     public void start(Stage stage) throws IOException {
         stage.setTitle("Tervetuloa Palkanseuraajaan");
@@ -35,6 +48,10 @@ public class Main extends Application {
 
     }
 
+    /**
+     * The basic main method for launching an application
+     * @param args the arguments that we are launching
+     */
     public static void main(String[] args) {
         launch(Main.class);
     }

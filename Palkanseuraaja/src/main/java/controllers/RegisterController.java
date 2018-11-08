@@ -17,7 +17,11 @@ import java.security.NoSuchProviderException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.PasswordHashing;
-
+/**
+ * This is the controller for "Register user" -view
+ * @author Joni, Artur, Joonas
+ *
+ */
 public class RegisterController {
 
   
@@ -26,6 +30,12 @@ public class RegisterController {
     private ViewChanger viewChanger;
     private Transaction tx;
 
+    /**
+     * The base constructor for the RegisterController class
+     * @param registerView
+     * @param registerModel
+     * @param viewChanger we use this for changing the view 
+     */
     public RegisterController(RegisterView registerView, RegisterModel registerModel, ViewChanger viewChanger) {
 
         /*Configuration con = new Configuration().configure().addAnnotatedClass(User.class);
@@ -43,6 +53,11 @@ public class RegisterController {
 
     }
 
+    /**
+     * The class for handling the onclick event when clicking the "Back" button
+     * @author Joni, Artur, Joonas
+     *
+     */
     class backButtonListener implements EventHandler {
 
         @Override
@@ -58,8 +73,19 @@ public class RegisterController {
     }
 
     // Luokka kuuntelee create-buttonia ja luo uuden käyttäjän.
+    /**
+     * This use this method to handle the "Create new user" -button
+     * @author Joni, Artur, Joonas
+     *
+     */
     class createButtonListener implements EventHandler {
 
+    	/**
+    	 * 1. Checks if register form is filled correctly
+    	 * 1a. The program alerts if something is not filled correctly
+    	 * 2. Adding the user to the database
+    	 * 2a. We don't add the user to the database if the username is taken
+    	 */
         @Override
         public void handle(Event arg0) {
             /*

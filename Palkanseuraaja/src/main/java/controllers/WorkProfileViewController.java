@@ -24,6 +24,11 @@ import models.WorkProfile;
 import models.CurrentCalendarViewController;
 import models.EventModel;
 
+/**
+ * The controller class for WorkProfileView
+ * @author Joni, Artur, Joonas
+ *
+ */
 public class WorkProfileViewController implements Initializable {
 
    
@@ -94,6 +99,10 @@ public class WorkProfileViewController implements Initializable {
 
     }
 
+    /**
+     * This methods is for handling the saving of a Work Profile onclick of the "save" button
+     * @param event required parameter for ActionEvent
+     */
     @FXML // button handler for "save profile" button click
     private void handleSaveProfileButtonClick(ActionEvent event) {
 
@@ -165,6 +174,10 @@ public class WorkProfileViewController implements Initializable {
         }
     }
 
+    /**
+     *  We use this ActionEvent method to save a new additional pay
+     * @param event required parameter
+     */
     @FXML
     private void handleSaveLisaButtonClick(ActionEvent event) {
         if (!profileChooser.getSelectionModel().isEmpty()) { // profile must be chosen to create ExtraPay for it
@@ -290,8 +303,11 @@ public class WorkProfileViewController implements Initializable {
 
     }
 
+    /**
+     * handler for "Uusi profiili" button
+     */
     @FXML
-    private void handleNewProfileButtonClick() { // handler for "Uusi profiili" button
+    private void handleNewProfileButtonClick() {
 
         clearTextFieldsProfile();
         enableFields();
@@ -306,8 +322,12 @@ public class WorkProfileViewController implements Initializable {
 
     }
 
+    /**
+     * handler for "Valitse Profiili" dropdown 
+     * @param event required parameter
+     */
     @FXML
-    private void handleProfileChooserClick(ActionEvent event) { // handler for "Valitse Profiili" dropdown 
+    private void handleProfileChooserClick(ActionEvent event) { 
 
         if (profileChooser.getSelectionModel().getSelectedItem() != null) {
 
@@ -322,17 +342,24 @@ public class WorkProfileViewController implements Initializable {
 
     }
 
+    /**
+     * handler for "Palkkalisä" dropdown
+     * @param event a required parameter
+     */
     @FXML
-    private void handleExtrapayChooserClick(ActionEvent event) { // handler for "Palkkalisä" dropdown
+    private void handleExtrapayChooserClick(ActionEvent event) {
         if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
             extrapay.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtraPay()));
 
             loadValuesToExtrapayFields();
         }
     }
-
+    
+    /**
+     * handler for "Muokkaa" button
+     */
     @FXML
-    private void handleEditButtonClick() { // handler for "Muokkaa" button
+    private void handleEditButtonClick() { 
 
         if (editButton.getText().equals("Muokkaa")) { // Changes button text when successfully clicked to "Peruuta"
 
@@ -350,7 +377,10 @@ public class WorkProfileViewController implements Initializable {
 
     }
 
-    private void loadValuesToTextFields() { // Loads values to textfield from selected WorkProfile object
+    /**
+     * Loads values to textfield from selected WorkProfile object
+     */
+    private void loadValuesToTextFields() {
 
         clearTextFieldsProfile();
         disableFields();
@@ -370,13 +400,19 @@ public class WorkProfileViewController implements Initializable {
 
     }
 
-    private void clearTextFieldsProfile() { // Clears text fields on the Profile side
+    /**
+     * Clears text fields on the Profile side
+     */
+    private void clearTextFieldsProfile() {
         profileName.clear();
         tuntipalkka.clear();
         extrapay.clear();
     }
 
-    private void clearTextFieldsExtraPay() { // Clears text fields on the ExtraPay side
+    /**
+     * Clears text fields on the ExtraPay side
+     */
+    private void clearTextFieldsExtraPay() {  
         lisanNimi.clear();
         monday.setSelected(false);
         tuesday.setSelected(false);
@@ -391,13 +427,18 @@ public class WorkProfileViewController implements Initializable {
         setEndHour.getItems().clear();
     }
 
-    private void disableFields() { // disables textfields on the left side
+    /**
+     *  disables textfields on the left side
+     */
+    private void disableFields() { 
         profileName.setDisable(true);
         tuntipalkka.setDisable(true);
         extrapay.setDisable(true);
     }
-
-    private void enableFields() { // enables textfields on the left side
+    /**
+     * enables textfields on the left side
+     */
+    private void enableFields() { 
         profileName.setDisable(false);
         tuntipalkka.setDisable(false);
         if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
@@ -406,7 +447,10 @@ public class WorkProfileViewController implements Initializable {
         extrapay.setDisable(false);
     }
 
-    private void loadValuesToExtrapayFields() { // Loads values to ExtraPay side from selected ExtraPay object
+    /**
+     * Loads values to ExtraPay side from selected ExtraPay object
+     */
+    private void loadValuesToExtrapayFields() { 
 
         lisanNimi.setText(extrapayChooser.getSelectionModel().getSelectedItem().getName());
 
@@ -461,7 +505,10 @@ public class WorkProfileViewController implements Initializable {
 
     }
 
-    private void loadValuesToProfileChooser() { // Loads current users' values to "Valitse Profiili" dropdown
+    /**
+     *  Loads current users' values to "Valitse Profiili" dropdown
+     */
+    private void loadValuesToProfileChooser() {  
         profileChooser.getItems().clear();
 
         profileList = CurrentUser.getWorkProfiles();
@@ -491,6 +538,9 @@ public class WorkProfileViewController implements Initializable {
 
     }
 
+    /**
+     *  Loading the values for ExtraPay chooser
+     */
     private void loadValuesToExtrapayChooser() {
 
         extrapayChooser.getItems().clear();
@@ -525,7 +575,10 @@ public class WorkProfileViewController implements Initializable {
 
     }
 
-    public void generateTimes() { // Generate numbers to hours/minutes dropdowns
+    /**
+     *  Generate numbers to hours/minutes dropdowns
+     */
+    public void generateTimes() { 
         for (int i = 0; i < 60; i++) {
             setBeginMinute.getItems().add(Integer.toString(i));
             setEndMinute.getItems().add(Integer.toString(i));
@@ -543,7 +596,11 @@ public class WorkProfileViewController implements Initializable {
         }
     }
 
-    public boolean timesAreValid() { // time validation for ExtraPay
+    /**
+     * time validation for ExtraPay
+     * @return the boolean for the result of validation
+     */
+    public boolean timesAreValid() { 
         if (setBeginHour.getSelectionModel().isEmpty() || setEndHour.getSelectionModel().isEmpty()
                 || setBeginMinute.getSelectionModel().isEmpty() || setEndMinute.getSelectionModel().isEmpty()) {
             return false;
