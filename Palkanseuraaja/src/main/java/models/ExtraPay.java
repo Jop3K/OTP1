@@ -1,6 +1,7 @@
 package models;
 
 import javax.persistence.*;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "extrapay")
@@ -39,6 +40,19 @@ public class ExtraPay {
     private WeekDays weekdays;
 
     public ExtraPay() {
+    }
+
+    // Tämä lisätty sitä varten että olisi helpompi tehdä ExtraPay olioita testeissä
+    public ExtraPay(LocalTime begin, LocalTime end, WeekDays weekDays) {
+
+        setWeekdays(weekDays);
+
+        setBeginHour("" + begin.getHour());
+        setBeginMinute("" + begin.getMinute());
+
+        setEndHour("" + end.getHour());
+        setEndMinute("" + end.getMinute());
+
     }
 
     public int getId() {

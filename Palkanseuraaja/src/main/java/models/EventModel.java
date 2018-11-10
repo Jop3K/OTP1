@@ -1,6 +1,7 @@
 package models;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.*;
 import com.google.api.client.util.DateTime;
@@ -53,6 +54,24 @@ public class EventModel {
     private String endMinute;
 
     public EventModel() {
+    }
+
+    // Tämä lisätty sitä varten että olisi helpompi tehdä EventModel olioita testeissä
+    public EventModel(LocalDateTime beginDay, LocalDateTime endDay, WorkProfile profile) {
+
+        setBeginDay(beginDay.toLocalDate());
+        setBeginHour("" + beginDay.getHour());
+        setBeginMinute("" + beginDay.getMinute());
+
+        setEndDay(endDay.toLocalDate());
+        setEndHour("" + endDay.getHour());
+        setEndMinute("" + endDay.getMinute());
+
+        setBeginDateTime(beginDay.toLocalDate());
+        setEndDateTime(endDay.toLocalDate());
+
+        setWorkProfile(profile);
+
     }
     
     public void calcPay() {
