@@ -4,6 +4,8 @@ import models.ViewChanger;
 import controllers.LoginController;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -16,16 +18,18 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException, GeneralSecurityException {
-        stage.setTitle("Tervetuloa Palkanseuraajaan");
-//        stage.getIcons().add(new Image("/img/salarypal.png"));
+        Locale.setDefault(new Locale("is"));
         
+        stage.setTitle(ResourceBundle.getBundle("MessagesBundle").getString("welcome"));
+//        stage.getIcons().add(new Image("/img/salarypal.png"));
+
         //Valjastetaan ensinmäin MVC-hommeli käyttöön. stage kulkee kokoajan mukana kirjautumisen
         //ja rekisteröinnin välissä
         ViewChanger viewChanger = new ViewChanger(stage);
         LoginView loginView = new LoginView();
         LoginModel loginModel = new LoginModel();
         LoginController loginViewController = new LoginController(loginView, loginModel, viewChanger);
-        
+
         Scene window = new Scene(loginView.getView(), 800, 800);
 
         stage.setScene(window);

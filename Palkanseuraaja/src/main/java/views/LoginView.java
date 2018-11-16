@@ -1,5 +1,7 @@
 package views;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,24 +14,39 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
 public class LoginView {
-
-    public LoginView() {
-
-    }
+    private ResourceBundle labels;
+    private ResourceBundle buttons;
 
     // tekstikentät
-    Label username = new Label("Käyttäjätunnus: ");
-    TextField usernameField = new TextField();
-
-    Label password = new Label("Salasana: ");
-
-    PasswordField passwordField = new PasswordField();
+    private Label username;
+    private TextField usernameField;
+    private Label password;
+    private PasswordField passwordField;
 
     // napit
-    Button login = new Button("Kirjaudu");
-    Button register = new Button("Rekisteröidy");
-    // Luodaan rekisteröintinäkymä ja palautetaan se Parent oliona.
+    private Button login;
+    private Button register;
 
+    public LoginView() {
+        labels = ResourceBundle.getBundle("LabelsBundle");
+        buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
+        
+        // tekstikentät
+        username = new Label();
+        username.setText(labels.getString("username") + ":");
+        usernameField = new TextField();
+        password = new Label();
+        password.setText(labels.getString("password") + ":");
+        passwordField = new PasswordField();
+        
+        // napit
+        login = new Button();
+        login.setText(buttons.getString("login"));
+        register = new Button();
+        register.setText(buttons.getString("register"));
+    }
+
+    // Luodaan rekisteröintinäkymä ja palautetaan se Parent oliona.
     public Parent getView() {
 
         // ruudukko asettelua varten

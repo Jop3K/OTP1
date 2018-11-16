@@ -1,12 +1,11 @@
 package dataAccessObjects;
 
-import application.GoogleCalendar;
-import com.google.api.client.auth.oauth2.Credential;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ResourceBundle;
 import org.hibernate.criterion.Restrictions;
 import javafx.scene.control.Alert;
 import models.CurrentUser;
@@ -22,11 +21,14 @@ import org.hibernate.query.Query;
 public class UserDAO extends DataAccessObject {
 
     private CurrentUser currentUser;
+    private ResourceBundle alerts;
     private Alert alert;
 
     public UserDAO() {
 
         super();
+        
+        alerts = ResourceBundle.getBundle("AlertMessagesBundle");
 
     }
 
@@ -40,8 +42,8 @@ public class UserDAO extends DataAccessObject {
 
         if (currentUser.getUser() == null || !(currentUser.getUser().getPassword().equals(new PasswordHashing().get_SHA_256_SecurePassword(password, currentUser.getUser().getSalt().getBytes())))) {
             alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Kirjautuminen epäonnistui.");
-            alert.setHeaderText("Tarkista käyttäjätunnus ja salasana");
+            alert.setTitle(alerts.getString("loginFailed"));
+            alert.setHeaderText(alerts.getString("checkUsernamePassword"));
 
             return false;
         }
@@ -49,8 +51,8 @@ public class UserDAO extends DataAccessObject {
         currentUser.setWorkProfiles(getUsersWorkProfilesFromDatabase());
 
         alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Kirjautuminen onnistui!");
-        alert.setHeaderText("Tervetuloa!");
+        alert.setTitle(alerts.getString("loginSuccessful"));
+        alert.setHeaderText(alerts.getString("welcome"));
 
         return true;
 
@@ -62,8 +64,8 @@ public class UserDAO extends DataAccessObject {
         if (!checkForDuplicateUser(user)) {
             // Luodaan uusi alert, koska käyttäjätunnus on varattu
             alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Virhe!");
-            alert.setHeaderText("Käyttäjätunnus on varattu!");
+            alert.setTitle(alerts.getString("error"));
+            alert.setHeaderText(alerts.getString("usernameReserved"));
 
             return false;
         }
@@ -72,8 +74,8 @@ public class UserDAO extends DataAccessObject {
         closeCurrentSessionWithTransaction();
 
         alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Rekisteröinti");
-        alert.setHeaderText("Uuden käyttäjän luominen onnistui!");
+        alert.setTitle(alerts.getString("registration"));
+        alert.setHeaderText(alerts.getString("userCreated"));
 
         return true;
     }
@@ -100,8 +102,8 @@ public class UserDAO extends DataAccessObject {
         closeCurrentSessionWithTransaction();
 
         alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Onnistui!");
-        alert.setHeaderText("Tapahtuma lisätty");
+        alert.setTitle(alerts.getString("success"));
+        alert.setHeaderText(alerts.getString("eventAdded"));
 
         return true;
     }
