@@ -161,10 +161,10 @@ public class Calculation {
     }
 
     /**
-     * Tilastojen laskenta
+     * Tilastojen laskenta - tulot yhteensä
      * @param daysFromNow int montako päivää tästä päivästä eteenpäin otetaan mukaan tilastoon (0 = pelkästään tämä päivä)
      * @param events List<EventModel> tapahtumat mistä tilastot lasketaan
-     *
+     * @return Valitun aikavälin tapahtumien palkkojen summa
      */
     static double calcPayForTimePeriod(int daysFromNow, List<EventModel> events) {
         LocalDate now = LocalDate.now();
@@ -182,6 +182,31 @@ public class Calculation {
         }
 
         return totalPay;
+
+    }
+
+    /**
+     * Tilastojen laskenta - työvuorojen määrä
+     * @param daysFromNow int montako päivää tästä päivästä eteenpäin otetaan mukaan tilastoon (0 = pelkästään tämä päivä)
+     * @param events List<EventModel> tapahtumat mistä tilastot lasketaan
+     * @return Valitun aikavälin tapahtumien määrä
+     */
+    static int calcAmountOfEvents(int daysFromNow, List<EventModel> events) {
+        LocalDate now = LocalDate.now();
+        LocalDate endOfTimePeriod = now.plusDays(daysFromNow);
+
+        int amountOfEvents = 0;
+
+        for(EventModel event : events) {
+            LocalDate eventBegin = event.getBeginDay();
+
+            if((eventBegin.isEqual(now) ||eventBegin.isAfter(now)) && (eventBegin.isBefore(endOfTimePeriod) || eventBegin.isEqual(endOfTimePeriod))) {
+                amountOfEvents++;
+            }
+
+        }
+
+        return amountOfEvents;
 
     }
 

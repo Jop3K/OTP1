@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class CalculationTest {
 
@@ -250,6 +251,45 @@ public class CalculationTest {
 
         assertEquals(expected, calculated, 0.1);
 
+    }
+
+    @Test
+    public void amountOfEventsIsCalculatedCorrectly() {
+        ArrayList<EventModel> events = new ArrayList<>();
+
+        EventModel testEvent = createTestEvent();
+
+        LocalDateTime start = LocalDateTime.now().plusDays(3);
+
+        LocalDateTime end = start.plusHours(10);
+
+        EventModel testEvent2 = new EventModel(start, end, profile);
+
+        start = LocalDateTime.now().plusDays(7);
+        end = start.plusHours(10);
+
+        EventModel testEvent3 = new EventModel(start, end, profile);
+
+        start = LocalDateTime.now().plusDays(10);
+        end = start.plusHours(10);
+
+        EventModel testEvent4 = new EventModel(start, end, profile);
+
+        events.add(testEvent);
+        events.add(testEvent2);
+        events.add(testEvent3);
+        events.add(testEvent4);
+
+        testEvent.calcPay();
+        testEvent2.calcPay();
+        testEvent3.calcPay();
+        testEvent4.calcPay();
+
+        int calculated = Calculation.calcAmountOfEvents(7, events);
+
+        int expected = 3;
+
+        assertEquals(expected, calculated);
     }
 
 }
