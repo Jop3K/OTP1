@@ -162,21 +162,35 @@ public class Calculation {
 
     /**
      * Tilastojen laskenta - tulot yhteensä
-     * @param daysFromNow int montako päivää tästä päivästä eteenpäin otetaan mukaan tilastoon (0 = pelkästään tämä päivä)
+     * @param daysFromNow int montako päivää tästä päivästä lähtien otetaan mukaan tilastoon (0 = pelkästään tänään, -1 = tänään ja eilen, 1 = tänään ja huomenna)
      * @param events List<EventModel> tapahtumat mistä tilastot lasketaan
      * @return Valitun aikavälin tapahtumien palkkojen summa
      */
     static double calcPayForTimePeriod(int daysFromNow, List<EventModel> events) {
-        LocalDate now = LocalDate.now();
-        LocalDate endOfTimePeriod = now.plusDays(daysFromNow);
-
         double totalPay = 0;
+        LocalDate now = LocalDate.now();
 
-        for(EventModel event : events) {
-            LocalDate eventBegin = event.getBeginDay();
+        if(daysFromNow >= 0) {
+            LocalDate endOfTimePeriod = now.plusDays(daysFromNow);
 
-            if((eventBegin.isEqual(now) ||eventBegin.isAfter(now)) && (eventBegin.isBefore(endOfTimePeriod) || eventBegin.isEqual(endOfTimePeriod))) {
-                totalPay += event.getEventPay();
+            for (EventModel event : events) {
+                LocalDate eventBegin = event.getBeginDay();
+
+                if ((eventBegin.isEqual(now) || eventBegin.isAfter(now)) && (eventBegin.isBefore(endOfTimePeriod) || eventBegin.isEqual(endOfTimePeriod))) {
+                    totalPay += event.getEventPay();
+                }
+
+            }
+        } else {
+            LocalDate endOfTimePeriod = now.minusDays(Math.abs(daysFromNow));
+
+            for (EventModel event : events) {
+                LocalDate eventBegin = event.getBeginDay();
+
+                if ((eventBegin.isEqual(now) || eventBegin.isBefore(now)) && (eventBegin.isAfter(endOfTimePeriod) || eventBegin.isEqual(endOfTimePeriod))) {
+                    totalPay += event.getEventPay();
+                }
+
             }
 
         }
@@ -187,23 +201,37 @@ public class Calculation {
 
     /**
      * Tilastojen laskenta - työvuorojen määrä
-     * @param daysFromNow int montako päivää tästä päivästä eteenpäin otetaan mukaan tilastoon (0 = pelkästään tämä päivä)
+     * @param daysFromNow int montako päivää tästä päivästä lähtien otetaan mukaan tilastoon (0 = pelkästään tämä päivä, -1 = tänään ja eilen, 1 = tänään ja huomenna)
      * @param events List<EventModel> tapahtumat mistä tilastot lasketaan
      * @return Valitun aikavälin tapahtumien määrä
      */
     static int calcAmountOfEvents(int daysFromNow, List<EventModel> events) {
-        LocalDate now = LocalDate.now();
-        LocalDate endOfTimePeriod = now.plusDays(daysFromNow);
-
         int amountOfEvents = 0;
+        LocalDate now = LocalDate.now();
 
-        for(EventModel event : events) {
-            LocalDate eventBegin = event.getBeginDay();
+        if(daysFromNow >= 0) {
+            LocalDate endOfTimePeriod = now.plusDays(daysFromNow);
 
-            if((eventBegin.isEqual(now) ||eventBegin.isAfter(now)) && (eventBegin.isBefore(endOfTimePeriod) || eventBegin.isEqual(endOfTimePeriod))) {
-                amountOfEvents++;
+            for (EventModel event : events) {
+                LocalDate eventBegin = event.getBeginDay();
+
+                if ((eventBegin.isEqual(now) || eventBegin.isAfter(now)) && (eventBegin.isBefore(endOfTimePeriod) || eventBegin.isEqual(endOfTimePeriod))) {
+                    amountOfEvents++;
+                }
+
             }
 
+        } else {
+            LocalDate endOfTimePeriod = now.minusDays(Math.abs(daysFromNow));
+
+            for (EventModel event : events) {
+                LocalDate eventBegin = event.getBeginDay();
+
+                if ((eventBegin.isEqual(now) || eventBegin.isBefore(now)) && (eventBegin.isAfter(endOfTimePeriod) || eventBegin.isEqual(endOfTimePeriod))) {
+                    amountOfEvents++;
+                }
+
+            }
         }
 
         return amountOfEvents;

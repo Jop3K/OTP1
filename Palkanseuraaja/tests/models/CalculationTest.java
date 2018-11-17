@@ -292,4 +292,46 @@ public class CalculationTest {
         assertEquals(expected, calculated);
     }
 
+    @Test
+    public void statisticsCalcWorksForThePast() {
+        ArrayList<EventModel> events = new ArrayList<>();
+
+        LocalDateTime start = LocalDateTime.now().minusDays(3);
+
+        LocalDateTime end = start.plusHours(10);
+
+        EventModel testEvent2 = new EventModel(start, end, profile);
+
+        start = LocalDateTime.now().minusDays(7);
+        end = start.plusHours(10);
+
+        EventModel testEvent3 = new EventModel(start, end, profile);
+
+        start = LocalDateTime.now().minusDays(10);
+        end = start.plusHours(10);
+
+        EventModel testEvent4 = new EventModel(start, end, profile);
+
+        events.add(testEvent2);
+        events.add(testEvent3);
+        events.add(testEvent4);
+
+        testEvent2.setEventPay(Calculation.Calculate(testEvent2));
+        testEvent3.setEventPay(Calculation.Calculate(testEvent3));
+        testEvent4.setEventPay(Calculation.Calculate(testEvent4));
+
+        double calculated = Calculation.calcPayForTimePeriod(-7, events);
+
+        double expected = 200;
+
+        assertEquals(expected, calculated, 0.1);
+
+        calculated = Calculation.calcAmountOfEvents(-7, events);
+
+        expected = 2;
+
+        assertEquals(expected, calculated, 0.1);
+
+    }
+
 }
