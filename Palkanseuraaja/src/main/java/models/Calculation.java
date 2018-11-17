@@ -161,6 +161,28 @@ public class Calculation {
     }
 
     /**
+     * Tilastojen laskenta - kuukauden tulot
+     * @param month Month Java.time API:n kuukausi enum arvo
+     * @param events List<EventModel> tapahtumat mistä tilastot lasketaan
+     * @return Valitun kuukauden tulojen summa
+     */
+    static double calcPayForMonth(Month month, List<EventModel> events) {
+        double totalPay = 0;
+
+        for (EventModel event : events) {
+            LocalDate eventBegin = event.getBeginDay();
+            Month eventMonth = eventBegin.getMonth();
+
+            if (eventMonth == month) {
+                totalPay += event.getEventPay();
+            }
+
+        }
+
+        return totalPay;
+    }
+
+    /**
      * Tilastojen laskenta - tulot yhteensä
      * @param daysFromNow int montako päivää tästä päivästä lähtien otetaan mukaan tilastoon (0 = pelkästään tänään, -1 = tänään ja eilen, 1 = tänään ja huomenna)
      * @param events List<EventModel> tapahtumat mistä tilastot lasketaan

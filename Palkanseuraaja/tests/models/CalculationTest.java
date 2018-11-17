@@ -5,12 +5,12 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class CalculationTest {
 
@@ -331,6 +331,45 @@ public class CalculationTest {
         expected = 2;
 
         assertEquals(expected, calculated, 0.1);
+
+    }
+
+    @Test
+    public void canCalcPayForGivenMonth() {
+        ArrayList<EventModel> events = new ArrayList<>();
+
+        LocalDateTime start = LocalDateTime.now().minusDays(3);
+
+        LocalDateTime end = start.plusHours(10);
+
+        EventModel testEvent2 = new EventModel(start, end, profile);
+
+        start = LocalDateTime.now().minusDays(7);
+        end = start.plusHours(10);
+
+        EventModel testEvent3 = new EventModel(start, end, profile);
+
+        start = LocalDateTime.now().minusDays(10);
+        end = start.plusHours(10);
+
+        EventModel testEvent4 = new EventModel(start, end, profile);
+
+        events.add(testEvent2);
+        events.add(testEvent3);
+        events.add(testEvent4);
+
+        testEvent2.setEventPay(Calculation.Calculate(testEvent2));
+        testEvent3.setEventPay(Calculation.Calculate(testEvent3));
+        testEvent4.setEventPay(Calculation.Calculate(testEvent4));
+
+        Month month = LocalDateTime.now().getMonth();
+
+        double calculated = Calculation.calcPayForMonth(month, events);
+
+        double expected = 300;
+
+        assertEquals(expected, calculated, 0.1);
+
 
     }
 
