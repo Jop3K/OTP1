@@ -161,8 +161,9 @@ public class Calculation {
     }
 
     /**
-     *
-     *
+     * Tilastojen laskenta
+     * @param daysFromNow int montako päivää tästä päivästä eteenpäin otetaan mukaan tilastoon (0 = pelkästään tämä päivä)
+     * @param events List<EventModel> tapahtumat mistä tilastot lasketaan
      *
      */
     static double calcPayForTimePeriod(int daysFromNow, List<EventModel> events) {
@@ -174,7 +175,7 @@ public class Calculation {
         for(EventModel event : events) {
             LocalDate eventBegin = event.getBeginDay();
 
-            if(eventBegin.isAfter(now) && eventBegin.isBefore(endOfTimePeriod)) {
+            if((eventBegin.isEqual(now) ||eventBegin.isAfter(now)) && (eventBegin.isBefore(endOfTimePeriod) || eventBegin.isEqual(endOfTimePeriod))) {
                 totalPay += event.getEventPay();
             }
 

@@ -10,11 +10,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class CalculationTest {
 
-    WorkProfile profile;
+    private WorkProfile profile;
 
     @Before
     public void setUp() throws Exception {
@@ -104,12 +103,66 @@ public class CalculationTest {
 
     @Test
     public void calcExtraPayWorksWhenEventDayChanges() {
-        fail("Not yet implemented");
+
+        LocalDateTime beginDate = LocalDateTime.of(2018, 1, 1, 20, 30);
+        LocalDateTime endDate = beginDate.plusHours(10);
+
+        EventModel testEvent = new EventModel(beginDate, endDate, profile);
+
+        Set<ExtraPay> extraPays = new HashSet<>();
+
+        LocalTime begin = LocalTime.of(23, 0);
+        LocalTime end = LocalTime.of(4, 0);
+        WeekDays weekDays = createWeekDays();
+
+        ExtraPay extrapay = new ExtraPay(begin, end, weekDays);
+        extrapay.setExtraPay(10);
+
+        extraPays.add(extrapay);
+
+        testEvent.getWorkProfile().setExtraPays(extraPays);
+
+        double calculated = Calculation.Calculate(testEvent);
+
+        double expected = 150;
+
+        assertEquals(expected, calculated, 0.1);
+
     }
 
     @Test
     public void calcExtraPayWorksWithMultipleOverlappingExtras() {
-        fail("Not yet implemented");
+        LocalDateTime beginDate = LocalDateTime.of(2018, 1, 1, 20, 30);
+        LocalDateTime endDate = beginDate.plusHours(10);
+
+        EventModel testEvent = new EventModel(beginDate, endDate, profile);
+
+        Set<ExtraPay> extraPays = new HashSet<>();
+
+        LocalTime begin = LocalTime.of(23, 0);
+        LocalTime end = LocalTime.of(4, 0);
+        WeekDays weekDays = createWeekDays();
+
+        ExtraPay extrapay = new ExtraPay(begin, end, weekDays);
+        extrapay.setExtraPay(10);
+
+        extraPays.add(extrapay);
+
+        LocalTime begin2 = LocalTime.of(23, 30);
+        LocalTime end2 = LocalTime.of(2, 30);
+
+        ExtraPay extrapay2 = new ExtraPay(begin2, end2, weekDays);
+        extrapay2.setExtraPay(10);
+
+        extraPays.add(extrapay2);
+
+        testEvent.getWorkProfile().setExtraPays(extraPays);
+
+        double calculated = Calculation.Calculate(testEvent);
+
+        double expected = 180;
+
+        assertEquals(expected, calculated, 0.1);
     }
 
     @Test
@@ -132,8 +185,71 @@ public class CalculationTest {
     }
 
     @Test
-    public void totalPayForTimePeriodIsCalculatedCorrectly() {
-        fail("Not yet implemented");
+    public void statisticCalcOnlyIncludesEventsFromChosenTimePeriod() {
+
+        ArrayList<EventModel> events = new ArrayList<>();
+
+        EventModel testEvent = createTestEvent();
+
+        LocalDateTime start = LocalDateTime.of(2000, 1, 1, 1, 1);
+
+        LocalDateTime end = start.plusHours(10);
+
+        EventModel testEvent2 = new EventModel(start, end, profile);
+
+        events.add(testEvent);
+        events.add(testEvent2);
+
+        testEvent.calcPay();
+        testEvent2.calcPay();
+
+        double calculated = Calculation.calcPayForTimePeriod(0, events);
+
+        double expected = 100;
+
+        assertEquals(expected, calculated, 0.1);
+
+    }
+
+    @Test
+    public void statisticCalcSumsTotalForWeekCorrectly() {
+
+        ArrayList<EventModel> events = new ArrayList<>();
+
+        EventModel testEvent = createTestEvent();
+
+        LocalDateTime start = LocalDateTime.now().plusDays(3);
+
+        LocalDateTime end = start.plusHours(10);
+
+        EventModel testEvent2 = new EventModel(start, end, profile);
+
+        start = LocalDateTime.now().plusDays(7);
+        end = start.plusHours(10);
+
+        EventModel testEvent3 = new EventModel(start, end, profile);
+
+        start = LocalDateTime.now().plusDays(10);
+        end = start.plusHours(10);
+
+        EventModel testEvent4 = new EventModel(start, end, profile);
+
+        events.add(testEvent);
+        events.add(testEvent2);
+        events.add(testEvent3);
+        events.add(testEvent4);
+
+        testEvent.calcPay();
+        testEvent2.calcPay();
+        testEvent3.calcPay();
+        testEvent4.calcPay();
+
+        double calculated = Calculation.calcPayForTimePeriod(7, events);
+
+        double expected = 300;
+
+        assertEquals(expected, calculated, 0.1);
+
     }
 
 }
