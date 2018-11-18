@@ -16,13 +16,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
-import models.CurrentUser;
-import models.CurrentWorkProfile;
-import models.ExtraPay;
-import models.WeekDays;
-import models.WorkProfile;
-import models.CurrentCalendarViewController;
-import models.EventModel;
+import models.*;
 
 /**
  * The controller class for WorkProfileView
@@ -109,7 +103,7 @@ public class WorkProfileViewController implements Initializable {
         if (!profileChooser.getSelectionModel().isEmpty()) { // if profile is chosen, updates it
 
             if (!profileName.getText().isEmpty()) {
-                profileChooser.getSelectionModel().getSelectedItem().setNimi(profileName.getText());
+                profileChooser.getSelectionModel().getSelectedItem().setName(profileName.getText());
             }
             if (!tuntipalkka.getText().isEmpty()) {
                 profileChooser.getSelectionModel().getSelectedItem().setPay(Double.parseDouble(tuntipalkka.getText()));
@@ -118,6 +112,8 @@ public class WorkProfileViewController implements Initializable {
                 extrapayChooser.getSelectionModel().getSelectedItem().setExtraPay(Double.parseDouble(extrapay.getText()));
                 UserDAO.save(extrapayChooser.getSelectionModel().getSelectedItem());
             }
+
+            profileChooser.getSelectionModel().getSelectedItem().calculateEventPays();
 
             UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
 
@@ -133,7 +129,7 @@ public class WorkProfileViewController implements Initializable {
 
                 WorkProfile workProfile = new WorkProfile();
 
-                workProfile.setNimi(profileName.getText());
+                workProfile.setName(profileName.getText());
                 workProfile.setUser(CurrentUser.getUser());
 
                 if (!tuntipalkka.getText().isEmpty()) {
@@ -284,6 +280,10 @@ public class WorkProfileViewController implements Initializable {
                     weekdays.setExtrapay(lisa);
                     UserDAO.save(lisa);
 
+                    // Moved to here because no need to load values if adding failed
+                    clearTextFieldsExtraPay();
+                    loadValuesToExtrapayChooser();
+
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Validation error!");
@@ -294,12 +294,9 @@ public class WorkProfileViewController implements Initializable {
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Virhe!");
-            alert.setHeaderText("Joku virhe");
+            alert.setHeaderText("Valitse työprofiili");
             alert.showAndWait();
         }
-
-        clearTextFieldsExtraPay();
-        loadValuesToExtrapayChooser();
 
     }
 
@@ -387,7 +384,7 @@ public class WorkProfileViewController implements Initializable {
 
         editButton.setText("Muokkaa");
 
-        profileName.setText(profileChooser.getSelectionModel().getSelectedItem().getNimi());
+        profileName.setText(profileChooser.getSelectionModel().getSelectedItem().getName());
         tuntipalkka.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getPay()));
 
         if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
@@ -421,10 +418,12 @@ public class WorkProfileViewController implements Initializable {
         friday.setSelected(false);
         saturday.setSelected(false);
         sunday.setSelected(false);
-        setBeginHour.getItems().clear();
-        setBeginMinute.getItems().clear();
-        setEndHour.getItems().clear();
-        setEndHour.getItems().clear();
+
+        // Changed to clearSelection because previous method removed all values from dropdown
+        setBeginHour.getSelectionModel().clearSelection();
+        setBeginMinute.getSelectionModel().clearSelection();
+        setEndHour.getSelectionModel().clearSelection();
+        setEndHour.getSelectionModel().clearSelection();
     }
 
     /**
@@ -517,25 +516,6 @@ public class WorkProfileViewController implements Initializable {
             profileChooser.getItems().add(w);
         }
 
-        profileChooser.setCellFactory( // Customizes cells so that they appear as WorkProfile's name (String) and not as a WorkProfile object
-                new Callback<ListView<WorkProfile>, ListCell<WorkProfile>>() {
-            @Override
-            public ListCell<WorkProfile> call(ListView<WorkProfile> w) {
-                ListCell cell = new ListCell<WorkProfile>() {
-                    @Override
-                    protected void updateItem(WorkProfile item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setText("");
-                        } else {
-                            setText(item.getNimi());
-                        }
-                    }
-                };
-                return cell;
-            }
-        });
-
     }
 
     /**
@@ -545,7 +525,7 @@ public class WorkProfileViewController implements Initializable {
 
         extrapayChooser.getItems().clear();
 
-        extrapayList = UserDAO.getProfilesExtraPays();
+        extrapayList = CurrentWorkProfile.getProfilesExtraPays();
 
         if (!extrapayList.isEmpty()) {
 
@@ -553,24 +533,6 @@ public class WorkProfileViewController implements Initializable {
                 extrapayChooser.getItems().add(e);
             }
 
-            extrapayChooser.setCellFactory(
-                    new Callback<ListView<ExtraPay>, ListCell<ExtraPay>>() {
-                @Override
-                public ListCell<ExtraPay> call(ListView<ExtraPay> w) {
-                    ListCell cell = new ListCell<ExtraPay>() {
-                        @Override
-                        protected void updateItem(ExtraPay item, boolean empty) {
-                            super.updateItem(item, empty);
-                            if (empty) {
-                                setText("");
-                            } else {
-                                setText(item.getName());
-                            }
-                        }
-                    };
-                    return cell;
-                }
-            });
         }
 
     }

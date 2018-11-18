@@ -7,6 +7,8 @@ import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.hibernate.Hibernate;
 import org.hibernate.criterion.Restrictions;
 import javafx.scene.control.Alert;
 import models.CurrentUser;
@@ -17,6 +19,7 @@ import models.PasswordHashing;
 import models.User;
 import models.WeekDays;
 import models.WorkProfile;
+import org.hibernate.jdbc.Work;
 import org.hibernate.query.Query;
 
 public class UserDAO extends DataAccessObject {
@@ -154,31 +157,6 @@ public class UserDAO extends DataAccessObject {
         return false;
     }
 
-    public static List<EventModel> getEvents() {
-
-        openCurrentSession();
-        Query q = getCurrentSession().createQuery("FROM WorkProfile WHERE user_id='" + CurrentUser.getUser().getId() + "'");
-
-        List<WorkProfile> profiles = q.list();
-
-        Iterator itr = profiles.iterator();
-        List<EventModel> events = new ArrayList<EventModel>();
-        while (itr.hasNext()) {
-            WorkProfile tmp = (WorkProfile) itr.next();
-            List<EventModel> eventlist = (List<EventModel>) tmp.getEvents();
-            Iterator itr1 = eventlist.iterator();
-            while (itr1.hasNext()) {
-                EventModel tmp2 = (EventModel) itr1.next();
-                events.add(tmp2);
-            }
-
-        }
-
-        closeCurrentSession();
-
-        return events;
-    }
-
     public static List<WorkProfile> getUsersWorkProfilesFromDatabase() {
 
         openCurrentSession();
@@ -186,21 +164,15 @@ public class UserDAO extends DataAccessObject {
 
         List<WorkProfile> profiles = q.list();
 
-        closeCurrentSession();
-
-        return profiles;
-
-    }
-
-    public static List<ExtraPay> getProfilesExtraPays() {
-        openCurrentSession();
-        Query q = getCurrentSession().createQuery("FROM ExtraPay WHERE workprofile_id='" + CurrentWorkProfile.getWorkProfile().getId() + "'");
-
-        List<ExtraPay> profiles = q.list();
+        for(WorkProfile profile : profiles) {
+            Hibernate.initialize(profile.getEvents());
+            Hibernate.initialize(profile.getExtraPays());
+        }
 
         closeCurrentSession();
 
         return profiles;
+
     }
 
     public static Alert getAlert() {

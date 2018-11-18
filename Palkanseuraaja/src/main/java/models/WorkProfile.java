@@ -26,10 +26,10 @@ public class WorkProfile {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "workProfile")
+    @OneToMany(mappedBy = "workProfile")
     private Set<ExtraPay> extrapays = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "workProfile")
+    @OneToMany(mappedBy = "workProfile")
     private List<EventModel> events = new ArrayList<>();
 
     public WorkProfile() {
@@ -51,14 +51,6 @@ public class WorkProfile {
         this.user = user;
     }
 
-    public String getNimi() {
-        return name;
-    }
-
-    public void setNimi(String name) {
-        this.name = name;
-    }
-
     public double getPay() {
         return pay;
     }
@@ -66,20 +58,13 @@ public class WorkProfile {
     public void setPay(double pay) {
         this.pay = pay;
     }
-    
+
     public void calculateEventPays() {
+        List<EventModel> events = CurrentCalendarViewController.getCalendarViewController().getData();
+
         for(EventModel event : events) {
             event.calcPay();
         }
-    }
-
-
-    public Set<ExtraPay> getPalkkalisat() {
-        return extrapays;
-    }
-
-    public void setPalkkalisat(Set<ExtraPay> extrapays) {
-        this.extrapays = extrapays;
     }
 
     public String getName() {

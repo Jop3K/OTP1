@@ -151,21 +151,19 @@ public class CalendarViewController implements Initializable {
                 String tmp = "0" + i;
                 startMinute.getItems().add(tmp);
                 endMinute.getItems().add(tmp);
+
+                startHour.getItems().add(tmp);
+                endHour.getItems().add(tmp);
+
             } else {
+                if(i < 24) {
+                    startHour.getItems().add(Integer.toString(i));
+                    endHour.getItems().add(Integer.toString(i));
+                }
                 startMinute.getItems().add(Integer.toString(i));
                 endMinute.getItems().add(Integer.toString(i));
             }
 
-        }
-        for (int i = 0; i < 24; i++) {
-            if (i < 10) {
-                String tmp = "0" + i;
-                startHour.getItems().add(tmp);
-                endHour.getItems().add(tmp);
-            } else {
-                startHour.getItems().add(Integer.toString(i));
-                endHour.getItems().add(Integer.toString(i));
-            }
         }
     }
 
@@ -262,7 +260,6 @@ public class CalendarViewController implements Initializable {
 
         } else {
             JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
-            return;
         }
 
     }
@@ -279,76 +276,22 @@ public class CalendarViewController implements Initializable {
             profileChooser.getItems().add(w);
         }
 
-        profileChooser.setCellFactory(
-                new Callback<ListView<WorkProfile>, ListCell<WorkProfile>>() {
-            @Override
-            public ListCell<WorkProfile> call(ListView<WorkProfile> w) {
-                ListCell cell = new ListCell<WorkProfile>() {
-                    @Override
-                    protected void updateItem(WorkProfile item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setText("");
-                        } else {
-                            setText(item.getNimi());
-                        }
-                    }
-                };
-                return cell;
-            }
-        });
-
     }
+
     /**
      * This method is for getting the events from the database to the table on the Calendar Tab
      */
     public void setTable() {
 
-        data = FXCollections.observableArrayList(UserDAO.getEvents());
-        
+        data = FXCollections.observableArrayList(CurrentUser.getEvents());
         
         eventCountLabel.setText(Integer.toString(data.size()));
         
         workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
         //Formatoidaan "alkaa" kolumni näyttämää päivämäärän dd.mm.yy hh:mm muodossa
-        startColumn.setCellFactory(column -> {
-            TableCell<EventModel, Date> cell = new TableCell<EventModel, Date>() {
-                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-
-                @Override
-                protected void updateItem(Date item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setText(null);
-                    } else {
-                        this.setText(format.format(item));
-
-                    }
-                }
-            };
-
-            return cell;
-        });
-
+        ControllerUtil.formatColumnDate(startColumn);
         //Formatoidaan "loppuu" kolumni myös samaan muotoon
-        endColumn.setCellFactory(column -> {
-            TableCell<EventModel, Date> cell = new TableCell<EventModel, Date>() {
-                private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-
-                @Override
-                protected void updateItem(Date item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setText(null);
-                    } else {
-                        this.setText(format.format(item));
-
-                    }
-                }
-            };
-
-            return cell;
-        });
+        ControllerUtil.formatColumnDate(endColumn);
         startColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("beginTime"));
         endColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("endTime"));
         //Lisätään mahdollisuus filtteröidä taulussa näkyviä tapahtumia päivämäärän mukaan
@@ -430,9 +373,7 @@ public class CalendarViewController implements Initializable {
                 for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
                     GoogleCalendar.sendSelectedEventToGoogleCalendar(e);
                 }
-            } catch (IOException ex) {
-                Logger.getLogger(CalendarViewController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (GeneralSecurityException ex) {
+            } catch (IOException | GeneralSecurityException ex) {
                 Logger.getLogger(CalendarViewController.class.getName()).log(Level.SEVERE, null, ex);
             }
 
@@ -493,5 +434,8 @@ public class CalendarViewController implements Initializable {
     	
     	cancelEventEditBtn.setDisable(true);
     }
-    
+
+    public ObservableList<EventModel> getData() {
+        return data;
+    }
 }

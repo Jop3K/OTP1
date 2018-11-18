@@ -109,7 +109,7 @@ public class GoogleCalendar {
         if (eventModel.getGoogleId() == null) {
 
             Event event = new Event()
-                    .setSummary(eventModel.getWorkProfile().getNimi())
+                    .setSummary(eventModel.getWorkProfile().getName())
                     .setDescription("Palkanseuraaja test event");
 
             DateTime startDateTime = new DateTime(eventModel.getBeginDateTime());

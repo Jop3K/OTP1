@@ -173,6 +173,8 @@ public class Calculation {
             LocalDate eventBegin = event.getBeginDay();
             Month eventMonth = eventBegin.getMonth();
 
+            if(eventBegin.getYear() != LocalDate.now().getYear()) continue;
+
             if (eventMonth == month) {
                 totalPay += event.getEventPay();
             }
