@@ -30,6 +30,7 @@ import models.Calculation;
 import models.CurrentCalendarViewController;
 import models.CurrentUser;
 import models.EventModel;
+import models.EventObservableDataList;
 import models.WorkProfile;
 
 /**
@@ -99,7 +100,7 @@ public class CalendarViewController implements Initializable {
     @FXML
     private Label eventCountLabel;
 
-    private ObservableList<EventModel> data;
+    private EventObservableDataList data;
 
     private EventModel eventModel;
 
@@ -145,7 +146,7 @@ public class CalendarViewController implements Initializable {
     /**
      * This method is for generating the numbers for the comboboxes with a simple loop
      */
-    public void generateTimeToComboboxes() {
+    private void generateTimeToComboboxes() {
         for (int i = 0; i < 60; i++) {
             if (i < 10) {
                 String tmp = "0" + i;
@@ -173,7 +174,7 @@ public class CalendarViewController implements Initializable {
      * We use this method for validating the creation of a workshift event
      * @return we return the boolean value for the validation
      */
-    public boolean isValid() {
+    private boolean isValid() {
         if (startDay.getValue() == null || endDay.getValue() == null
                 || startHour.getSelectionModel().isEmpty() || endHour.getSelectionModel().isEmpty()
                 || startMinute.getSelectionModel().isEmpty() || endMinute.getSelectionModel().isEmpty()
@@ -246,10 +247,10 @@ public class CalendarViewController implements Initializable {
             // Lasketaan palkka ennen tallennusta
             eventModel.calcPay();
             UserDAO.save(eventModel);
-            data.add(eventModel);
+            data.getInstance().add(eventModel);
             clearChoices();
             JOptionPane.showMessageDialog(null, "Luonti onnistui!");
-            eventCountLabel.setText(Integer.toString(data.size()));
+            eventCountLabel.setText(Integer.toString(data.getInstance().size()));
             } else {
                 // Lasketaan palkka ennen tallennusta
                 eventModel.calcPay();
@@ -303,11 +304,9 @@ public class CalendarViewController implements Initializable {
      * This method is for getting the events from the database to the table on the Calendar Tab
      */
     public void setTable() {
-
-        data = FXCollections.observableArrayList(UserDAO.getEvents());
         
         
-        eventCountLabel.setText(Integer.toString(data.size()));
+        eventCountLabel.setText(Integer.toString(data.getInstance().size()));
         
         workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
         //Formatoidaan "alkaa" kolumni näyttämää päivämäärän dd.mm.yy hh:mm muodossa
@@ -352,7 +351,7 @@ public class CalendarViewController implements Initializable {
         startColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("beginTime"));
         endColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("endTime"));
         //Lisätään mahdollisuus filtteröidä taulussa näkyviä tapahtumia päivämäärän mukaan
-        FilteredList<EventModel> filteredData = new FilteredList<>(data, p -> true);
+        FilteredList<EventModel> filteredData = new FilteredList<>(data.getInstance(), p -> true);
         eventDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
            
             filteredData.setPredicate(EventModel -> {
@@ -416,9 +415,9 @@ public class CalendarViewController implements Initializable {
             EventModel tmp = eventTable.getSelectionModel().getSelectedItem();
             System.out.print(tmp.toString());
             UserDAO.delete(tmp);
-            data.remove(tmp);
+            data.getInstance().remove(tmp);
             for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
-                data.remove(e);
+                data.getInstance().remove(e);
                 UserDAO.delete(e);
             }
         });

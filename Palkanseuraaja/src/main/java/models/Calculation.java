@@ -1,8 +1,16 @@
 package models;
 
 import java.time.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import dataAccessObjects.UserDAO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArrayBase;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 /**
  * 
@@ -37,7 +45,7 @@ public class Calculation {
         System.out.println("Extrapalkka: " + extraPay);
 
         totalPay = basicPay + extraPay;
-
+        System.out.println(totalPay);
         return (double) Math.round(totalPay * 100d) / 100d;
     }
 
@@ -159,7 +167,23 @@ public class Calculation {
         return extraPay;
 
     }
-
+    
+    static List calcPayForEveryMonthInYear(EventObservableDataList data) {
+    	
+    	List result = new ArrayList();
+    	
+    	for (Month month : Month.values()) {
+    		
+    		double salary = calcPayForMonth(month, data.getInstance());
+    		SalaryPerMonthModel tmp = new SalaryPerMonthModel(month, salary);   		
+    		result.add(tmp);
+    		
+    		}
+    	
+    	
+    	
+		return result;
+    }
     /**
      * Tilastojen laskenta - kuukauden tulot
      * @param month Month Java.time API:n kuukausi enum arvo
@@ -169,7 +193,7 @@ public class Calculation {
     static double calcPayForMonth(Month month, List<EventModel> events) {
         double totalPay = 0;
 
-        for (EventModel event : events) {
+        for (EventModel event : events) { System.out.println(event.getId());
             LocalDate eventBegin = event.getBeginDay();
             Month eventMonth = eventBegin.getMonth();
 
@@ -178,7 +202,7 @@ public class Calculation {
             }
 
         }
-
+        
         return totalPay;
     }
 
