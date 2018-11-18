@@ -17,7 +17,7 @@ public class CalculationTest {
     private WorkProfile profile;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
         profile = new WorkProfile();
         profile.setPay(10);

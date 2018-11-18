@@ -88,9 +88,7 @@ public class LoginController {
                         //Kirjautuminen epäonnistui. Ilmoitetaan siitä
                         loginView.showAlert(UserDAO.getAlert());
                     }
-                } catch (NoSuchAlgorithmException ex) {
-                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (NoSuchProviderException ex) {
+                } catch (NoSuchAlgorithmException | NoSuchProviderException ex) {
                     Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {

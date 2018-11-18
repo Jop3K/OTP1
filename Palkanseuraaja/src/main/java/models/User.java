@@ -32,13 +32,8 @@ public class User {
     @Column(name = "salt", nullable = false)
     private String salt;
 
-    @OneToMany(mappedBy = "user")
-    private Set<WorkProfile> profiles;
-    
-
     public User() throws NoSuchAlgorithmException, NoSuchProviderException {
         salt = new PasswordHashing().generateSalt().toString();
-        profiles = new HashSet<>();
     }
 
     public int getId() {
@@ -87,14 +82,6 @@ public class User {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
-    }
-
-    public Set<WorkProfile> getProfiles() {
-        return profiles;
-    }
-
-    public void setProfiles(Set<WorkProfile> profiles) {
-        this.profiles = profiles;
     }
 
     @Override

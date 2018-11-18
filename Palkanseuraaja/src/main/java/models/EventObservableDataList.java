@@ -10,7 +10,7 @@ public class EventObservableDataList {
 	
 	private EventObservableDataList() {
 
-		data = FXCollections.observableArrayList(UserDAO.getEvents());
+		data = FXCollections.observableArrayList(CurrentUser.getEvents());
 	}
 	
 	public static ObservableList<EventModel> getInstance(){

@@ -47,7 +47,6 @@ public class StatsController  implements Initializable {
 		data.getInstance().addListener((ListChangeListener)(c -> {statsModel.updateAllData();}));
 		IncomesByMonthsBarChart = statsModel.setUpIncomesByMonthsBarChart(IncomesByMonthsBarChart);
 		
-
 	}
 
 }

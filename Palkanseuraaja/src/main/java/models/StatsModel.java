@@ -59,8 +59,6 @@ public class StatsModel{
 			xyList.add(new XYChart.Data(s.getMonth().toString(), s.getTotalSalary()));		
 		}
 		
-		
-		
 		return xyList;
 	}
 	

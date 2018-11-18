@@ -7,6 +7,10 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+/**
+ * Työvuoro/tapahtuma luokka. Käytetään työvuorojen esittämiseen ja tallentamiseen. Liittyvät aina johonkin työprofiiliin.
+ *
+ */
 @Entity
 @Table(name = "events")
 public class EventModel {
@@ -78,7 +82,9 @@ public class EventModel {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime eventStart = LocalDateTime.of(beginDay, LocalTime.of(Integer.parseInt(endHour), Integer.parseInt(endMinute)));
 
-        if (eventStart.isAfter(now)) eventPay = Calculation.Calculate(this);
+        if (eventStart.isAfter(now)) {
+            eventPay = Calculation.Calculate(this);
+        }
     }
 
     public double getEventPay() {
