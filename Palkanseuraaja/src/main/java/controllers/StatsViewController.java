@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.BarChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -32,21 +33,9 @@ public class StatsViewController implements Initializable {
     @FXML
     private Font x12;
     @FXML
-    private Label revenueDay;
-    @FXML
-    private TextField incomeToday;
-    @FXML
     private Label workShifts;
     @FXML
-    private TextField incomeMonthly;
-    @FXML
-    private TextField incomeYearly;
-    @FXML
-    private Label revenueMonth;
-    @FXML
-    private TextField workshiftUpcoming;
-    @FXML
-    private Label revenueYear;
+    private Label revenue;
     @FXML
     private Font x121;
     @FXML
@@ -61,6 +50,12 @@ public class StatsViewController implements Initializable {
     private Button saveButton;
     @FXML
     private Button editButton;
+    @FXML
+    private BarChart incomesByMonthsBarChart;
+    @FXML
+    private ComboBox incomeDropdown;
+    @FXML
+    private ComboBox workshiftDropdown;
 
     /**
      * Initializes the controller class.
@@ -69,22 +64,31 @@ public class StatsViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         labels = ResourceBundle.getBundle("LabelsBundle");
         buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
-        
+
         setLabels();
         setButtons();
     }
 
     public void setLabels() {
         stats.setText(labels.getString("stats"));
-        revenueDay.setText(labels.getString("revenueDay"));
-        revenueMonth.setText(labels.getString("revenueMonth"));
-        revenueYear.setText(labels.getString("revenueYear"));
+        revenue.setText(labels.getString("revenue"));
+        incomeDropdown.getItems().add(labels.getString("today"));
+        incomeDropdown.getSelectionModel().select(0);
+        incomeDropdown.getItems().add(labels.getString("week"));
+        incomeDropdown.getItems().add(labels.getString("month"));
+        incomeDropdown.getItems().add(labels.getString("year"));
+        workshiftDropdown.getItems().add(labels.getString("today"));
+        workshiftDropdown.getSelectionModel().select(0);
+        workshiftDropdown.getItems().add(labels.getString("week"));
+        workshiftDropdown.getItems().add(labels.getString("month"));
+        workshiftDropdown.getItems().add(labels.getString("year"));
         workShifts.setText(labels.getString("workShifts"));
+        incomesByMonthsBarChart.setTitle(labels.getString("yearlyIncome"));
         settings.setText(labels.getString("settings"));
         payLimit.setText(labels.getString("payLimit"));
         currency.setText(labels.getString("currency"));
     }
-    
+
     public void setButtons() {
         saveButton.setText(buttons.getString("save"));
         editButton.setText(buttons.getString("edit"));

@@ -17,15 +17,25 @@ import java.security.NoSuchProviderException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.PasswordHashing;
-
+/**
+ * This is the controller for "Register user" -view
+ * @author Joni, Artur, Joonas
+ *
+ */
 public class RegisterController {
 
-    private UserDAO dao;
+  
     private RegisterView registerView;
     private RegisterModel registerModel;
     private ViewChanger viewChanger;
     private Transaction tx;
 
+    /**
+     * The base constructor for the RegisterController class
+     * @param registerView
+     * @param registerModel
+     * @param viewChanger we use this for changing the view 
+     */
     public RegisterController(RegisterView registerView, RegisterModel registerModel, ViewChanger viewChanger) {
 
         /*Configuration con = new Configuration().configure().addAnnotatedClass(User.class);
@@ -33,7 +43,7 @@ public class RegisterController {
         SessionFactory sf = con.buildSessionFactory();
         session = sf.getCurrentSession();
         tx = session.beginTransaction();*/
-        this.dao = new UserDAO();
+        
         this.registerView = registerView;
         this.registerModel = registerModel;
         this.viewChanger = viewChanger;
@@ -43,6 +53,11 @@ public class RegisterController {
 
     }
 
+    /**
+     * The class for handling the onclick event when clicking the "Back" button
+     * @author Joni, Artur, Joonas
+     *
+     */
     class backButtonListener implements EventHandler {
 
         @Override
@@ -58,8 +73,19 @@ public class RegisterController {
     }
 
     // Luokka kuuntelee create-buttonia ja luo uuden käyttäjän.
+    /**
+     * This use this method to handle the "Create new user" -button
+     * @author Joni, Artur, Joonas
+     *
+     */
     class createButtonListener implements EventHandler {
 
+    	/**
+    	 * 1. Checks if register form is filled correctly
+    	 * 1a. The program alerts if something is not filled correctly
+    	 * 2. Adding the user to the database
+    	 * 2a. We don't add the user to the database if the username is taken
+    	 */
         @Override
         public void handle(Event arg0) {
             /*
@@ -84,9 +110,9 @@ public class RegisterController {
                     user.setUsername(tmpRegisterModel.getuName());
                     
                     //luodaan käyttäjä tietokantaan, jos käyttäjänimeä ei ole varattu.
-                    if (dao.save(user)) {
+                    if (UserDAO.save(user)) {
                         //ilmoitetaan onnistumisesta
-                        registerView.showAlert(dao.getAlert());
+                        registerView.showAlert(UserDAO.getAlert());
                         //Ohjataan takaisin loginiin
                         /*
                         * TODO: Joku builderi, jolla saadaan luotua controllerit yhdellä rivillä koodia nätisti.
@@ -102,13 +128,11 @@ public class RegisterController {
                         
                     } else {
                         //Ilmoitetaan käyttäjätunnuksen olevan varattu
-                        registerView.showAlert(dao.getAlert());
-                    }} catch (NoSuchAlgorithmException ex) {
-                    Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (NoSuchProviderException ex) {
+                        registerView.showAlert(UserDAO.getAlert());
+                    }} catch (NoSuchAlgorithmException | NoSuchProviderException ex) {
                     Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-           } else {//ilmoitetaan formin validaatiosta tapahtuneesta virheestä
+            } else {//ilmoitetaan formin validaatiosta tapahtuneesta virheestä
                 registerView.showAlert(tmpRegisterModel.getAlert());
             }
         }

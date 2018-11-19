@@ -5,6 +5,8 @@ import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.hibernate.Hibernate;
 import java.util.ResourceBundle;
 import org.hibernate.criterion.Restrictions;
 import javafx.scene.control.Alert;
@@ -16,13 +18,15 @@ import models.PasswordHashing;
 import models.User;
 import models.WeekDays;
 import models.WorkProfile;
+import org.hibernate.jdbc.Work;
 import org.hibernate.query.Query;
 
 public class UserDAO extends DataAccessObject {
 
-    private CurrentUser currentUser;
-    private ResourceBundle alerts;
-    private Alert alert;
+	
+    private static CurrentUser currentUser;
+    private static Alert alert;
+    private static ResourceBundle alerts;
 
     public UserDAO() {
 
@@ -32,10 +36,10 @@ public class UserDAO extends DataAccessObject {
 
     }
 
-    public boolean login(String username, String password) throws NoSuchAlgorithmException, NoSuchProviderException {
+    public static boolean login(String username, String password) throws NoSuchAlgorithmException, NoSuchProviderException {
 
         openCurrentSession();
-        Query q = session.createQuery("FROM User WHERE username='" + username + "'");
+        Query q = getCurrentSession().createQuery("FROM User WHERE username='" + username + "'");
         currentUser = new CurrentUser((User) q.uniqueResult());
 
         closeCurrentSession();
@@ -59,7 +63,7 @@ public class UserDAO extends DataAccessObject {
     }
     //Metodi palauttaa truen, jos käyttäjän lisäys onnistuu.
 
-    public boolean save(User user) {
+    public static boolean save(User user) {
         //Katsotaan löytyykö tietokannasta käyttäjää
         if (!checkForDuplicateUser(user)) {
             // Luodaan uusi alert, koska käyttäjätunnus on varattu
@@ -79,8 +83,8 @@ public class UserDAO extends DataAccessObject {
 
         return true;
     }
-    
-    public boolean update(User user) {
+
+    public static boolean update(User user) {
 
         openCurrentSessionWithTransaction().update(user);
         closeCurrentSessionWithTransaction();
@@ -88,15 +92,17 @@ public class UserDAO extends DataAccessObject {
         return true;
     }
 
-    public boolean update(EventModel event) {
-
+    public static boolean update(EventModel event) {
+    
+    
     	openCurrentSessionWithTransaction().update(event);
         closeCurrentSessionWithTransaction();	
         
         return true;
     }
 
-    public boolean save(EventModel event) {
+    public static  boolean save(EventModel event) {
+
 
         openCurrentSessionWithTransaction().saveOrUpdate(event);
         closeCurrentSessionWithTransaction();
@@ -108,14 +114,14 @@ public class UserDAO extends DataAccessObject {
         return true;
     }
 
-    public boolean save(WorkProfile profile) {
+    public static boolean save(WorkProfile profile) {
         openCurrentSessionWithTransaction().saveOrUpdate(profile);
         closeCurrentSessionWithTransaction();
 
         return true;
     }
 
-    public boolean save(ExtraPay extrapay) {
+    public static boolean save(ExtraPay extrapay) {
 
         openCurrentSessionWithTransaction().saveOrUpdate(extrapay);
         closeCurrentSessionWithTransaction();
@@ -123,7 +129,7 @@ public class UserDAO extends DataAccessObject {
         return true;
     }
 
-    public boolean save(WeekDays weekdays) {
+    public static boolean save(WeekDays weekdays) {
 
         openCurrentSessionWithTransaction().saveOrUpdate(weekdays);
         closeCurrentSessionWithTransaction();
@@ -131,7 +137,7 @@ public class UserDAO extends DataAccessObject {
         return true;
     }
 
-    public boolean delete(EventModel event) {
+    public static boolean delete(EventModel event) {
         openCurrentSessionWithTransaction().delete(event);
 
         closeCurrentSessionWithTransaction();
@@ -140,7 +146,7 @@ public class UserDAO extends DataAccessObject {
     }
 
     // palauttaa falsen jos käyttäjänimi löytyy tietokannasta
-    public boolean checkForDuplicateUser(User user) {
+    public static boolean checkForDuplicateUser(User user) {
 
         List users = openCurrentSession().createCriteria(User.class)
                 .add(Restrictions.eq("username", user.getUsername())).list();
@@ -153,57 +159,26 @@ public class UserDAO extends DataAccessObject {
         return false;
     }
 
-    public List<EventModel> getEvents() {
+    public static List<WorkProfile> getUsersWorkProfilesFromDatabase() {
 
         openCurrentSession();
-        Query q = session.createQuery("FROM WorkProfile WHERE user_id='" + CurrentUser.getUser().getId() + "'");
+        Query q = getCurrentSession().createQuery("FROM WorkProfile WHERE user_id='" + CurrentUser.getUser().getId() + "'");
 
         List<WorkProfile> profiles = q.list();
 
-        Iterator itr = profiles.iterator();
-        List<EventModel> events = new ArrayList<EventModel>();
-        while (itr.hasNext()) {
-            WorkProfile tmp = (WorkProfile) itr.next();
-            List<EventModel> eventlist = (List<EventModel>) tmp.getEvents();
-            Iterator itr1 = eventlist.iterator();
-            while (itr1.hasNext()) {
-                EventModel tmp2 = (EventModel) itr1.next();
-                events.add(tmp2);
-            }
-
+        for(WorkProfile profile : profiles) {
+            Hibernate.initialize(profile.getEvents());
+            Hibernate.initialize(profile.getExtraPays());
         }
 
         closeCurrentSession();
 
-        return events;
-    }
-
-    public List<WorkProfile> getUsersWorkProfilesFromDatabase() {
-
-        openCurrentSession();
-        Query q = session.createQuery("FROM WorkProfile WHERE user_id='" + CurrentUser.getUser().getId() + "'");
-
-        List<WorkProfile> profiles = q.list();
-
-        closeCurrentSession();
-
         return profiles;
 
     }
 
-    public List<ExtraPay> getProfilesExtraPays() {
-        openCurrentSession();
-        Query q = session.createQuery("FROM ExtraPay WHERE workprofile_id='" + CurrentWorkProfile.getWorkProfile().getId() + "'");
-
-        List<ExtraPay> profiles = q.list();
-
-        closeCurrentSession();
-
-        return profiles;
-    }
-
-    public Alert getAlert() {
-        return this.alert;
+    public static Alert getAlert() {
+       return alert;
     }
 
 }

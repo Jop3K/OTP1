@@ -15,61 +15,64 @@ import models.WorkProfile;
 
 public class DataAccessObject {
 
-    Session session;
-    Transaction transaction;
+    private static Session session;
+    private static Transaction transaction;
+    private static SessionFactory sessionFactory;
 
     public DataAccessObject() {
+
+    	Configuration con = new Configuration().configure().addAnnotatedClass(User.class)
+    	        .addAnnotatedClass(WorkProfile.class)
+    	        .addAnnotatedClass(ExtraPay.class)
+    	        .addAnnotatedClass(EventModel.class)
+    	        .addAnnotatedClass(WeekDays.class);
+    	        ServiceRegistry reg = new StandardServiceRegistryBuilder().applySettings(con.getProperties()).build();
+    	        sessionFactory = con.buildSessionFactory(reg);
+
     }
 
     private static SessionFactory getSessionFactory() {
-        Configuration con = new Configuration().configure().addAnnotatedClass(User.class)
-        .addAnnotatedClass(WorkProfile.class)
-        .addAnnotatedClass(ExtraPay.class)
-        .addAnnotatedClass(EventModel.class)
-        .addAnnotatedClass(WeekDays.class);
-        ServiceRegistry reg = new StandardServiceRegistryBuilder().applySettings(con.getProperties()).build();
-        SessionFactory sf = con.buildSessionFactory(reg);
 
-        return sf;
+       return sessionFactory;
     }
 
-    public Session openCurrentSession() {
+    public static Session openCurrentSession() {
         session = getSessionFactory().openSession();
         return session;
 
     }
 
-    public void closeCurrentSession() {
+    public static void closeCurrentSession() {
         session.close();
     }
 
-    public void closeCurrentSessionWithTransaction() {
+    public static void closeCurrentSessionWithTransaction() {
         transaction.commit();
         session.close();
     }
     //Transactionia käytetään, kun tietokantaa muutetaan. Haut sieltä suoritetaan normaalilla sessionilla
 
-    public Session openCurrentSessionWithTransaction() {
+    public static Session openCurrentSessionWithTransaction() {
         session = getSessionFactory().openSession();
-        transaction = session.beginTransaction();
+       transaction = session.beginTransaction();
 
         return session;
     }
 
-    public Session getCurrentSession() {
-        return this.session;
+    public static Session getCurrentSession() {
+        return session;
     }
 
-    public void setCurrentSession(Session session) {
-        this.session = session;
+    public static void setCurrentSession(Session session) {
+        session = session;
     }
 
-    public Transaction getCurrentTransaction() {
+    public static Transaction getCurrentTransaction() {
         return transaction;
     }
 
-    public void setCurrentTransaction(Transaction transaction) {
-        this.transaction = transaction;
+    public static void setCurrentTransaction(Transaction transaction) {
+        transaction = transaction;
     }
 
 }

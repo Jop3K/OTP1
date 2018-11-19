@@ -1,12 +1,16 @@
 package models;
 
-import java.time.DayOfWeek;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import dataAccessObjects.UserDAO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArrayBase;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 /**
  * 
@@ -41,7 +45,7 @@ public class Calculation {
         System.out.println("Extrapalkka: " + extraPay);
 
         totalPay = basicPay + extraPay;
-
+        System.out.println(totalPay);
         return (double) Math.round(totalPay * 100d) / 100d;
     }
 
@@ -50,7 +54,7 @@ public class Calculation {
      * @param event EventModel minkä palkka halutaan laskea
      * @return Laskettu peruspalkka
      */
-    private static double calcBasicPay(EventModel event) {
+    static double calcBasicPay(EventModel event) {
 
         long start;
         long end;
@@ -67,7 +71,6 @@ public class Calculation {
         pay = event.getWorkProfile().getPay() / 60;
         //lasketaan kokonaisansiot
         pay = pay * minutes;
-
         
         // Päivitetään tuntimäärä eventtiin
         event.setHours((double) Math.round((minutes / 60) * 100d) / 100d);
@@ -80,7 +83,7 @@ public class Calculation {
      * @param event EventModel minkä palkka halutaan laskea
      * @return Laskettu palkkalisien antama lisäpalkka
      */
-    private static double calcExtraPay(EventModel event) {
+    static double calcExtraPay(EventModel event) {
 
         double extraPay = 0;
 
@@ -162,6 +165,124 @@ public class Calculation {
         }
 
         return extraPay;
+
+    }
+    
+    static List calcPayForEveryMonthInYear(EventObservableDataList data) {
+    	
+    	List result = new ArrayList();
+    	
+    	for (Month month : Month.values()) {
+    		
+    		double salary = calcPayForMonth(month, data.getInstance());
+    		SalaryPerMonthModel tmp = new SalaryPerMonthModel(month, salary);   		
+    		result.add(tmp);
+    		
+    		}
+    	
+    	
+    	
+		return result;
+    }
+    /**
+     * Tilastojen laskenta - kuukauden tulot
+     * @param month Month Java.time API:n kuukausi enum arvo
+     * @param events List<EventModel> tapahtumat mistä tilastot lasketaan
+     * @return Valitun kuukauden tulojen summa
+     */
+    static double calcPayForMonth(Month month, List<EventModel> events) {
+        double totalPay = 0;
+
+        for (EventModel event : events) { System.out.println(event.getId());
+            LocalDate eventBegin = event.getBeginDay();
+            Month eventMonth = eventBegin.getMonth();
+
+            if(eventBegin.getYear() != LocalDate.now().getYear()) continue;
+
+            if (eventMonth == month) {
+                totalPay += event.getEventPay();
+            }
+
+        }
+        
+        return totalPay;
+    }
+
+    /**
+     * Tilastojen laskenta - tulot yhteensä
+     * @param daysFromNow int montako päivää tästä päivästä lähtien otetaan mukaan tilastoon (0 = pelkästään tänään, -1 = tänään ja eilen, 1 = tänään ja huomenna)
+     * @param events List<EventModel> tapahtumat mistä tilastot lasketaan
+     * @return Valitun aikavälin tapahtumien palkkojen summa
+     */
+    static double calcPayForTimePeriod(int daysFromNow, List<EventModel> events) {
+        double totalPay = 0;
+        LocalDate now = LocalDate.now();
+
+        if(daysFromNow >= 0) {
+            LocalDate endOfTimePeriod = now.plusDays(daysFromNow);
+
+            for (EventModel event : events) {
+                LocalDate eventBegin = event.getBeginDay();
+
+                if ((eventBegin.isEqual(now) || eventBegin.isAfter(now)) && (eventBegin.isBefore(endOfTimePeriod) || eventBegin.isEqual(endOfTimePeriod))) {
+                    totalPay += event.getEventPay();
+                }
+
+            }
+        } else {
+            LocalDate endOfTimePeriod = now.minusDays(Math.abs(daysFromNow));
+
+            for (EventModel event : events) {
+                LocalDate eventBegin = event.getBeginDay();
+
+                if ((eventBegin.isEqual(now) || eventBegin.isBefore(now)) && (eventBegin.isAfter(endOfTimePeriod) || eventBegin.isEqual(endOfTimePeriod))) {
+                    totalPay += event.getEventPay();
+                }
+
+            }
+
+        }
+
+        return totalPay;
+
+    }
+
+    /**
+     * Tilastojen laskenta - työvuorojen määrä
+     * @param daysFromNow int montako päivää tästä päivästä lähtien otetaan mukaan tilastoon (0 = pelkästään tämä päivä, -1 = tänään ja eilen, 1 = tänään ja huomenna)
+     * @param events List<EventModel> tapahtumat mistä tilastot lasketaan
+     * @return Valitun aikavälin tapahtumien määrä
+     */
+    static int calcAmountOfEvents(int daysFromNow, List<EventModel> events) {
+        int amountOfEvents = 0;
+        LocalDate now = LocalDate.now();
+
+        if(daysFromNow >= 0) {
+            LocalDate endOfTimePeriod = now.plusDays(daysFromNow);
+
+            for (EventModel event : events) {
+                LocalDate eventBegin = event.getBeginDay();
+
+                if ((eventBegin.isEqual(now) || eventBegin.isAfter(now)) && (eventBegin.isBefore(endOfTimePeriod) || eventBegin.isEqual(endOfTimePeriod))) {
+                    amountOfEvents++;
+                }
+
+            }
+
+        } else {
+            LocalDate endOfTimePeriod = now.minusDays(Math.abs(daysFromNow));
+
+            for (EventModel event : events) {
+                LocalDate eventBegin = event.getBeginDay();
+
+                if ((eventBegin.isEqual(now) || eventBegin.isBefore(now)) && (eventBegin.isAfter(endOfTimePeriod) || eventBegin.isEqual(endOfTimePeriod))) {
+                    amountOfEvents++;
+                }
+
+            }
+        }
+
+        return amountOfEvents;
 
     }
 

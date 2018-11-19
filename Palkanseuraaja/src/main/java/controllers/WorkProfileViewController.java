@@ -17,17 +17,15 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
-import models.CurrentUser;
-import models.CurrentWorkProfile;
-import models.ExtraPay;
-import models.WeekDays;
-import models.WorkProfile;
-import models.CurrentCalendarViewController;
-import models.EventModel;
+import models.*;
 
+/**
+ * The controller class for WorkProfileView
+ *
+ * @author Joni, Artur, Joonas
+ *
+ */
 public class WorkProfileViewController implements Initializable {
-
-    private UserDAO dao;
 
     private ResourceBundle labels;
     private ResourceBundle buttons;
@@ -120,12 +118,9 @@ public class WorkProfileViewController implements Initializable {
         labels = ResourceBundle.getBundle("LabelsBundle");
         buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
         alerts = ResourceBundle.getBundle("AlertMessagesBundle");
-        
+
         setLabels();
         setButtons();
-
-        dao = new UserDAO();
-        dao.openCurrentSession();
 
         loadValuesToProfileChooser();
         generateTimes();
@@ -134,6 +129,12 @@ public class WorkProfileViewController implements Initializable {
 
     }
 
+    /**
+     * This methods is for handling the saving of a Work Profile onclick of the
+     * "save" button
+     *
+     * @param event required parameter for ActionEvent
+     */
     public void setLabels() {
         workInfo.setText(labels.getString("workInfo"));
         chooseProfile.setText(labels.getString("chooseProfile"));
@@ -159,7 +160,7 @@ public class WorkProfileViewController implements Initializable {
         setBeginMinute.promptTextProperty().setValue(labels.getString("m"));
         setEndHour.promptTextProperty().setValue(labels.getString("h"));
         setEndMinute.promptTextProperty().setValue(labels.getString("m"));
-        
+
     }
 
     public void setButtons() {
@@ -176,17 +177,19 @@ public class WorkProfileViewController implements Initializable {
         if (!profileChooser.getSelectionModel().isEmpty()) { // if profile is chosen, updates it
 
             if (!profileName.getText().isEmpty()) {
-                profileChooser.getSelectionModel().getSelectedItem().setNimi(profileName.getText());
+                profileChooser.getSelectionModel().getSelectedItem().setName(profileName.getText());
             }
             if (!tuntipalkka.getText().isEmpty()) {
                 profileChooser.getSelectionModel().getSelectedItem().setPay(Double.parseDouble(tuntipalkka.getText()));
             }
             if (!extrapay.getText().isEmpty()) {
                 extrapayChooser.getSelectionModel().getSelectedItem().setExtraPay(Double.parseDouble(extrapay.getText()));
-                dao.save(extrapayChooser.getSelectionModel().getSelectedItem());
+                UserDAO.save(extrapayChooser.getSelectionModel().getSelectedItem());
             }
 
-            dao.save(profileChooser.getSelectionModel().getSelectedItem());
+            profileChooser.getSelectionModel().getSelectedItem().calculateEventPays();
+
+            UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
 
             profileChooser.getItems().add(profileChooser.getSelectionModel().getSelectedItem());
             profileChooser.getSelectionModel().selectLast();
@@ -200,7 +203,7 @@ public class WorkProfileViewController implements Initializable {
 
                 WorkProfile workProfile = new WorkProfile();
 
-                workProfile.setNimi(profileName.getText());
+                workProfile.setName(profileName.getText());
                 workProfile.setUser(CurrentUser.getUser());
 
                 if (!tuntipalkka.getText().isEmpty()) {
@@ -211,11 +214,11 @@ public class WorkProfileViewController implements Initializable {
 
                     extrapayChooser.getSelectionModel().getSelectedItem().setExtraPay(Double.parseDouble(extrapay.getText()));
 
-                    dao.save(extrapayChooser.getSelectionModel().getSelectedItem());
+                    UserDAO.save(extrapayChooser.getSelectionModel().getSelectedItem());
 
                 }
 
-                dao.save(workProfile);
+                UserDAO.save(workProfile);
 
                 // Tallennetaan eventit uudelleen jos palkka extrapayt vaihtuu (palkka lasketaan tässä tilanteessa uudelleen)
                 if (!tuntipalkka.getText().isEmpty() || extrapayChooser.getSelectionModel().getSelectedItem() != null) {
@@ -223,7 +226,7 @@ public class WorkProfileViewController implements Initializable {
                     for (EventModel profileEvent : workProfile.getEvents()) {
 
                         profileEvent.calcPay();
-                        dao.update(profileEvent);
+                        UserDAO.update(profileEvent);
 
                     }
                 }
@@ -241,6 +244,11 @@ public class WorkProfileViewController implements Initializable {
         }
     }
 
+    /**
+     * We use this ActionEvent method to save a new additional pay
+     *
+     * @param event required parameter
+     */
     @FXML
     private void handleSaveLisaButtonClick(ActionEvent event) {
         if (!profileChooser.getSelectionModel().isEmpty()) { // profile must be chosen to create ExtraPay for it
@@ -292,7 +300,7 @@ public class WorkProfileViewController implements Initializable {
                 extrapayChooser.getSelectionModel().getSelectedItem().setEndHour(setEndHour.getSelectionModel().getSelectedItem());
                 extrapayChooser.getSelectionModel().getSelectedItem().setEndMinute(setEndMinute.getSelectionModel().getSelectedItem());
 
-                dao.save(extrapayChooser.getSelectionModel().getSelectedItem());
+                UserDAO.save(extrapayChooser.getSelectionModel().getSelectedItem());
 
             } else { // when no ExtraPay is selected, creates a new ExtraPay
 
@@ -345,7 +353,11 @@ public class WorkProfileViewController implements Initializable {
                     lisa.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
                     lisa.setWeekdays(weekdays);
                     weekdays.setExtrapay(lisa);
-                    dao.save(lisa);
+                    UserDAO.save(lisa);
+
+                    // Moved to here because no need to load values if adding failed
+                    clearTextFieldsExtraPay();
+                    loadValuesToExtrapayChooser();
 
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -356,18 +368,19 @@ public class WorkProfileViewController implements Initializable {
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
+
             alert.setTitle(alerts.getString("error"));
             alert.setHeaderText(alerts.getString("error"));
             alert.showAndWait();
         }
 
-        clearTextFieldsExtraPay();
-        loadValuesToExtrapayChooser();
-
     }
 
+    /**
+     * handler for "Uusi profiili" button
+     */
     @FXML
-    private void handleNewProfileButtonClick() { // handler for "Uusi profiili" button
+    private void handleNewProfileButtonClick() {
 
         clearTextFieldsProfile();
         enableFields();
@@ -382,8 +395,13 @@ public class WorkProfileViewController implements Initializable {
 
     }
 
+    /**
+     * handler for "Valitse Profiili" dropdown
+     *
+     * @param event required parameter
+     */
     @FXML
-    private void handleProfileChooserClick(ActionEvent event) { // handler for "Valitse Profiili" dropdown 
+    private void handleProfileChooserClick(ActionEvent event) {
 
         if (profileChooser.getSelectionModel().getSelectedItem() != null) {
 
@@ -398,8 +416,13 @@ public class WorkProfileViewController implements Initializable {
 
     }
 
+    /**
+     * handler for "Palkkalisä" dropdown
+     *
+     * @param event a required parameter
+     */
     @FXML
-    private void handleExtrapayChooserClick(ActionEvent event) { // handler for "Palkkalisä" dropdown
+    private void handleExtrapayChooserClick(ActionEvent event) {
         if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
             extrapay.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtraPay()));
 
@@ -407,8 +430,11 @@ public class WorkProfileViewController implements Initializable {
         }
     }
 
+    /**
+     * handler for "Muokkaa" button
+     */
     @FXML
-    private void handleEditButtonClick() { // handler for "Muokkaa" button
+    private void handleEditButtonClick() {
 
         if (editButton.getText().equals(buttons.getString("edit"))) { // Changes button text when successfully clicked to "Peruuta"
 
@@ -426,14 +452,17 @@ public class WorkProfileViewController implements Initializable {
 
     }
 
-    private void loadValuesToTextFields() { // Loads values to textfield from selected WorkProfile object
+    /**
+     * Loads values to textfield from selected WorkProfile object
+     */
+    private void loadValuesToTextFields() {
 
         clearTextFieldsProfile();
         disableFields();
 
         editButton.setText(buttons.getString("edit"));
 
-        profileName.setText(profileChooser.getSelectionModel().getSelectedItem().getNimi());
+        profileName.setText(profileChooser.getSelectionModel().getSelectedItem().getName());
         tuntipalkka.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getPay()));
 
         if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
@@ -446,13 +475,19 @@ public class WorkProfileViewController implements Initializable {
 
     }
 
-    private void clearTextFieldsProfile() { // Clears text fields on the Profile side
+    /**
+     * Clears text fields on the Profile side
+     */
+    private void clearTextFieldsProfile() {
         profileName.clear();
         tuntipalkka.clear();
         extrapay.clear();
     }
 
-    private void clearTextFieldsExtraPay() { // Clears text fields on the ExtraPay side
+    /**
+     * Clears text fields on the ExtraPay side
+     */
+    private void clearTextFieldsExtraPay() {
         lisanNimi.clear();
         monday.setSelected(false);
         tuesday.setSelected(false);
@@ -461,19 +496,27 @@ public class WorkProfileViewController implements Initializable {
         friday.setSelected(false);
         saturday.setSelected(false);
         sunday.setSelected(false);
-        setBeginHour.getItems().clear();
-        setBeginMinute.getItems().clear();
-        setEndHour.getItems().clear();
-        setEndHour.getItems().clear();
+
+        // Changed to clearSelection because previous method removed all values from dropdown
+        setBeginHour.getSelectionModel().clearSelection();
+        setBeginMinute.getSelectionModel().clearSelection();
+        setEndHour.getSelectionModel().clearSelection();
+        setEndHour.getSelectionModel().clearSelection();
     }
 
-    private void disableFields() { // disables textfields on the left side
+    /**
+     * disables textfields on the left side
+     */
+    private void disableFields() {
         profileName.setDisable(true);
         tuntipalkka.setDisable(true);
         extrapay.setDisable(true);
     }
 
-    private void enableFields() { // enables textfields on the left side
+    /**
+     * enables textfields on the left side
+     */
+    private void enableFields() {
         profileName.setDisable(false);
         tuntipalkka.setDisable(false);
         if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
@@ -482,7 +525,10 @@ public class WorkProfileViewController implements Initializable {
         extrapay.setDisable(false);
     }
 
-    private void loadValuesToExtrapayFields() { // Loads values to ExtraPay side from selected ExtraPay object
+    /**
+     * Loads values to ExtraPay side from selected ExtraPay object
+     */
+    private void loadValuesToExtrapayFields() {
 
         lisanNimi.setText(extrapayChooser.getSelectionModel().getSelectedItem().getName());
 
@@ -537,7 +583,10 @@ public class WorkProfileViewController implements Initializable {
 
     }
 
-    private void loadValuesToProfileChooser() { // Loads current users' values to "Valitse Profiili" dropdown
+    /**
+     * Loads current users' values to "Valitse Profiili" dropdown
+     */
+    private void loadValuesToProfileChooser() {
         profileChooser.getItems().clear();
 
         profileList = CurrentUser.getWorkProfiles();
@@ -546,32 +595,16 @@ public class WorkProfileViewController implements Initializable {
             profileChooser.getItems().add(w);
         }
 
-        profileChooser.setCellFactory( // Customizes cells so that they appear as WorkProfile's name (String) and not as a WorkProfile object
-                new Callback<ListView<WorkProfile>, ListCell<WorkProfile>>() {
-            @Override
-            public ListCell<WorkProfile> call(ListView<WorkProfile> w) {
-                ListCell cell = new ListCell<WorkProfile>() {
-                    @Override
-                    protected void updateItem(WorkProfile item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setText("");
-                        } else {
-                            setText(item.getNimi());
-                        }
-                    }
-                };
-                return cell;
-            }
-        });
-
     }
 
+    /**
+     * Loading the values for ExtraPay chooser
+     */
     private void loadValuesToExtrapayChooser() {
 
         extrapayChooser.getItems().clear();
 
-        extrapayList = dao.getProfilesExtraPays();
+        extrapayList = CurrentWorkProfile.getProfilesExtraPays();
 
         if (!extrapayList.isEmpty()) {
 
@@ -579,29 +612,14 @@ public class WorkProfileViewController implements Initializable {
                 extrapayChooser.getItems().add(e);
             }
 
-            extrapayChooser.setCellFactory(
-                    new Callback<ListView<ExtraPay>, ListCell<ExtraPay>>() {
-                @Override
-                public ListCell<ExtraPay> call(ListView<ExtraPay> w) {
-                    ListCell cell = new ListCell<ExtraPay>() {
-                        @Override
-                        protected void updateItem(ExtraPay item, boolean empty) {
-                            super.updateItem(item, empty);
-                            if (empty) {
-                                setText("");
-                            } else {
-                                setText(item.getName());
-                            }
-                        }
-                    };
-                    return cell;
-                }
-            });
         }
 
     }
 
-    public void generateTimes() { // Generate numbers to hours/minutes dropdowns
+    /**
+     * Generate numbers to hours/minutes dropdowns
+     */
+    public void generateTimes() {
         for (int i = 0; i < 60; i++) {
             setBeginMinute.getItems().add(Integer.toString(i));
             setEndMinute.getItems().add(Integer.toString(i));
@@ -619,7 +637,12 @@ public class WorkProfileViewController implements Initializable {
         }
     }
 
-    public boolean timesAreValid() { // time validation for ExtraPay
+    /**
+     * time validation for ExtraPay
+     *
+     * @return the boolean for the result of validation
+     */
+    public boolean timesAreValid() {
         if (setBeginHour.getSelectionModel().isEmpty() || setEndHour.getSelectionModel().isEmpty()
                 || setBeginMinute.getSelectionModel().isEmpty() || setEndMinute.getSelectionModel().isEmpty()) {
             return false;

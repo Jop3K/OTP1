@@ -17,5 +17,5 @@ public class CurrentCalendarViewController extends CalendarViewController {
     public static void setCalendarViewController(CalendarViewController c) {
         CurrentCalendarViewController.calendarViewController = c;
     }
-    
+
 }

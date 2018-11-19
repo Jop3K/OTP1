@@ -1,11 +1,16 @@
 package models;
 
-import java.time.LocalDate;
-import java.util.Date;
 import javax.persistence.*;
-import com.google.api.client.util.DateTime;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
+/**
+ * Työvuoro/tapahtuma luokka. Käytetään työvuorojen esittämiseen ja tallentamiseen. Liittyvät aina johonkin työprofiiliin.
+ *
+ */
 @Entity
 @Table(name = "events")
 public class EventModel {
@@ -24,18 +29,18 @@ public class EventModel {
 
     @Column(name = "endTime")
     private Date endTime;
-    
+
     @Column(name = "beginDateTime")
     private String beginDateTime;
-    
+
     @Column(name = "endDateTime")
     private String endDateTime;
-    
+
     @Column(name = "googleId")
     private String googleId;
     @Column
     private double eventPay;
-    
+
     @Column
     private double hours;
 
@@ -54,23 +59,46 @@ public class EventModel {
 
     public EventModel() {
     }
-    
-    public void calcPay() {
-        eventPay = Calculation.Calculate(this);
+
+    // Tämä lisätty sitä varten että olisi helpompi tehdä EventModel olioita testeissä
+    public EventModel(LocalDateTime beginDay, LocalDateTime endDay, WorkProfile profile) {
+
+        setBeginDay(beginDay.toLocalDate());
+        setBeginHour("" + beginDay.getHour());
+        setBeginMinute("" + beginDay.getMinute());
+
+        setEndDay(endDay.toLocalDate());
+        setEndHour("" + endDay.getHour());
+        setEndMinute("" + endDay.getMinute());
+
+        setBeginDateTime(beginDay.toLocalDate());
+        setEndDateTime(endDay.toLocalDate());
+
+        setWorkProfile(profile);
+
     }
-    
+
+    public void calcPay() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime eventStart = LocalDateTime.of(beginDay, LocalTime.of(Integer.parseInt(endHour), Integer.parseInt(endMinute)));
+
+        if (eventStart.isAfter(now)) {
+            eventPay = Calculation.Calculate(this);
+        }
+    }
+
     public double getEventPay() {
         return eventPay;
     }
-    
+
     public double getHours() {
         return hours;
     }
-    
+
     public void setHours(double hours) {
         this.hours = hours;
     }
-    
+
     public void setEventPay(double pay) {
         eventPay = pay;
     }
@@ -132,7 +160,7 @@ public class EventModel {
         beginTime.setHours(Integer.parseInt(beginHour));
         System.out.println(beginTime);
         this.beginHour = beginHour;
-}
+    }
 
     public String getBeginMinute() {
         return beginMinute;
@@ -141,7 +169,7 @@ public class EventModel {
     public void setBeginMinute(String beginMinute) {
         beginTime.setMinutes(Integer.parseInt(beginMinute));
         this.beginMinute = beginMinute;
-}
+    }
 
     public LocalDate getEndDay() {
         return endDay;
@@ -160,7 +188,7 @@ public class EventModel {
     public void setEndHour(String endHour) {
         endTime.setHours(Integer.parseInt(endHour));
         this.endHour = endHour;
-}
+    }
 
     public String getEndMinute() {
         return endMinute;
@@ -169,7 +197,7 @@ public class EventModel {
     public void setEndMinute(String endMinute) {
         endTime.setMinutes(Integer.parseInt(endMinute));
         this.endMinute = endMinute;
-}
+    }
 
     public int getId() {
         return id;
@@ -194,5 +222,5 @@ public class EventModel {
     public void setEndDateTime(String endDateTime) {
         this.endDateTime = endDateTime;
     }
-    
+
 }

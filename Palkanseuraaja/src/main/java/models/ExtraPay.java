@@ -1,10 +1,15 @@
 package models;
 
 import javax.persistence.*;
+import java.time.LocalTime;
 
+/**
+ *
+ * Palkkalisä luokka. Käytetään palkkalisien esittämiseen ja tallentamiseen. Liittyvät aina johonkin työprofiiliin.
+ *
+ */
 @Entity
 @Table(name = "extrapay")
-
 public class ExtraPay {
 
     @Id
@@ -39,6 +44,19 @@ public class ExtraPay {
     private WeekDays weekdays;
 
     public ExtraPay() {
+    }
+
+    // Tämä lisätty sitä varten että olisi helpompi tehdä ExtraPay olioita testeissä
+    public ExtraPay(LocalTime begin, LocalTime end, WeekDays weekDays) {
+
+        setWeekdays(weekDays);
+
+        setBeginHour("" + begin.getHour());
+        setBeginMinute("" + begin.getMinute());
+
+        setEndHour("" + end.getHour());
+        setEndMinute("" + end.getMinute());
+
     }
 
     public int getId() {
@@ -113,4 +131,6 @@ public class ExtraPay {
         this.weekdays = weekdays;
     }
 
+    @Override
+    public String toString() { return getName(); }
 }
