@@ -378,12 +378,6 @@ public class CalendarViewController implements Initializable {
 
 
         });
-        
-        // Palkanlaskennan testausta varten
-        eventTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            EventModel event = eventTable.getSelectionModel().getSelectedItem();
-            System.out.println("Palkka: " + event.getEventPay() + "€" + " Tunnit: " + event.getHours());
-        });
 
         ContextMenu menu = new ContextMenu();
         menu.getItems().add(info);

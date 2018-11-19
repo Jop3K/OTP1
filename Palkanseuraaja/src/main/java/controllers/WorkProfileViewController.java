@@ -490,16 +490,20 @@ public class WorkProfileViewController implements Initializable {
         }
 
         if (extrapayChooser.getSelectionModel().getSelectedItem().getBeginHour() != null) {
-            setBeginHour.getItems().add(extrapayChooser.getSelectionModel().getSelectedItem().getBeginHour());
+            String beginHour = extrapayChooser.getSelectionModel().getSelectedItem().getBeginHour();
+            setBeginHour.getSelectionModel().select(beginHour);
         }
         if (extrapayChooser.getSelectionModel().getSelectedItem().getBeginMinute() != null) {
-            setBeginMinute.getItems().add(extrapayChooser.getSelectionModel().getSelectedItem().getBeginMinute());
+            String beginMinute = extrapayChooser.getSelectionModel().getSelectedItem().getBeginMinute();
+            setBeginMinute.getSelectionModel().select(beginMinute);
         }
         if (extrapayChooser.getSelectionModel().getSelectedItem().getEndHour() != null) {
-            setEndHour.getItems().add(extrapayChooser.getSelectionModel().getSelectedItem().getEndHour());
+            String endHour = extrapayChooser.getSelectionModel().getSelectedItem().getEndHour();
+            setEndHour.getSelectionModel().select(endHour);
         }
         if (extrapayChooser.getSelectionModel().getSelectedItem().getEndMinute() != null) {
-            setEndHour.getItems().add(extrapayChooser.getSelectionModel().getSelectedItem().getEndMinute());
+            String endMinute = extrapayChooser.getSelectionModel().getSelectedItem().getEndMinute();
+            setEndMinute.getSelectionModel().select(endMinute);
         }
 
     }
@@ -542,19 +546,23 @@ public class WorkProfileViewController implements Initializable {
      */
     public void generateTimes() { 
         for (int i = 0; i < 60; i++) {
-            setBeginMinute.getItems().add(Integer.toString(i));
-            setEndMinute.getItems().add(Integer.toString(i));
 
-        }
-        for (int i = 0; i < 24; i++) {
-            if (i < 10) {
-                String tmp = "0" + i;
+            String tmp;
+
+            if(i < 10) {
+                tmp = "0" + i;
+            } else {
+                tmp = "" + i;
+            }
+
+            if(i < 24) {
                 setBeginHour.getItems().add(tmp);
                 setEndHour.getItems().add(tmp);
-            } else {
-                setBeginHour.getItems().add(Integer.toString(i));
-                setEndHour.getItems().add(Integer.toString(i));
             }
+
+            setBeginMinute.getItems().add(tmp);
+            setEndMinute.getItems().add(tmp);
+
         }
     }
 

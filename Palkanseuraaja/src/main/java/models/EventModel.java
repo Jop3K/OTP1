@@ -79,12 +79,7 @@ public class EventModel {
     }
 
     public void calcPay() {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime eventStart = LocalDateTime.of(beginDay, LocalTime.of(Integer.parseInt(endHour), Integer.parseInt(endMinute)));
-
-        if (eventStart.isAfter(now)) {
             eventPay = Calculation.Calculate(this);
-        }
     }
 
     public double getEventPay() {
