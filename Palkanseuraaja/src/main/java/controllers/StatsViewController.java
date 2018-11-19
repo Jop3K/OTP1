@@ -7,6 +7,8 @@ package controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.BarChart;
@@ -15,6 +17,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
+import models.EventObservableDataList;
+import models.StatsModel;
 
 /**
  * FXML Controller class
@@ -57,6 +61,13 @@ public class StatsViewController implements Initializable {
     @FXML
     private ComboBox workshiftDropdown;
 
+    private EventObservableDataList data;
+    private StatsModel statsModel;
+
+    public StatsViewController() {
+        statsModel = new StatsModel();
+    }
+
     /**
      * Initializes the controller class.
      */
@@ -67,6 +78,9 @@ public class StatsViewController implements Initializable {
 
         setLabels();
         setButtons();
+
+        data.getInstance().addListener((ListChangeListener)(c -> {statsModel.updateAllData();}));
+        incomesByMonthsBarChart = statsModel.setUpIncomesByMonthsBarChart(incomesByMonthsBarChart);
     }
 
     public void setLabels() {
