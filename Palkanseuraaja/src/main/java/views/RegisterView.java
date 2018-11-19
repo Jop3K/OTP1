@@ -1,5 +1,7 @@
 package views;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,30 +14,55 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
 public class RegisterView {
+    private ResourceBundle labels;
+    private ResourceBundle buttons;
+
+    private Label fname;
+    private TextField fnameField;
+    private Label lname;
+    private TextField lnameField;
+    private Label uname;
+    private TextField unameField;
+    private Label pword1;
+    private PasswordField pword1Field;
+    private Label pword2;
+    private PasswordField pword2Field;
+    private Button create;
+    private Button back;
+    private Label required;
 
     public RegisterView() {
+        labels = ResourceBundle.getBundle("LabelsBundle");
+        buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
+        
+        fname = new Label();
+        fname.setText(labels.getString("firstname") + ":");
+        fnameField = new TextField();
 
+        lname = new Label();
+        lname.setText(labels.getString("lastname") + ":");
+        lnameField = new TextField();
+
+        uname = new Label();
+        uname.setText(labels.getString("username") + ":");
+        unameField = new TextField();
+
+        pword1 = new Label();
+        pword1.setText(labels.getString("password") + ":");
+        pword1Field = new PasswordField();
+
+        pword2 = new Label();
+        pword2.setText(labels.getString("passwordAgain") + ":");
+        pword2Field = new PasswordField();
+
+        create = new Button();
+        create.setText(buttons.getString("createUser"));
+        back = new Button();
+        back.setText(buttons.getString("back"));
+        
+        required = new Label();
+        required.setText(labels.getString("required"));
     }
-    Label fname = new Label("* Etunimi: ");
-    TextField fnameField = new TextField();
-
-    Label lname = new Label("* Sukunimi: ");
-    TextField lnameField = new TextField();
-
-    Label uname = new Label("* Käyttäjätunnus: ");
-    TextField unameField = new TextField();
-
-    Label gmail = new Label("Gmail-tili (vaihtoehtoinen)");
-    TextField gmailField = new TextField();
-
-    Label pword1 = new Label("* Salasana: ");
-    PasswordField pword1Field = new PasswordField();
-
-    Label pword2 = new Label("* Salasana uudelleen: ");
-    PasswordField pword2Field = new PasswordField();
-
-    Button create = new Button("Luo käyttäjä");
-    Button back = new Button("Palaa");
 
     public Parent getView() {
 
@@ -48,9 +75,6 @@ public class RegisterView {
         grid.setHgap(10);
         grid.setPadding(new Insets(10, 10, 10, 10));
 
-        // tekstikentät
-        Label required = new Label("* Tähdillä merkityt - pakolliset");
-
         // välit
         grid.setPadding(new Insets(10, 10, 10, 10));
 
@@ -58,11 +82,10 @@ public class RegisterView {
         grid.addRow(0, fname, fnameField);
         grid.addRow(1, lname, lnameField);
         grid.addRow(2, uname, unameField);
-        grid.addRow(3, gmail, gmailField);
-        grid.addRow(4, pword1, pword1Field);
-        grid.addRow(5, pword2, pword2Field);
-        grid.add(required, 0, 6);
-        grid.addRow(7, create, back);
+        grid.addRow(3, pword1, pword1Field);
+        grid.addRow(4, pword2, pword2Field);
+        grid.add(required, 0, 5);
+        grid.addRow(6, create, back);
 
         // muokkaan nappien asettelua
         GridPane.setMargin(required, new Insets(20, 0, 0, 0));
@@ -103,10 +126,6 @@ public class RegisterView {
 
     public String getUname() {
         return unameField.getText();
-    }
-
-    public String getGmail() {
-        return gmailField.getText();
     }
 
 }

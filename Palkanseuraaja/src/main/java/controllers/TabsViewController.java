@@ -15,6 +15,8 @@ import javafx.scene.control.Tab;
 
 public class TabsViewController implements Initializable {
 
+    private ResourceBundle labels;
+    
     @FXML
     private Tab calendarTab;
     @FXML
@@ -26,7 +28,11 @@ public class TabsViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        labels = ResourceBundle.getBundle("LabelsBundle");
+        
+        calendarTab.setText(labels.getString("calendar"));
+        profileTab.setText(labels.getString("workProfile"));
+        statsTab.setText(labels.getString("statistics"));
     }
     
     public void refresh() {

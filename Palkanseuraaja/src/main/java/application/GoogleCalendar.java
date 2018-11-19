@@ -32,7 +32,8 @@ public class GoogleCalendar {
 
     private static final String APPLICATION_NAME = "Palkanseuraaja";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    private static final String TOKENS_DIRECTORY_PATH = "tokens";
+    private static final String pathToTokens = "tokens" + CurrentUser.getUser().getUsername();
+    private static final String TOKENS_DIRECTORY_PATH = pathToTokens;
 
     /**
      * Global instance of the scopes required by this quickstart. If modifying

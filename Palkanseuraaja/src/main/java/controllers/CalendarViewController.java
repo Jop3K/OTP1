@@ -2,21 +2,16 @@ package controllers;
 
 import application.GoogleCalendar;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ResourceBundle;
 import dataAccessObjects.UserDAO;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,8 +20,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.util.Callback;
-import models.Calculation;
 import models.CurrentCalendarViewController;
 import models.CurrentUser;
 import models.EventModel;
@@ -35,14 +28,12 @@ import models.WorkProfile;
 
 /**
  * This is the controller for the "Calendar Tab" -View
- * 
+ *
  * @author Joni, Artur, Joonas
  *
  */
-
 public class CalendarViewController implements Initializable {
 
-   
     @FXML
     private Color x2;
     @FXML
@@ -57,12 +48,7 @@ public class CalendarViewController implements Initializable {
     private Color x21;
     @FXML
     private Font x11;
-    @FXML
-    private Button saveButton;
-    @FXML
-    private Button clearEventsBtn;
-    @FXML
-    private Button cancelEventEditBtn;
+
     @FXML
     private ComboBox<?> hourStart;
     @FXML
@@ -77,6 +63,50 @@ public class CalendarViewController implements Initializable {
     private DatePicker startDay;
     @FXML
     private DatePicker endDay;
+
+    @FXML
+    private TableView<EventModel> eventTable;
+    @FXML
+    private DatePicker eventDatePicker;
+    @FXML
+
+    private TableColumn<EventModel, Date> endColumn;
+
+    private EventObservableDataList data;
+
+    private EventModel eventModel;
+
+    // elements for localization below:
+    private ResourceBundle labels;
+    private ResourceBundle buttons;
+    private ResourceBundle messages;
+
+    @FXML
+    private Label events;
+    @FXML
+    private Label chooseDate1;
+    @FXML
+    private Label chooseDate2;
+    @FXML
+    private Label startDate;
+    @FXML
+    private Label endDate;
+    @FXML
+    private Label timeFrame;
+    @FXML
+    private Label hoursStart;
+    @FXML
+    private Label minutesStart;
+    @FXML
+    private Label hoursEnd;
+    @FXML
+    private Label minutesEnd;
+    @FXML
+    private Label createEvent;
+    @FXML
+    private Label workProfile;
+    @FXML
+    private Label eventsFound;
     @FXML
     private ComboBox<String> startHour;
     @FXML
@@ -86,39 +116,45 @@ public class CalendarViewController implements Initializable {
     @FXML
     private ComboBox<String> endMinute;
     @FXML
-    private TableView<EventModel> eventTable;
+    private Button connectToGoogle;
     @FXML
-    private TableColumn<EventModel, Date> startColumn;
+    private Button saveButton;
     @FXML
-    private TableColumn<EventModel, Date> endColumn;
+    private Button clearEventsBtn;
+    @FXML
+    private Button cancelEventEditBtn;
     @FXML
     private TableColumn<EventModel, String> workProfileColumn;
     @FXML
-    private DatePicker eventDatePicker;
-    @FXML
-    private Button connectToGoogle;
+    private TableColumn<EventModel, Date> startColumn;
     @FXML
     private Label eventCountLabel;
 
-    private EventObservableDataList data;
-
-    private EventModel eventModel;
-
-
     /**
-     *  The constructor for "eventModel"
+     * The constructor for "eventModel"
      */
     public CalendarViewController() {
-        
+
         eventModel = new EventModel();
     }
 
     /**
      * (non-Javadoc)
-     * @see javafx.fxml.Initializable#initialize(java.net.URL, java.util.ResourceBundle)
+     *
+     * @see javafx.fxml.Initializable#initialize(java.net.URL,
+     * java.util.ResourceBundle)
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // loading resources
+
+        labels = ResourceBundle.getBundle("LabelsBundle");
+        buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
+        messages = ResourceBundle.getBundle("MessagesBundle");
+
+        setLabels();
+        setButtons();
+
         // TODO Auto-generated method stub
         CurrentCalendarViewController.setCalendarViewController(this);
 
@@ -131,9 +167,10 @@ public class CalendarViewController implements Initializable {
         loadWorkProfilesToProfileChooser();
 
     }
+
     /**
      * The method we use for connecting to google's calendar
-     * 
+     *
      * @throws IOException error handling for google calendar
      * @throws GeneralSecurityException error handling for google calendar
      */
@@ -143,10 +180,40 @@ public class CalendarViewController implements Initializable {
         GoogleCalendar.main();
     }
 
+    public void setLabels() {
+        events.setText(labels.getString("events"));
+        chooseDate1.setText(labels.getString("chooseDate"));
+        chooseDate2.setText(labels.getString("chooseDate"));
+        startDate.setText(labels.getString("start"));
+        endDate.setText(labels.getString("end"));
+        timeFrame.setText(labels.getString("timeFrame"));
+        hoursStart.setText(labels.getString("hour"));
+        minutesStart.setText(labels.getString("minute"));
+        hoursEnd.setText(labels.getString("hour"));
+        minutesEnd.setText(labels.getString("minute"));
+        createEvent.setText(labels.getString("createEvent"));
+        workProfile.setText(labels.getString("workProfile"));
+        eventsFound.setText(labels.getString("eventsFound"));
+        workProfileColumn.setText(labels.getString("workProfile"));
+        startColumn.setText(labels.getString("starts"));
+        endColumn.setText(labels.getString("ends"));
+        startHour.promptTextProperty().setValue(labels.getString("h"));
+        startMinute.promptTextProperty().setValue(labels.getString("m"));
+        endHour.promptTextProperty().setValue(labels.getString("h"));
+        endMinute.promptTextProperty().setValue(labels.getString("m"));
+    }
+
+    public void setButtons() {
+        saveButton.setText(buttons.getString("save"));
+        cancelEventEditBtn.setText(buttons.getString("cancel"));
+        connectToGoogle.setText(buttons.getString("connectToGoogle"));
+    }
+
     /**
-     * This method is for generating the numbers for the comboboxes with a simple loop
+     * This method is for generating the numbers for the comboboxes with a
+     * simple loop
      */
-    private void generateTimeToComboboxes() {
+    public void generateTimeToComboboxes() {
         for (int i = 0; i < 60; i++) {
             if (i < 10) {
                 String tmp = "0" + i;
@@ -157,7 +224,7 @@ public class CalendarViewController implements Initializable {
                 endHour.getItems().add(tmp);
 
             } else {
-                if(i < 24) {
+                if (i < 24) {
                     startHour.getItems().add(Integer.toString(i));
                     endHour.getItems().add(Integer.toString(i));
                 }
@@ -170,6 +237,7 @@ public class CalendarViewController implements Initializable {
 
     /**
      * We use this method for validating the creation of a workshift event
+     *
      * @return we return the boolean value for the validation
      */
     private boolean isValid() {
@@ -187,7 +255,9 @@ public class CalendarViewController implements Initializable {
 
     /**
      * The method for saving an event when pressing "Save" button
-     * @param e ActionEvent parameter that is required when creating an ActionEvent
+     *
+     * @param e ActionEvent parameter that is required when creating an
+     * ActionEvent
      * @throws IOException error handling for saving an event
      */
     public void saveEvent(ActionEvent e) throws IOException {
@@ -196,8 +266,8 @@ public class CalendarViewController implements Initializable {
 
         try {
             if (isValid() == false) {
-            	
-                JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
+
+                JOptionPane.showMessageDialog(null, messages.getString("fillAllFields"));
                 return;
             }
 
@@ -206,18 +276,18 @@ public class CalendarViewController implements Initializable {
                 eventModel.setEndDay(endDay.getValue());
 
             } else if (startDate.isAfter(endDate)) {
-                JOptionPane.showMessageDialog(null, "Lopetusajan pitää olla aloitusajan jälkeen (päivä)");
+                JOptionPane.showMessageDialog(null, messages.getString("checkDay"));
                 return;
             } else if (startDate.equals(endDate)) { // jos aloitus pvm ja lopetus pvm sama niin...
                 eventModel.setBeginDay(startDay.getValue());
                 eventModel.setEndDay(endDay.getValue());
 
                 if (Integer.parseInt(startHour.getValue()) > Integer.parseInt(endHour.getValue())) { // jos aloitusaika on isompi kuin lopetusaika
-                    JOptionPane.showMessageDialog(null, "Aloitusaika ei voi olla lopetusajan jälkeen, tarkista tunnit");
+                    JOptionPane.showMessageDialog(null, messages.getString("checkHours"));
                     return;
                 } else if (Integer.parseInt(startHour.getValue()) == Integer.parseInt(endHour.getValue())) { // jos aloitustunti on sama kuin lopetustunti
                     if (Integer.parseInt(startMinute.getValue()) >= Integer.parseInt(endMinute.getValue())) {
-                        JOptionPane.showMessageDialog(null, "Aloitusaika ei voi olla lopetusajan jälkeen, tarkista minuutit");
+                        JOptionPane.showMessageDialog(null, messages.getString("checkMinutes"));
                         return;
                     }
                 }
@@ -234,29 +304,29 @@ public class CalendarViewController implements Initializable {
             eventModel.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
 
         } catch (Exception err) {
-            JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
+            JOptionPane.showMessageDialog(null, messages.getString("fillAllFields"));
             return;
         }
 
         if (isValid() == true) {
 
-            if(eventModel.getId() == 0) {
-            	System.out.print(eventModel.getId());
-            // Lasketaan palkka ennen tallennusta
-            eventModel.calcPay();
-            UserDAO.save(eventModel);
-            data.getInstance().add(eventModel);
-            clearChoices();
-            JOptionPane.showMessageDialog(null, "Luonti onnistui!");
-            eventCountLabel.setText(Integer.toString(data.getInstance().size()));
+            if (eventModel.getId() == 0) {
+                System.out.print(eventModel.getId());
+                // Lasketaan palkka ennen tallennusta
+                eventModel.calcPay();
+                UserDAO.save(eventModel);
+                data.getInstance().add(eventModel);
+                clearChoices();
+                JOptionPane.showMessageDialog(null, "Luonti onnistui!");
+                eventCountLabel.setText(Integer.toString(data.getInstance().size()));
             } else {
                 // Lasketaan palkka ennen tallennusta
                 eventModel.calcPay();
-            	UserDAO.update(eventModel);      
-            	 eventTable.getColumns().get(0).setVisible(false); //Workaround for fireing changelistener in observablelist(updates object to table)
-            	 eventTable.getColumns().get(0).setVisible(true);
-            	eventModel = new EventModel();
-            	clearChoices();
+                UserDAO.update(eventModel);
+                eventTable.getColumns().get(0).setVisible(false); //Workaround for fireing changelistener in observablelist(updates object to table)
+                eventTable.getColumns().get(0).setVisible(true);
+                eventModel = new EventModel();
+                clearChoices();
             }
 
         } else {
@@ -264,10 +334,10 @@ public class CalendarViewController implements Initializable {
         }
 
     }
-     
+
     /**
      * We use this method to get the workprofiles to the Dropdown menu
-     * 
+     *
      */
     public void loadWorkProfilesToProfileChooser() {
 
@@ -280,12 +350,13 @@ public class CalendarViewController implements Initializable {
     }
 
     /**
-     * This method is for getting the events from the database to the table on the Calendar Tab
+     * This method is for getting the events from the database to the table on
+     * the Calendar Tab
      */
     public void setTable() {
 
         eventCountLabel.setText(Integer.toString(data.getInstance().size()));
-        
+
         workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
         //Formatoidaan "alkaa" kolumni näyttämää päivämäärän dd.mm.yy hh:mm muodossa
         ControllerUtil.formatColumnDate(startColumn);
@@ -296,7 +367,7 @@ public class CalendarViewController implements Initializable {
         //Lisätään mahdollisuus filtteröidä taulussa näkyviä tapahtumia päivämäärän mukaan
         FilteredList<EventModel> filteredData = new FilteredList<>(data.getInstance(), p -> true);
         eventDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-           
+
             filteredData.setPredicate(EventModel -> {
 
                 if (newValue == null) {
@@ -315,10 +386,10 @@ public class CalendarViewController implements Initializable {
                 }
                 return false;
             });
-            
+
             clearEventsBtn.setDisable(false);
             eventCountLabel.setText(Integer.toString(filteredData.size()));
-            
+
         });
 
         // Adds menu for editing and deleting objects from eventTable. Fired by mouses right-click
@@ -326,21 +397,21 @@ public class CalendarViewController implements Initializable {
         MenuItem edit = new MenuItem("Muokkaa");
         MenuItem delete = new MenuItem("Poista");
         MenuItem sendToGoogle = new MenuItem("Vie Google Kalenteriin");
-        
+
         // Showing useful information to user
         info.setOnAction((ActionEvent event) -> {
-        	
-        	EventModel tmp = eventTable.getSelectionModel().getSelectedItem();
-        	
-        	JOptionPane.showMessageDialog(null, "Tapahtuman kesto: " + tmp.getHours() +  " tuntia" 
-        									+ "\nPalkka: " + tmp.getEventPay() + " euroa"
-        									, "Tapahtuman tiedot", JOptionPane.INFORMATION_MESSAGE);
-        	
+
+            EventModel tmp = eventTable.getSelectionModel().getSelectedItem();
+
+            JOptionPane.showMessageDialog(null, "Tapahtuman kesto: " + tmp.getHours() + " tuntia"
+                    + "\nPalkka: " + tmp.getEventPay() + " euroa",
+                    "Tapahtuman tiedot", JOptionPane.INFORMATION_MESSAGE);
+
         });
         edit.setOnAction((ActionEvent event) -> {
-            
-        	cancelEventEditBtn.setDisable(false);
-            
+
+            cancelEventEditBtn.setDisable(false);
+
             eventModel = eventTable.getSelectionModel().getSelectedItem();
             System.out.print(eventModel.getId());
             startHour.setValue(eventModel.getBeginHour());
@@ -350,11 +421,10 @@ public class CalendarViewController implements Initializable {
             startDay.setValue(eventModel.getBeginDay());
             endDay.setValue(eventModel.getEndDay());
             profileChooser.setValue(eventModel.getWorkProfile());
-            
-            
+
         });
         delete.setOnAction((ActionEvent event) -> {
-            
+
             EventModel tmp = eventTable.getSelectionModel().getSelectedItem();
             System.out.print(tmp.toString());
             UserDAO.delete(tmp);
@@ -364,19 +434,26 @@ public class CalendarViewController implements Initializable {
                 UserDAO.delete(e);
             }
         });
-        
+
         sendToGoogle.setOnAction((ActionEvent event) -> {
 
             try {
                 GoogleCalendar.main();
                 for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
                     GoogleCalendar.sendSelectedEventToGoogleCalendar(e);
+
                 }
             } catch (IOException | GeneralSecurityException ex) {
-                Logger.getLogger(CalendarViewController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(CalendarViewController.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
 
+        });
 
+        // Palkanlaskennan testausta varten
+        eventTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            EventModel event = eventTable.getSelectionModel().getSelectedItem();
+            System.out.println("Palkka: " + event.getEventPay() + "€" + " Tunnit: " + event.getHours());
         });
 
         ContextMenu menu = new ContextMenu();
@@ -403,29 +480,30 @@ public class CalendarViewController implements Initializable {
         endHour.setValue(null);
         profileChooser.setValue(null);
     }
-    
-    
+
     /**
-     * This method is for clearing the Event search with DatePicker field when the ClearEvents button is pressed
+     * This method is for clearing the Event search with DatePicker field when
+     * the ClearEvents button is pressed
+     *
      * @param e a required parameter for defining an ActionEvent
      */
     public void clearEventDatePicker(ActionEvent e) {
-    	
-    	eventDatePicker.setValue(null);
-    	clearEventsBtn.setDisable(true);
+
+        eventDatePicker.setValue(null);
+        clearEventsBtn.setDisable(true);
     }
-    
+
     /**
      * Canceling the editing of an event when pressing the "Cancel" button
+     *
      * @param e a required parameter for defining an ActionEvent
      */
     public void cancelEventEdit(ActionEvent e) {
-    	
-    	
-    	eventModel = null;
-    	clearChoices();
-    	
-    	cancelEventEditBtn.setDisable(true);
+
+        eventModel = null;
+        clearChoices();
+
+        cancelEventEditBtn.setDisable(true);
     }
 
 }

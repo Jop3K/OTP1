@@ -2,6 +2,7 @@ package models;
 
 import application.Main;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -28,8 +29,9 @@ public class ViewChanger {
 
         Parent root = null;
         Stage stage = new Stage();
-        stage.setTitle("Palkanseuraaja v0.02a // Käyttäjä: " + CurrentUser.getUser().getUsername());
-        stage.getIcons().add(new Image("/img/salarypal.png"));
+
+        stage.setTitle(ResourceBundle.getBundle("LabelsBundle").getString("title") + " v0.02a // " + ResourceBundle.getBundle("LabelsBundle").getString("username") + ": " + CurrentUser.getUser().getUsername());
+//        stage.getIcons().add(new Image("/img/salarypal.png"));
         try {
             root = FXMLLoader.load(Main.class.getResource(name));
             Scene window = new Scene(root);
