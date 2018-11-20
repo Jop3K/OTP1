@@ -94,9 +94,9 @@
                         <Font size="18.0" fx:id="x11" />
                     </font>
                 </Label>
-                <Button fx:id="connectToGoogle" disable="false" mnemonicParsing="false" onAction="#connectToGoogle" text="Connect to Google" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                <Button fx:id="connectToGoogle" disable="false" mnemonicParsing="false" onAction="#connectToGoogle" text="Connect to Google" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                     <GridPane.margin>
-                        <Insets left="150.0" />
+                        <Insets left="70.0" />
                     </GridPane.margin>
                 </Button>
                 <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveEvent" text="Tallenna" GridPane.columnIndex="1" GridPane.rowIndex="2">

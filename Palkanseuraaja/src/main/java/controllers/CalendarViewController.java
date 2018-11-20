@@ -155,9 +155,21 @@ public class CalendarViewController implements Initializable {
         setLabels();
         setButtons();
 
-        // TODO Auto-generated method stub
+        
         CurrentCalendarViewController.setCalendarViewController(this);
 
+        //Tooltip test (does not work yet)
+        final Tooltip tooltipHour = new Tooltip();
+        final Tooltip tooltipMinute = new Tooltip();
+        
+        tooltipHour.setText("0-23");
+        tooltipMinute.setText("0-59");
+        
+        startHour.setTooltip(tooltipHour);
+        endHour.setTooltip(tooltipHour);
+        startMinute.setTooltip(tooltipMinute);
+        endMinute.setTooltip(tooltipMinute);
+        
         //Täytetään taulu
         setTable();
 
@@ -166,6 +178,7 @@ public class CalendarViewController implements Initializable {
 
         loadWorkProfilesToProfileChooser();
 
+       
     }
 
     /**

@@ -98,7 +98,7 @@ public class StatsViewController implements Initializable {
         workshiftDropdown.getItems().add(labels.getString("year"));
         workShifts.setText(labels.getString("workShifts"));
         incomesByMonthsBarChart.setTitle(labels.getString("yearlyIncome"));
-        settings.setText(labels.getString("settings"));
+        //settings.setText(labels.getString("settings"));
         payLimit.setText(labels.getString("payLimit"));
         currency.setText(labels.getString("currency"));
     }
