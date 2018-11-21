@@ -9,6 +9,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.BarChart;
@@ -23,7 +25,7 @@ import models.StatsModel;
 /**
  * FXML Controller class
  *
- * @author Artur
+ * @author Artur, Joni
  */
 public class StatsViewController implements Initializable {
 
@@ -55,6 +57,8 @@ public class StatsViewController implements Initializable {
     @FXML
     private Button editButton;
     @FXML
+    private Button statsSettingsBtn;
+    @FXML
     private BarChart incomesByMonthsBarChart;
     @FXML
     private ComboBox incomeDropdown;
@@ -81,6 +85,8 @@ public class StatsViewController implements Initializable {
 
         data.getInstance().addListener((ListChangeListener)(c -> {statsModel.updateAllData();}));
         incomesByMonthsBarChart = statsModel.setUpIncomesByMonthsBarChart(incomesByMonthsBarChart);
+    
+      
     }
 
     public void setLabels() {
@@ -107,4 +113,14 @@ public class StatsViewController implements Initializable {
         saveButton.setText(buttons.getString("save"));
         editButton.setText(buttons.getString("edit"));
     }
+   
+    /*
+    statsSettingsBtn.setOnAction(
+            new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                   
+                }
+             });
+    */
 }
