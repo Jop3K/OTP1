@@ -10,6 +10,8 @@ import dataAccessObjects.UserDAO;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -22,6 +24,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
 import models.CurrentCalendarViewController;
 import models.CurrentUser;
 import models.EventModel;
@@ -136,7 +140,7 @@ public class CalendarViewController implements Initializable {
     @FXML
     private Text connection;
     @FXML
-    private ComboBox<String> googleCalendarsDropdown;
+    private ComboBox<CalendarListEntry> googleCalendarsDropdown;
     @FXML
     private Button sendToGoogleButton;
     @FXML
@@ -230,8 +234,49 @@ public class CalendarViewController implements Initializable {
 
     public void loadGoogleCalendarsToCombobox() throws IOException {
         for (CalendarListEntry c : GoogleCalendar.getCalendars()) {
-            googleCalendarsDropdown.getItems().add(c.getSummary());
+            googleCalendarsDropdown.getItems().add(c);
         }
+
+        googleCalendarsDropdown.setCellFactory(
+                new Callback<ListView<CalendarListEntry>, ListCell<CalendarListEntry>>() {
+            @Override
+            public ListCell<CalendarListEntry> call(ListView<CalendarListEntry> w) {
+                ListCell cell = new ListCell<CalendarListEntry>() {
+                    @Override
+                    protected void updateItem(CalendarListEntry item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setText("");
+                        } else {
+                            setText(item.getSummary());
+                        }
+                    }
+                };
+                return cell;
+            }
+        });
+
+        googleCalendarsDropdown.setConverter(
+                new StringConverter<CalendarListEntry>() {
+            private Map<String, CalendarListEntry> map = new HashMap<>();
+
+            @Override
+            public String toString(CalendarListEntry w) {
+                if (w != null) {
+                    String str = w.getSummary();
+                    map.put(w.getSummary(), w);
+                    return str;
+                } else {
+                    return "";
+                }
+
+            }
+
+            @Override
+            public CalendarListEntry fromString(String string) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
     }
 
     public void setLabels() {
@@ -349,7 +394,7 @@ public class CalendarViewController implements Initializable {
             }
 
             eventModel.setDescription(descriptionTextField.getText());
-            
+
             eventModel.setBeginHour(startHour.getValue());
             eventModel.setBeginMinute(startMinute.getValue());
             eventModel.setEndHour(endHour.getValue());
@@ -411,7 +456,7 @@ public class CalendarViewController implements Initializable {
         try {
             GoogleCalendar.main();
             for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
-                GoogleCalendar.sendSelectedEventToGoogleCalendar(e);
+                GoogleCalendar.sendSelectedEventToGoogleCalendar(e, googleCalendarsDropdown.getSelectionModel().getSelectedItem().getId());
 
             }
         } catch (IOException | GeneralSecurityException ex) {

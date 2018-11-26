@@ -104,7 +104,7 @@ public class GoogleCalendar {
         }
     }
 
-    public static void sendSelectedEventToGoogleCalendar(EventModel eventModel) throws IOException {
+    public static void sendSelectedEventToGoogleCalendar(EventModel eventModel, String calendarId) throws IOException {
         //TODO
         // Refer to the Java quickstart on how to setup the environment:
 // https://developers.google.com/calendar/quickstart/java
@@ -129,7 +129,6 @@ public class GoogleCalendar {
                     .setTimeZone("Europe/Helsinki");
             event.setEnd(end);
 
-            String calendarId = "a4kp9cn4gh2vqrn9hukqrb99a4@group.calendar.google.com";
             event = service.events().insert(calendarId, event).execute();
             System.out.printf("Event created: %s\n", event.getHtmlLink());
 
@@ -140,15 +139,14 @@ public class GoogleCalendar {
             System.out.println(event.getSummary());
 
         } else {
-            updateSelectedEvent(eventModel);
+            updateSelectedEvent(eventModel, calendarId);
         }
 
     }
 
-    public static void updateSelectedEvent(EventModel eventModel) throws IOException {
+    public static void updateSelectedEvent(EventModel eventModel, String calendarId) throws IOException {
 
         System.out.println(eventModel.getGoogleId());
-        String calendarId = "a4kp9cn4gh2vqrn9hukqrb99a4@group.calendar.google.com";
         // Retrieve the event from the API
         Event event = service.events().get(calendarId, eventModel.getGoogleId()).execute();
 
