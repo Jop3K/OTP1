@@ -14,6 +14,8 @@ import com.google.api.client.util.store.DataStore;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.services.calendar.model.CalendarList;
+import com.google.api.services.calendar.model.CalendarListEntry;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.Events;
@@ -113,7 +115,7 @@ public class GoogleCalendar {
 
             Event event = new Event()
                     .setSummary(eventModel.getWorkProfile().getName())
-                    .setDescription("Palkanseuraaja test event");
+                    .setDescription(eventModel.getDescription());
 
             DateTime startDateTime = new DateTime(eventModel.getBeginDateTime());
             EventDateTime start = new EventDateTime()
@@ -175,12 +177,18 @@ public class GoogleCalendar {
             System.out.println("Not Connected");
         }
     }
-    
+
     public static boolean isConnected() {
         if (service != null) {
             return true;
         }
         return false;
+    }
+
+    public static List<CalendarListEntry> getCalendars() throws IOException {
+        CalendarList calendarList = service.calendarList().list().execute();
+        List<CalendarListEntry> items = calendarList.getItems();
+        return items;
     }
 
 }

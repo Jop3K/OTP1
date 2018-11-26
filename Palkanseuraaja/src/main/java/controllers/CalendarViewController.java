@@ -1,6 +1,7 @@
 package controllers;
 
 import application.GoogleCalendar;
+import com.google.api.services.calendar.model.CalendarListEntry;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -134,6 +135,14 @@ public class CalendarViewController implements Initializable {
     private Button disconnectGoogle;
     @FXML
     private Text connection;
+    @FXML
+    private ComboBox<String> googleCalendarsDropdown;
+    @FXML
+    private Button sendToGoogleButton;
+    @FXML
+    private Label descriptionLabel;
+    @FXML
+    private TextField descriptionTextField;
 
     /**
      * The constructor for "eventModel"
@@ -204,6 +213,11 @@ public class CalendarViewController implements Initializable {
         GoogleCalendar.main();
         connection.setText(labels.getString("connected"));
         connection.setFill(Color.GREEN);
+        try {
+            loadGoogleCalendarsToCombobox();
+        } catch (IOException ex) {
+            System.out.println("ERROR");
+        }
     }
 
     @FXML
@@ -211,6 +225,13 @@ public class CalendarViewController implements Initializable {
         GoogleCalendar.disconnect();
         connection.setText(labels.getString("disconnected"));
         connection.setFill(Color.RED);
+        googleCalendarsDropdown.getItems().clear();
+    }
+
+    public void loadGoogleCalendarsToCombobox() throws IOException {
+        for (CalendarListEntry c : GoogleCalendar.getCalendars()) {
+            googleCalendarsDropdown.getItems().add(c.getSummary());
+        }
     }
 
     public void setLabels() {
@@ -327,6 +348,8 @@ public class CalendarViewController implements Initializable {
                 }
             }
 
+            eventModel.setDescription(descriptionTextField.getText());
+            
             eventModel.setBeginHour(startHour.getValue());
             eventModel.setBeginMinute(startMinute.getValue());
             eventModel.setEndHour(endHour.getValue());
@@ -381,6 +404,20 @@ public class CalendarViewController implements Initializable {
             profileChooser.getItems().add(w);
         }
 
+    }
+
+    @FXML
+    public void sendToGoogle() {
+        try {
+            GoogleCalendar.main();
+            for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
+                GoogleCalendar.sendSelectedEventToGoogleCalendar(e);
+
+            }
+        } catch (IOException | GeneralSecurityException ex) {
+            Logger.getLogger(CalendarViewController.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -470,18 +507,7 @@ public class CalendarViewController implements Initializable {
         });
 
         sendToGoogle.setOnAction((ActionEvent event) -> {
-
-            try {
-                GoogleCalendar.main();
-                for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
-                    GoogleCalendar.sendSelectedEventToGoogleCalendar(e);
-
-                }
-            } catch (IOException | GeneralSecurityException ex) {
-                Logger.getLogger(CalendarViewController.class
-                        .getName()).log(Level.SEVERE, null, ex);
-            }
-
+            sendToGoogle();
         });
 
         // Palkanlaskennan testausta varten
