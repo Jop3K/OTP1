@@ -112,6 +112,7 @@ public class StatsViewController implements Initializable {
     public void setButtons() {
         saveButton.setText(buttons.getString("save"));
         editButton.setText(buttons.getString("edit"));
+        statsSettingsBtn.setText(buttons.getString("settings"));
     }
    
     /*

@@ -147,6 +147,8 @@ public class CalendarViewController implements Initializable {
     private Label descriptionLabel;
     @FXML
     private TextField descriptionTextField;
+    @FXML
+    private Text chooseCalendarText;
 
     /**
      * The constructor for "eventModel"
@@ -300,11 +302,14 @@ public class CalendarViewController implements Initializable {
         startMinute.promptTextProperty().setValue(labels.getString("m"));
         endHour.promptTextProperty().setValue(labels.getString("h"));
         endMinute.promptTextProperty().setValue(labels.getString("m"));
+        descriptionLabel.setText(labels.getString("description"));
+        chooseCalendarText.setText(labels.getString("chooseCalendar"));
     }
 
     public void setButtons() {
         saveButton.setText(buttons.getString("save"));
         cancelEventEditBtn.setText(buttons.getString("cancel"));
+        sendToGoogleButton.setText(buttons.getString("sendEvent"));
         connectToGoogle.setText(buttons.getString("connectToGoogle"));
         disconnectGoogle.setText(buttons.getString("disconnectFromGoogle"));
     }

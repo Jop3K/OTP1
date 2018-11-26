@@ -211,7 +211,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Your Google Calendar: " GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Text fx:id="chooseCalendarText" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Your Google Calendar: " GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <ComboBox fx:id="googleCalendarsDropdown" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
             <Button fx:id="sendToGoogleButton" mnemonicParsing="false" onAction="#sendToGoogle" text="Send selected events to Google Calendar" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
                <GridPane.margin>
