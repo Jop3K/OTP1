@@ -5,20 +5,26 @@
  */
 package controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import models.EventObservableDataList;
 import models.StatsModel;
 
@@ -105,22 +111,31 @@ public class StatsViewController implements Initializable {
         workShifts.setText(labels.getString("workShifts"));
         incomesByMonthsBarChart.setTitle(labels.getString("yearlyIncome"));
         //settings.setText(labels.getString("settings"));
-        payLimit.setText(labels.getString("payLimit"));
-        currency.setText(labels.getString("currency"));
+        //payLimit.setText(labels.getString("payLimit"));
+        //currency.setText(labels.getString("currency"));
     }
 
     public void setButtons() {
-        saveButton.setText(buttons.getString("save"));
-        editButton.setText(buttons.getString("edit"));
+        //saveButton.setText(buttons.getString("save"));
+        //editButton.setText(buttons.getString("edit"));
     }
    
-    /*
-    statsSettingsBtn.setOnAction(
-            new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                   
-                }
-             });
-    */
+    public void openSettings(ActionEvent e) {
+    	
+    	 try {
+    	        FXMLLoader fxmlLoader = new FXMLLoader();
+    	        fxmlLoader.setLocation(getClass().getResource("/fxml/StatsSettingsView.fxml"));
+    	        
+    	        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+    	        Stage stage = new Stage();
+    	        stage.setTitle("Tilaston asetukset");
+    	        stage.setScene(scene);
+    	        stage.show();
+    	    } catch (IOException er) {
+    	        Logger logger = Logger.getLogger(getClass().getName());
+    	        logger.log(Level.SEVERE, "Failed to create new Window.", er);
+    	    }
+     
+    }
+    
 }

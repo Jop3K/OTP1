@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.chart.*?>
@@ -76,36 +77,6 @@
                         <Insets left="220.0" right="300.0" />
                     </GridPane.margin>
                 </TextField>
-                <Label fx:id="payLimit" text="Palkkaraja (kuukaudessa)" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets bottom="150.0" left="50.0" />
-                    </GridPane.margin>
-                </Label>
-                <TextField fx:id="incomeLimit" editable="false" layoutX="360.0" layoutY="348.0" promptText="TBD" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets bottom="100.0" left="50.0" right="400.0" />
-                    </GridPane.margin>
-                </TextField>
-                <Button fx:id="editButton" mnemonicParsing="false" text="Muokkaa" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets bottom="100.0" left="250.0" />
-                    </GridPane.margin>
-                </Button>
-                <Button fx:id="saveButton" disable="true" layoutX="900.0" layoutY="328.0" mnemonicParsing="false" text="Tallenna" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets bottom="100.0" left="330.0" />
-                    </GridPane.margin>
-                </Button>
-                <Label fx:id="currency" layoutX="700.0" layoutY="327.0" text="Valuutta" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets bottom="40.0" left="50.0" />
-                    </GridPane.margin>
-                </Label>
-                <ComboBox fx:id="currencyDropdown" disable="true" prefHeight="25.0" prefWidth="80.0" promptText="EUR(€)" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets left="50.0" top="10.0" />
-                    </GridPane.margin>
-                </ComboBox>
                 <ComboBox fx:id="incomeDropdown" prefHeight="25.0" prefWidth="93.0" GridPane.rowIndex="1">
                     <GridPane.margin>
                         <Insets bottom="100.0" left="120.0" />
@@ -132,13 +103,23 @@
                         <NumberAxis side="LEFT" />
                     </yAxis>
                 </BarChart>
-            <Button fx:id="statsSettingsBtn" mnemonicParsing="false" text="Asetukset" GridPane.columnIndex="1">
+            <Button fx:id="statsSettingsBtn" mnemonicParsing="false" onAction="#openSettings" prefHeight="117.0" prefWidth="126.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
                <GridPane.margin>
-                  <Insets left="300.0" />
+                  <Insets />
                </GridPane.margin>
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="/img/settingsIcon.png" />
+                     </image>
+                     </ImageView>
+               </graphic>
+               
+             
+               
             </Button>
             </children>
         </GridPane>
