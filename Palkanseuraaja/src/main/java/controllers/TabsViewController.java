@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.Tab;
 
 
@@ -23,6 +24,8 @@ public class TabsViewController implements Initializable {
     private Tab profileTab;
     @FXML
     private Tab statsTab;
+    @FXML
+    private MenuButton userSettingsMenu;
     /**
      * Initializes the controller class.
      */
