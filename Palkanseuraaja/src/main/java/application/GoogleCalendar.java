@@ -10,6 +10,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
+import com.google.api.client.util.store.DataStore;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
@@ -32,7 +33,7 @@ public class GoogleCalendar {
 
     private static final String APPLICATION_NAME = "Palkanseuraaja";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    private static final String pathToTokens = "tokens" + CurrentUser.getUser().getUsername();
+    private static final String pathToTokens = "tokens/" + CurrentUser.getUser().getUsername();
     private static final String TOKENS_DIRECTORY_PATH = pathToTokens;
 
     /**
@@ -43,6 +44,7 @@ public class GoogleCalendar {
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
 
     private static Calendar service;
+    private static GoogleAuthorizationCodeFlow flow;
 
     /**
      * Creates an authorized Credential object.
@@ -57,13 +59,13 @@ public class GoogleCalendar {
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
+        flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
                 .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
                 .setAccessType("offline")
                 .build();
-        LocalServerReceiver receier = new LocalServerReceiver.Builder().setPort(8888).build();
-        return new AuthorizationCodeInstalledApp(flow, receier).authorize("user");
+        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
+        return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
 
     }
 
@@ -164,6 +166,21 @@ public class GoogleCalendar {
         // Update the event
         Event updatedEvent = service.events().update(calendarId, event.getId(), event).execute();
 
+    }
+
+    public static void disconnect() throws IOException {
+        try {
+            flow.getCredentialDataStore().delete("user");
+        } catch (Exception e) {
+            System.out.println("Not Connected");
+        }
+    }
+    
+    public static boolean isConnected() {
+        if (service != null) {
+            return true;
+        }
+        return false;
     }
 
 }

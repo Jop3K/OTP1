@@ -16,6 +16,8 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 
 import java.time.*;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 public class StatsModel{
 	private EventObservableDataList data;
@@ -56,7 +58,7 @@ public class StatsModel{
 		
 		for(SalaryPerMonthModel s : IncomesByMonths) {
 			
-			xyList.add(new XYChart.Data(s.getMonth().toString(), s.getTotalSalary()));		
+			xyList.add(new XYChart.Data(s.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), s.getTotalSalary()));		
 		}
 		
 		return xyList;

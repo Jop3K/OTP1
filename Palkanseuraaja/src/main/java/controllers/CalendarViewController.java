@@ -20,6 +20,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import models.CurrentCalendarViewController;
 import models.CurrentUser;
 import models.EventModel;
@@ -129,6 +130,10 @@ public class CalendarViewController implements Initializable {
     private TableColumn<EventModel, Date> startColumn;
     @FXML
     private Label eventCountLabel;
+    @FXML
+    private Button disconnectGoogle;
+    @FXML
+    private Text connection;
 
     /**
      * The constructor for "eventModel"
@@ -155,21 +160,20 @@ public class CalendarViewController implements Initializable {
         setLabels();
         setButtons();
 
-        
         CurrentCalendarViewController.setCalendarViewController(this);
 
         //Tooltip test (does not work yet)
         final Tooltip tooltipHour = new Tooltip();
         final Tooltip tooltipMinute = new Tooltip();
-        
+
         tooltipHour.setText("0-23");
         tooltipMinute.setText("0-59");
-        
+
         startHour.setTooltip(tooltipHour);
         endHour.setTooltip(tooltipHour);
         startMinute.setTooltip(tooltipMinute);
         endMinute.setTooltip(tooltipMinute);
-        
+
         //Täytetään taulu
         setTable();
 
@@ -178,7 +182,14 @@ public class CalendarViewController implements Initializable {
 
         loadWorkProfilesToProfileChooser();
 
-       
+        if (GoogleCalendar.isConnected()) {
+            connection.setText(labels.getString("connected"));
+            connection.setFill(Color.GREEN);
+        } else {
+            connection.setText(labels.getString("disconnected"));
+            connection.setFill(Color.RED);
+        }
+
     }
 
     /**
@@ -191,6 +202,15 @@ public class CalendarViewController implements Initializable {
     public void connectToGoogle() throws IOException, GeneralSecurityException {
         //TODO
         GoogleCalendar.main();
+        connection.setText(labels.getString("connected"));
+        connection.setFill(Color.GREEN);
+    }
+
+    @FXML
+    public void disconnectFromGoogle() throws IOException {
+        GoogleCalendar.disconnect();
+        connection.setText(labels.getString("disconnected"));
+        connection.setFill(Color.RED);
     }
 
     public void setLabels() {
@@ -220,6 +240,7 @@ public class CalendarViewController implements Initializable {
         saveButton.setText(buttons.getString("save"));
         cancelEventEditBtn.setText(buttons.getString("cancel"));
         connectToGoogle.setText(buttons.getString("connectToGoogle"));
+        disconnectGoogle.setText(buttons.getString("disconnectFromGoogle"));
     }
 
     /**
