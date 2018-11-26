@@ -10,9 +10,12 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
+import com.google.api.client.util.store.DataStore;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.services.calendar.model.CalendarList;
+import com.google.api.services.calendar.model.CalendarListEntry;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.Events;
@@ -32,7 +35,7 @@ public class GoogleCalendar {
 
     private static final String APPLICATION_NAME = "Palkanseuraaja";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    private static final String pathToTokens = "tokens" + CurrentUser.getUser().getUsername();
+    private static final String pathToTokens = "tokens/" + CurrentUser.getUser().getUsername();
     private static final String TOKENS_DIRECTORY_PATH = pathToTokens;
 
     /**
@@ -43,6 +46,7 @@ public class GoogleCalendar {
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
 
     private static Calendar service;
+    private static GoogleAuthorizationCodeFlow flow;
 
     /**
      * Creates an authorized Credential object.
@@ -57,13 +61,13 @@ public class GoogleCalendar {
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
+        flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
                 .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
                 .setAccessType("offline")
                 .build();
-        LocalServerReceiver receier = new LocalServerReceiver.Builder().setPort(8888).build();
-        return new AuthorizationCodeInstalledApp(flow, receier).authorize("user");
+        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
+        return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
 
     }
 
@@ -100,7 +104,7 @@ public class GoogleCalendar {
         }
     }
 
-    public static void sendSelectedEventToGoogleCalendar(EventModel eventModel) throws IOException {
+    public static void sendSelectedEventToGoogleCalendar(EventModel eventModel, String calendarId) throws IOException {
         //TODO
         // Refer to the Java quickstart on how to setup the environment:
 // https://developers.google.com/calendar/quickstart/java
@@ -111,7 +115,7 @@ public class GoogleCalendar {
 
             Event event = new Event()
                     .setSummary(eventModel.getWorkProfile().getName())
-                    .setDescription("Palkanseuraaja test event");
+                    .setDescription(eventModel.getDescription());
 
             DateTime startDateTime = new DateTime(eventModel.getBeginDateTime());
             EventDateTime start = new EventDateTime()
@@ -125,7 +129,6 @@ public class GoogleCalendar {
                     .setTimeZone("Europe/Helsinki");
             event.setEnd(end);
 
-            String calendarId = "a4kp9cn4gh2vqrn9hukqrb99a4@group.calendar.google.com";
             event = service.events().insert(calendarId, event).execute();
             System.out.printf("Event created: %s\n", event.getHtmlLink());
 
@@ -136,15 +139,14 @@ public class GoogleCalendar {
             System.out.println(event.getSummary());
 
         } else {
-            updateSelectedEvent(eventModel);
+            updateSelectedEvent(eventModel, calendarId);
         }
 
     }
 
-    public static void updateSelectedEvent(EventModel eventModel) throws IOException {
+    public static void updateSelectedEvent(EventModel eventModel, String calendarId) throws IOException {
 
         System.out.println(eventModel.getGoogleId());
-        String calendarId = "a4kp9cn4gh2vqrn9hukqrb99a4@group.calendar.google.com";
         // Retrieve the event from the API
         Event event = service.events().get(calendarId, eventModel.getGoogleId()).execute();
 
@@ -164,6 +166,27 @@ public class GoogleCalendar {
         // Update the event
         Event updatedEvent = service.events().update(calendarId, event.getId(), event).execute();
 
+    }
+
+    public static void disconnect() throws IOException {
+        try {
+            flow.getCredentialDataStore().delete("user");
+        } catch (Exception e) {
+            System.out.println("Not Connected");
+        }
+    }
+
+    public static boolean isConnected() {
+        if (service != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public static List<CalendarListEntry> getCalendars() throws IOException {
+        CalendarList calendarList = service.calendarList().list().execute();
+        List<CalendarListEntry> items = calendarList.getItems();
+        return items;
     }
 
 }

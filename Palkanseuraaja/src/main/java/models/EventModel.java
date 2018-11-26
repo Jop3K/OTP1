@@ -8,7 +8,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
- * Työvuoro/tapahtuma luokka. Käytetään työvuorojen esittämiseen ja tallentamiseen. Liittyvät aina johonkin työprofiiliin.
+ * Työvuoro/tapahtuma luokka. Käytetään työvuorojen esittämiseen ja
+ * tallentamiseen. Liittyvät aina johonkin työprofiiliin.
  *
  */
 @Entity
@@ -38,6 +39,10 @@ public class EventModel {
 
     @Column(name = "googleId")
     private String googleId;
+
+    @Column(name = "description")
+    private String description;
+
     @Column
     private double eventPay;
 
@@ -79,7 +84,7 @@ public class EventModel {
     }
 
     public void calcPay() {
-            eventPay = Calculation.Calculate(this);
+        eventPay = Calculation.Calculate(this);
     }
 
     public double getEventPay() {
@@ -216,6 +221,14 @@ public class EventModel {
 
     public void setEndDateTime(String endDateTime) {
         this.endDateTime = endDateTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }
