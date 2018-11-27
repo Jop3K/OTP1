@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.Tab;
+import models.CurrentUser;
 
 
 /**
@@ -26,6 +27,9 @@ public class TabsViewController implements Initializable {
     private Tab statsTab;
     @FXML
     private MenuButton userSettingsMenu;
+    
+    
+    
     /**
      * Initializes the controller class.
      */
@@ -36,9 +40,16 @@ public class TabsViewController implements Initializable {
         calendarTab.setText(labels.getString("calendar"));
         profileTab.setText(labels.getString("workProfile"));
         statsTab.setText(labels.getString("statistics"));
+        
+        userSettingsMenu.setText(CurrentUser.getUser().getUsername());
+       
     }
     
     public void refresh() {
         //TODO
     }
+    
+    
+    
+    
 }
