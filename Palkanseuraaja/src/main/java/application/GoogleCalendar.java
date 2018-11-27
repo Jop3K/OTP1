@@ -12,7 +12,6 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
 import com.google.api.client.util.store.DataStore;
 import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.CalendarList;
 import com.google.api.services.calendar.model.CalendarListEntry;
@@ -45,7 +44,7 @@ public class GoogleCalendar {
     private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
     private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
 
-    private static Calendar service;
+    private static com.google.api.services.calendar.Calendar service;
     private static GoogleAuthorizationCodeFlow flow;
 
     /**
@@ -74,7 +73,7 @@ public class GoogleCalendar {
     public static void main(String... args) throws IOException, GeneralSecurityException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+        service = new com.google.api.services.calendar.Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
@@ -189,4 +188,14 @@ public class GoogleCalendar {
         return items;
     }
 
+    public static void createCalendar(String name) throws IOException, GeneralSecurityException {
+        com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
+        calendar.setSummary(name);
+        calendar.setTimeZone("Europe/Helsinki");
+
+        // Insert the new calendar
+        com.google.api.services.calendar.model.Calendar createdCalendar = service.calendars().insert(calendar).execute();
+
+        System.out.println(createdCalendar.getId());
+    }
 }

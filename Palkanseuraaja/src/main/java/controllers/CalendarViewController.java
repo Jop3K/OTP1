@@ -149,6 +149,12 @@ public class CalendarViewController implements Initializable {
     private TextField descriptionTextField;
     @FXML
     private Text chooseCalendarText;
+    @FXML
+    private Text createCalendarText;
+    @FXML
+    private TextField newGoogleCalendarField;
+    @FXML
+    private Button createNewCalendarButton;
 
     /**
      * The constructor for "eventModel"
@@ -235,6 +241,8 @@ public class CalendarViewController implements Initializable {
     }
 
     public void loadGoogleCalendarsToCombobox() throws IOException {
+        googleCalendarsDropdown.getItems().clear();
+        
         for (CalendarListEntry c : GoogleCalendar.getCalendars()) {
             googleCalendarsDropdown.getItems().add(c);
         }
@@ -280,6 +288,12 @@ public class CalendarViewController implements Initializable {
             }
         });
     }
+    
+    @FXML
+    public void createGoogleCalendar() throws IOException, GeneralSecurityException {
+        GoogleCalendar.createCalendar(newGoogleCalendarField.getText());
+        loadGoogleCalendarsToCombobox();
+    }
 
     public void setLabels() {
         events.setText(labels.getString("events"));
@@ -304,11 +318,13 @@ public class CalendarViewController implements Initializable {
         endMinute.promptTextProperty().setValue(labels.getString("m"));
         descriptionLabel.setText(labels.getString("description"));
         chooseCalendarText.setText(labels.getString("chooseCalendar"));
+        createCalendarText.setText(labels.getString("createCalendar"));
     }
 
     public void setButtons() {
         saveButton.setText(buttons.getString("save"));
         cancelEventEditBtn.setText(buttons.getString("cancel"));
+        createNewCalendarButton.setText(buttons.getString("create"));
         sendToGoogleButton.setText(buttons.getString("sendEvent"));
         connectToGoogle.setText(buttons.getString("connectToGoogle"));
         disconnectGoogle.setText(buttons.getString("disconnectFromGoogle"));
