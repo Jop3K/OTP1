@@ -41,7 +41,7 @@ public class TabsViewController implements Initializable {
         profileTab.setText(labels.getString("workProfile"));
         statsTab.setText(labels.getString("statistics"));
         
-        userSettingsMenu.setText(CurrentUser.getUser().getUsername());
+//        userSettingsMenu.setText(CurrentUser.getUser().getUsername());
        
     }
     

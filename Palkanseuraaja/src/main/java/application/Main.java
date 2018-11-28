@@ -10,6 +10,7 @@ import java.security.GeneralSecurityException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -48,6 +49,8 @@ public class Main extends Application {
         Scene window = new Scene(loginView.getView(), 800, 800);
 
         stage.setScene(window);
+
+        stage.setOnCloseRequest(e -> Platform.exit());
 
         stage.show();
 

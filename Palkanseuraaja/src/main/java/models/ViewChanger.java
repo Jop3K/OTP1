@@ -3,6 +3,7 @@ package models;
 import application.Main;
 import java.io.IOException;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -42,6 +43,11 @@ public class ViewChanger {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
+        stage.setOnCloseRequest(e -> {
+            Platform.exit();
+            System.exit(0);
+        });
 
     }
 
