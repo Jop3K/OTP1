@@ -103,24 +103,24 @@
                         <NumberAxis side="LEFT" />
                     </yAxis>
                 </BarChart>
-            <Button fx:id="statsSettingsBtn" mnemonicParsing="false" onAction="#openSettings" prefHeight="117.0" prefWidth="126.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="/img/settingsIcon.png" />
-                     </image>
-                     </ImageView>
-               </graphic>
+                <Button fx:id="statsSettingsBtn" mnemonicParsing="false" onAction="#openSettings" prefHeight="117.0" prefWidth="126.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
+                    <GridPane.margin>
+                        <Insets />
+                    </GridPane.margin>
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="/img/settingsIcon.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
                
              
                
-            </Button>
+                </Button>
             </children>
         </GridPane>
     </children>

@@ -100,12 +100,12 @@ public class WorkProfileViewController implements Initializable {
     private CheckBox saturday;
     @FXML
     private CheckBox sunday;
+    @FXML
+    private Button deleteExtraPayButton;
 
     private List<WorkProfile> profileList;
 
     private List<ExtraPay> extrapayList;
-
-    public CurrentWorkProfile currentWorkProfile;
 
     /**
      * Initializes the controller class.
@@ -173,26 +173,38 @@ public class WorkProfileViewController implements Initializable {
 
         if (!profileChooser.getSelectionModel().isEmpty()) { // if profile is chosen, updates it
 
-            if (!profileName.getText().isEmpty()) {
-                profileChooser.getSelectionModel().getSelectedItem().setName(profileName.getText());
+            if (workProfileValidation()) {
+
+                if (!profileName.getText().isEmpty()) {
+                    profileChooser.getSelectionModel().getSelectedItem().setName(profileName.getText());
+                }
+                if (!tuntipalkka.getText().isEmpty()) {
+                    profileChooser.getSelectionModel().getSelectedItem().setPay(Double.parseDouble(tuntipalkka.getText()));
+                }
+                if (!extrapay.getText().isEmpty()) {
+                    extrapayChooser.getSelectionModel().getSelectedItem().setExtraPay(Double.parseDouble(extrapay.getText()));
+                    UserDAO.save(extrapayChooser.getSelectionModel().getSelectedItem());
+                }
+
+                profileChooser.getSelectionModel().getSelectedItem().calculateEventPays();
+
+                UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
+                
+                int profileIndex = profileChooser.getSelectionModel().getSelectedIndex();
+                
+                loadValuesToProfileChooser();
+                
+                profileChooser.getSelectionModel().select(profileIndex);
+
+                disableFields();
+                editButton.setText(buttons.getString("edit"));
+
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(alerts.getString("error"));
+                alert.setHeaderText(alerts.getString("fillAllFields"));
+                alert.showAndWait();
             }
-            if (!tuntipalkka.getText().isEmpty()) {
-                profileChooser.getSelectionModel().getSelectedItem().setPay(Double.parseDouble(tuntipalkka.getText()));
-            }
-            if (!extrapay.getText().isEmpty()) {
-                extrapayChooser.getSelectionModel().getSelectedItem().setExtraPay(Double.parseDouble(extrapay.getText()));
-                UserDAO.save(extrapayChooser.getSelectionModel().getSelectedItem());
-            }
-
-            profileChooser.getSelectionModel().getSelectedItem().calculateEventPays();
-
-            UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
-
-            profileChooser.getItems().add(profileChooser.getSelectionModel().getSelectedItem());
-            profileChooser.getSelectionModel().selectLast();
-
-            disableFields();
-            editButton.setText(buttons.getString("edit"));
 
         } else {
 
@@ -239,6 +251,13 @@ public class WorkProfileViewController implements Initializable {
 
             }
         }
+    }
+
+    public boolean workProfileValidation() {
+        if (profileName.getText().isEmpty() || tuntipalkka.getText().isEmpty()) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -309,57 +328,66 @@ public class WorkProfileViewController implements Initializable {
                     lisa.setEndHour(setEndHour.getSelectionModel().getSelectedItem());
                     lisa.setEndMinute(setEndMinute.getSelectionModel().getSelectedItem());
 
-                    WeekDays weekdays = new WeekDays();
+                    if (weekdaysValidation()) {
 
-                    if (monday.isSelected()) {
-                        weekdays.setMonday(true);
-                    } else {
-                        weekdays.setMonday(false);
-                    }
-                    if (tuesday.isSelected()) {
-                        weekdays.setTuesday(true);
-                    } else {
-                        weekdays.setTuesday(false);
-                    }
-                    if (wednesday.isSelected()) {
-                        weekdays.setWednesday(true);
-                    } else {
-                        weekdays.setWednesday(false);
-                    }
-                    if (thursday.isSelected()) {
-                        weekdays.setThursday(true);
-                    } else {
-                        weekdays.setThursday(false);
-                    }
-                    if (friday.isSelected()) {
-                        weekdays.setFriday(true);
-                    } else {
-                        weekdays.setFriday(false);
-                    }
-                    if (saturday.isSelected()) {
-                        weekdays.setSaturday(true);
-                    } else {
-                        weekdays.setSaturday(false);
-                    }
-                    if (sunday.isSelected()) {
-                        weekdays.setSunday(true);
-                    } else {
-                        weekdays.setSunday(false);
-                    }
+                        WeekDays weekdays = new WeekDays();
 
-                    lisa.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
-                    lisa.setWeekdays(weekdays);
-                    weekdays.setExtrapay(lisa);
-                    UserDAO.save(lisa);
+                        if (monday.isSelected()) {
+                            weekdays.setMonday(true);
+                        } else {
+                            weekdays.setMonday(false);
+                        }
+                        if (tuesday.isSelected()) {
+                            weekdays.setTuesday(true);
+                        } else {
+                            weekdays.setTuesday(false);
+                        }
+                        if (wednesday.isSelected()) {
+                            weekdays.setWednesday(true);
+                        } else {
+                            weekdays.setWednesday(false);
+                        }
+                        if (thursday.isSelected()) {
+                            weekdays.setThursday(true);
+                        } else {
+                            weekdays.setThursday(false);
+                        }
+                        if (friday.isSelected()) {
+                            weekdays.setFriday(true);
+                        } else {
+                            weekdays.setFriday(false);
+                        }
+                        if (saturday.isSelected()) {
+                            weekdays.setSaturday(true);
+                        } else {
+                            weekdays.setSaturday(false);
+                        }
+                        if (sunday.isSelected()) {
+                            weekdays.setSunday(true);
+                        } else {
+                            weekdays.setSunday(false);
+                        }
+
+                        lisa.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
+                        lisa.setWeekdays(weekdays);
+                        weekdays.setExtrapay(lisa);
+                        UserDAO.save(lisa);
+                        extrapayChooser.getItems().add(lisa);
+
+                        clearTextFieldsExtraPay();
+
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle(alerts.getString("error"));
+                        alert.setHeaderText(alerts.getString("chooseWeekdays"));
+                        alert.showAndWait();
+                    }
 
                     // Moved to here because no need to load values if adding failed
-                    clearTextFieldsExtraPay();
-                    loadValuesToExtrapayChooser();
-
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle(alerts.getString("error"));
-                    alert.setHeaderText(alerts.getString("error"));
+                    alert.setHeaderText(alerts.getString("fillAllFields"));
                     alert.showAndWait();
                 }
             }
@@ -367,10 +395,30 @@ public class WorkProfileViewController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR);
 
             alert.setTitle(alerts.getString("error"));
-            alert.setHeaderText(alerts.getString("error"));
+            alert.setHeaderText(alerts.getString("chooseProfile"));
             alert.showAndWait();
         }
 
+    }
+
+    private boolean weekdaysValidation() {
+        if (!monday.isSelected() && !tuesday.isSelected() && !wednesday.isSelected()
+                && !thursday.isSelected() && !friday.isSelected() && !saturday.isSelected() && !sunday.isSelected()) {
+            return false;
+        }
+        return true;
+    }
+
+    @FXML
+    void deleteWorkProfile() {
+        UserDAO.delete(profileChooser.getSelectionModel().getSelectedItem());
+        profileChooser.getItems().remove(profileChooser.getSelectionModel().getSelectedIndex());
+    }
+
+    @FXML
+    private void deleteExtraPay() {
+        UserDAO.delete(extrapayChooser.getSelectionModel().getSelectedItem());
+        extrapayChooser.getItems().remove(extrapayChooser.getSelectionModel().getSelectedIndex());
     }
 
     /**
@@ -401,8 +449,6 @@ public class WorkProfileViewController implements Initializable {
     private void handleProfileChooserClick(ActionEvent event) {
 
         if (profileChooser.getSelectionModel().getSelectedItem() != null) {
-
-            currentWorkProfile = new CurrentWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
 
             loadValuesToTextFields();
             extrapay.clear();
@@ -519,7 +565,7 @@ public class WorkProfileViewController implements Initializable {
         if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
             extrapayChooser.setDisable(false);
         }
-        extrapay.setDisable(false);
+        extrapay.setDisable(true);
     }
 
     /**
@@ -605,7 +651,7 @@ public class WorkProfileViewController implements Initializable {
 
         extrapayChooser.getItems().clear();
 
-        extrapayList = CurrentWorkProfile.getProfilesExtraPays();
+        extrapayList = profileChooser.getSelectionModel().getSelectedItem().getExtraPays();
 
         if (!extrapayList.isEmpty()) {
 
@@ -625,13 +671,13 @@ public class WorkProfileViewController implements Initializable {
 
             String tmp;
 
-            if(i < 10) {
+            if (i < 10) {
                 tmp = "0" + i;
             } else {
                 tmp = "" + i;
             }
 
-            if(i < 24) {
+            if (i < 24) {
                 setBeginHour.getItems().add(tmp);
                 setEndHour.getItems().add(tmp);
             }

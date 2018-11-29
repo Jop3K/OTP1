@@ -27,7 +27,7 @@ public class WorkProfile {
     private User user;
 
     @OneToMany(mappedBy = "workProfile")
-    private Set<ExtraPay> extrapays = new HashSet<>();
+    private List<ExtraPay> extrapays = new ArrayList<>();
 
     @OneToMany(mappedBy = "workProfile")
     private List<EventModel> events = new ArrayList<>();
@@ -75,11 +75,11 @@ public class WorkProfile {
         this.name = name;
     }
 
-    public Set<ExtraPay> getExtraPays() {
+    public List<ExtraPay> getExtraPays() {
         return extrapays;
     }
 
-    public void setExtraPays(Set<ExtraPay> extrapays) {
+    public void setExtraPays(List<ExtraPay> extrapays) {
         this.extrapays = extrapays;
     }
 

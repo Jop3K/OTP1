@@ -1,6 +1,5 @@
 package controllers;
 
-import application.GoogleCalendar;
 import com.google.api.services.calendar.model.CalendarListEntry;
 import java.net.URL;
 import java.time.LocalDate;
