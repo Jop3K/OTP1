@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -132,7 +131,7 @@ public class StatsViewController implements Initializable {
     	        
     	        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
     	        Stage stage = new Stage();
-    	        stage.setTitle("Tilaston asetukset");
+    	        stage.setTitle(labels.getString("statsSettings"));
     	        stage.setScene(scene);
     	        stage.show();
     	    } catch (IOException er) {

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.WorkProfileViewController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.WorkProfileViewController">
     <children>
         <GridPane gridLinesVisible="true" prefHeight="800.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
@@ -83,7 +83,7 @@
                         <Insets bottom="360.0" left="10.0" />
                     </GridPane.margin>
                 </Label>
-                <TextField fx:id="lisanNimi" layoutX="20.0" layoutY="153.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <TextField fx:id="extraPayNameField" layoutX="20.0" layoutY="153.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
                         <Insets bottom="310.0" left="10.0" right="150.0" />
                     </GridPane.margin>

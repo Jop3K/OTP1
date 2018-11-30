@@ -25,6 +25,7 @@ import models.CurrentUser;
 public class TabsViewController implements Initializable {
 
     private ResourceBundle labels;
+    private ResourceBundle alerts;
 
     @FXML
     private Tab calendarTab;
@@ -34,7 +35,6 @@ public class TabsViewController implements Initializable {
     private Tab statsTab;
     @FXML
     private MenuButton userSettingsMenu;
-
     @FXML
     private MenuItem userSettingsItem;
     @FXML
@@ -46,12 +46,15 @@ public class TabsViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         labels = ResourceBundle.getBundle("LabelsBundle");
+        alerts = ResourceBundle.getBundle("AlertMessagesBundle");
 
         calendarTab.setText(labels.getString("calendar"));
         profileTab.setText(labels.getString("workProfile"));
         statsTab.setText(labels.getString("statistics"));
+        userSettingsItem.setText(labels.getString("userSettings"));
+        userLogoutItem.setText(labels.getString("logout"));
 
-//        userSettingsMenu.setText(CurrentUser.getUser().getUsername());
+        userSettingsMenu.setText(CurrentUser.getUser().getUsername());
     }
 
     public void refresh() {
@@ -66,12 +69,12 @@ public class TabsViewController implements Initializable {
 
             Scene scene = new Scene(fxmlLoader.load(), 600, 400);
             Stage stage = new Stage();
-            stage.setTitle("Käyttäjän asetukset");
+            stage.setTitle(labels.getString("userSettings"));
             stage.setScene(scene);
             stage.show();
         } catch (IOException er) {
             Logger logger = Logger.getLogger(getClass().getName());
-            logger.log(Level.SEVERE, "Failed to create new Window.", er);
+            logger.log(Level.SEVERE, alerts.getString("failedToCreateWindow"), er);
         }
     }
 

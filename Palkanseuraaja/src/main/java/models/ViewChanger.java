@@ -31,7 +31,7 @@ public class ViewChanger {
         Parent root = null;
         Stage stage = new Stage();
 
-        stage.setTitle(ResourceBundle.getBundle("LabelsBundle").getString("title") + " v0.02a // " + ResourceBundle.getBundle("LabelsBundle").getString("username") + ": " + CurrentUser.getUser().getUsername());
+        stage.setTitle(ResourceBundle.getBundle("LabelsBundle").getString("title") + " v0.03a // " + ResourceBundle.getBundle("LabelsBundle").getString("username") + ": " + CurrentUser.getUser().getUsername());
 //        stage.getIcons().add(new Image("/img/salarypal.png"));
         try {
             root = FXMLLoader.load(Main.class.getResource(name));
