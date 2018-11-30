@@ -189,11 +189,11 @@ public class WorkProfileViewController implements Initializable {
                 profileChooser.getSelectionModel().getSelectedItem().calculateEventPays();
 
                 UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
-                
+
                 int profileIndex = profileChooser.getSelectionModel().getSelectedIndex();
-                
+
                 loadValuesToProfileChooser();
-                
+
                 profileChooser.getSelectionModel().select(profileIndex);
 
                 disableFields();
@@ -411,14 +411,14 @@ public class WorkProfileViewController implements Initializable {
 
     @FXML
     void deleteWorkProfile() {
-        UserDAO.delete(profileChooser.getSelectionModel().getSelectedItem());
-        profileChooser.getItems().remove(profileChooser.getSelectionModel().getSelectedIndex());
+        CurrentUser.getWorkProfiles().remove(profileChooser.getSelectionModel().getSelectedItem());
+        UserDAO.save(CurrentUser.getUser());
     }
 
     @FXML
     private void deleteExtraPay() {
-        UserDAO.delete(extrapayChooser.getSelectionModel().getSelectedItem());
-        extrapayChooser.getItems().remove(extrapayChooser.getSelectionModel().getSelectedIndex());
+        profileChooser.getSelectionModel().getSelectedItem().getExtraPays().remove(extrapayChooser.getSelectionModel().getSelectedItem());
+        UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
     }
 
     /**
