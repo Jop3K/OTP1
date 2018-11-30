@@ -413,12 +413,16 @@ public class WorkProfileViewController implements Initializable {
     void deleteWorkProfile() {
         CurrentUser.getWorkProfiles().remove(profileChooser.getSelectionModel().getSelectedItem());
         UserDAO.save(CurrentUser.getUser());
+        profileChooser.getItems().remove(profileChooser.getSelectionModel().getSelectedItem());
+        profileChooser.getSelectionModel().clearSelection();
     }
 
     @FXML
     private void deleteExtraPay() {
         profileChooser.getSelectionModel().getSelectedItem().getExtraPays().remove(extrapayChooser.getSelectionModel().getSelectedItem());
         UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
+        extrapayChooser.getItems().remove(extrapayChooser.getSelectionModel().getSelectedItem());
+        extrapayChooser.getSelectionModel().clearSelection();
     }
 
     /**
