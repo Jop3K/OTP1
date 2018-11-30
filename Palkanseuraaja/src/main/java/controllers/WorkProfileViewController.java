@@ -71,11 +71,9 @@ public class WorkProfileViewController implements Initializable {
     @FXML
     private Button newProfile;
     @FXML
-    private TextField lisanNimi;
+    private TextField extraPayNameField;
     @FXML
     private Font x121;
-    @FXML
-    private TextField extraPayNameField;
     @FXML
     private ComboBox<String> setEndHour;
     @FXML
@@ -275,7 +273,7 @@ public class WorkProfileViewController implements Initializable {
             if (!extrapayChooser.getSelectionModel().isEmpty() && timesAreValid()) { // if selected, updates
 
                 if (!extraPayNameField.getText().isEmpty()) {
-                    extrapayChooser.getSelectionModel().getSelectedItem().setName(lisanNimi.getText());
+                    extrapayChooser.getSelectionModel().getSelectedItem().setName(extraPayNameField.getText());
                 }
 
                 if (monday.isSelected()) {
@@ -325,9 +323,9 @@ public class WorkProfileViewController implements Initializable {
 
             } else { // when no ExtraPay is selected, creates a new ExtraPay
 
-                if (!lisanNimi.getText().isEmpty() && timesAreValid()) {
+                if (!extraPayNameField.getText().isEmpty() && timesAreValid()) {
                     ExtraPay lisa = new ExtraPay();
-                    lisa.setName(lisanNimi.getText());
+                    lisa.setName(extraPayNameField.getText());
                     lisa.setBeginHour(setBeginHour.getSelectionModel().getSelectedItem());
                     lisa.setBeginMinute(setBeginMinute.getSelectionModel().getSelectedItem());
                     lisa.setEndHour(setEndHour.getSelectionModel().getSelectedItem());
@@ -416,14 +414,18 @@ public class WorkProfileViewController implements Initializable {
 
     @FXML
     void deleteWorkProfile() {
-        UserDAO.delete(profileChooser.getSelectionModel().getSelectedItem());
-        profileChooser.getItems().remove(profileChooser.getSelectionModel().getSelectedIndex());
+        CurrentUser.getWorkProfiles().remove(profileChooser.getSelectionModel().getSelectedItem());
+        UserDAO.save(CurrentUser.getUser());
+        profileChooser.getItems().remove(profileChooser.getSelectionModel().getSelectedItem());
+        profileChooser.getSelectionModel().clearSelection();
     }
 
     @FXML
     private void deleteExtraPay() {
-        UserDAO.delete(extrapayChooser.getSelectionModel().getSelectedItem());
-        extrapayChooser.getItems().remove(extrapayChooser.getSelectionModel().getSelectedIndex());
+        profileChooser.getSelectionModel().getSelectedItem().getExtraPays().remove(extrapayChooser.getSelectionModel().getSelectedItem());
+        UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
+        extrapayChooser.getItems().remove(extrapayChooser.getSelectionModel().getSelectedItem());
+        extrapayChooser.getSelectionModel().clearSelection();
     }
 
     /**
@@ -536,7 +538,7 @@ public class WorkProfileViewController implements Initializable {
      * Clears text fields on the ExtraPay side
      */
     private void clearTextFieldsExtraPay() {
-        lisanNimi.clear();
+        extraPayNameField.clear();
         monday.setSelected(false);
         tuesday.setSelected(false);
         wednesday.setSelected(false);
@@ -578,7 +580,7 @@ public class WorkProfileViewController implements Initializable {
      */
     private void loadValuesToExtrapayFields() {
 
-        lisanNimi.setText(extrapayChooser.getSelectionModel().getSelectedItem().getName());
+        extraPayNameField.setText(extrapayChooser.getSelectionModel().getSelectedItem().getName());
 
         if (extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().isMonday()) {
             monday.setSelected(true);

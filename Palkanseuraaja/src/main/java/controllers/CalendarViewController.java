@@ -529,10 +529,10 @@ public class CalendarViewController implements Initializable {
         });
 
         // Adds menu for editing and deleting objects from eventTable. Fired by mouses right-click
-        MenuItem info = new MenuItem("Tiedot");
-        MenuItem edit = new MenuItem("Muokkaa");
-        MenuItem delete = new MenuItem("Poista");
-        MenuItem sendToGoogle = new MenuItem("Vie Google Kalenteriin");
+        MenuItem info = new MenuItem(labels.getString("info"));
+        MenuItem edit = new MenuItem(labels.getString("edit"));
+        MenuItem delete = new MenuItem(labels.getString("delete"));
+        MenuItem sendToGoogle = new MenuItem(labels.getString("sendToGoogle"));
 
         // Showing useful information to user
         info.setOnAction((ActionEvent event) -> {
