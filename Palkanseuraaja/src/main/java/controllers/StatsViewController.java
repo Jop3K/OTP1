@@ -83,7 +83,10 @@ public class StatsViewController implements Initializable {
         setLabels();
         setButtons();
 
-        data.getInstance().addListener((ListChangeListener)(c -> {statsModel.updateAllData();}));
+        data.getInstance().addListener((ListChangeListener)(c -> {
+        	statsModel.updateAllData();
+        	
+        }));
         incomesByMonthsBarChart = statsModel.setUpIncomesByMonthsBarChart(incomesByMonthsBarChart);
     
       

@@ -18,20 +18,28 @@ import javafx.scene.chart.XYChart.Series;
 import java.time.*;
 
 public class StatsModel{
-	private EventObservableDataList data;
+	
 	private List<SalaryPerMonthModel> IncomesByMonths;
 	private ObservableList<XYChart.Series<String, Double>> IncomesByMonthsBarChartData;
-
+	private BarChartData dataGenerator;
+	private BarChart incomesByMonthsBarChart;
 	public StatsModel() {
-		IncomesByMonths = Calculation.calcPayForEveryMonthInYear(data);
+
 		IncomesByMonthsBarChartData = FXCollections.observableArrayList();
+		dataGenerator = new IncomesByYearsDataStrategy();
 		
 		}
 
+	public void setDataGenerator(BarChartData dataGenerator) {
+		this.dataGenerator = dataGenerator;
+		
+	}
+
 	public BarChart setUpIncomesByMonthsBarChart(BarChart incomesByMonthsBarChart) {
-	
-        setUpIncomesByMonthsBarChartData();
-		incomesByMonthsBarChart.setData(IncomesByMonthsBarChartData);
+	this.incomesByMonthsBarChart = incomesByMonthsBarChart;
+	//IncomesByMonthsBarChartData = dataGenerator.setBarChartData();
+	incomesByMonthsBarChart.setData(dataGenerator.setBarChartData());
+	dataGenerator.addMouseClickListeners(this);
 		
 		return incomesByMonthsBarChart;
 		
@@ -39,8 +47,7 @@ public class StatsModel{
 	
 	public void updateAllData(){
 		
-				IncomesByMonths = Calculation.calcPayForEveryMonthInYear(data);
-				updateIncomesByMonthsBarChartData();
+		incomesByMonthsBarChart.setData(dataGenerator.setBarChartData());
 	}
 	
 	private void setUpIncomesByMonthsBarChartData() {
