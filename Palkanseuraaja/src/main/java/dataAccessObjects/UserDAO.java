@@ -2,7 +2,6 @@ package dataAccessObjects;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,7 +10,6 @@ import java.util.ResourceBundle;
 import org.hibernate.criterion.Restrictions;
 import javafx.scene.control.Alert;
 import models.CurrentUser;
-import models.CurrentWorkProfile;
 import models.EventModel;
 import models.ExtraPay;
 import models.PasswordHashing;
@@ -23,7 +21,6 @@ import org.hibernate.query.Query;
 
 public class UserDAO extends DataAccessObject {
 
-	
     private static CurrentUser currentUser;
     private static Alert alert;
     private static ResourceBundle alerts;
@@ -31,7 +28,7 @@ public class UserDAO extends DataAccessObject {
     public UserDAO() {
 
         super();
-        
+
         alerts = ResourceBundle.getBundle("AlertMessagesBundle");
 
     }
@@ -93,16 +90,14 @@ public class UserDAO extends DataAccessObject {
     }
 
     public static boolean update(EventModel event) {
-    
-    
-    	openCurrentSessionWithTransaction().update(event);
-        closeCurrentSessionWithTransaction();	
-        
+
+        openCurrentSessionWithTransaction().update(event);
+        closeCurrentSessionWithTransaction();
+
         return true;
     }
 
-    public static  boolean save(EventModel event) {
-
+    public static boolean save(EventModel event) {
 
         openCurrentSessionWithTransaction().saveOrUpdate(event);
         closeCurrentSessionWithTransaction();
@@ -145,6 +140,22 @@ public class UserDAO extends DataAccessObject {
         return true;
     }
 
+    public static boolean delete(WorkProfile workProfile) {
+        openCurrentSessionWithTransaction().delete(workProfile);
+
+        closeCurrentSessionWithTransaction();
+
+        return true;
+    }
+
+    public static boolean delete(ExtraPay extrapay) {
+        openCurrentSessionWithTransaction().delete(extrapay);
+
+        closeCurrentSessionWithTransaction();
+
+        return true;
+    }
+
     // palauttaa falsen jos käyttäjänimi löytyy tietokannasta
     public static boolean checkForDuplicateUser(User user) {
 
@@ -166,7 +177,7 @@ public class UserDAO extends DataAccessObject {
 
         List<WorkProfile> profiles = q.list();
 
-        for(WorkProfile profile : profiles) {
+        for (WorkProfile profile : profiles) {
             Hibernate.initialize(profile.getEvents());
             Hibernate.initialize(profile.getExtraPays());
         }
@@ -178,7 +189,7 @@ public class UserDAO extends DataAccessObject {
     }
 
     public static Alert getAlert() {
-       return alert;
+        return alert;
     }
 
 }

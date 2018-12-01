@@ -1,6 +1,6 @@
 package controllers;
 
-import application.GoogleCalendar;
+import com.google.api.services.calendar.model.CalendarListEntry;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -9,6 +9,8 @@ import dataAccessObjects.UserDAO;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -20,6 +22,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
 import models.CurrentCalendarViewController;
 import models.CurrentUser;
 import models.EventModel;
@@ -129,6 +134,26 @@ public class CalendarViewController implements Initializable {
     private TableColumn<EventModel, Date> startColumn;
     @FXML
     private Label eventCountLabel;
+    @FXML
+    private Button disconnectGoogle;
+    @FXML
+    private Text connection;
+    @FXML
+    private ComboBox<CalendarListEntry> googleCalendarsDropdown;
+    @FXML
+    private Button sendToGoogleButton;
+    @FXML
+    private Label descriptionLabel;
+    @FXML
+    private TextField descriptionTextField;
+    @FXML
+    private Text chooseCalendarText;
+    @FXML
+    private Text createCalendarText;
+    @FXML
+    private TextField newGoogleCalendarField;
+    @FXML
+    private Button createNewCalendarButton;
 
     /**
      * The constructor for "eventModel"
@@ -155,21 +180,20 @@ public class CalendarViewController implements Initializable {
         setLabels();
         setButtons();
 
-        
         CurrentCalendarViewController.setCalendarViewController(this);
 
         //Tooltip test (does not work yet)
         final Tooltip tooltipHour = new Tooltip();
         final Tooltip tooltipMinute = new Tooltip();
-        
+
         tooltipHour.setText("0-23");
         tooltipMinute.setText("0-59");
-        
+
         startHour.setTooltip(tooltipHour);
         endHour.setTooltip(tooltipHour);
         startMinute.setTooltip(tooltipMinute);
         endMinute.setTooltip(tooltipMinute);
-        
+
         //Täytetään taulu
         setTable();
 
@@ -178,7 +202,14 @@ public class CalendarViewController implements Initializable {
 
         loadWorkProfilesToProfileChooser();
 
-       
+        if (GoogleCalendar.isConnected()) {
+            connection.setText(labels.getString("connected"));
+            connection.setFill(Color.GREEN);
+        } else {
+            connection.setText(labels.getString("disconnected"));
+            connection.setFill(Color.RED);
+        }
+
     }
 
     /**
@@ -191,6 +222,76 @@ public class CalendarViewController implements Initializable {
     public void connectToGoogle() throws IOException, GeneralSecurityException {
         //TODO
         GoogleCalendar.main();
+        connection.setText(labels.getString("connected"));
+        connection.setFill(Color.GREEN);
+        try {
+            loadGoogleCalendarsToCombobox();
+        } catch (IOException ex) {
+            System.out.println("ERROR");
+        }
+    }
+
+    @FXML
+    public void disconnectFromGoogle() throws IOException {
+        GoogleCalendar.disconnect();
+        connection.setText(labels.getString("disconnected"));
+        connection.setFill(Color.RED);
+        googleCalendarsDropdown.getItems().clear();
+    }
+
+    public void loadGoogleCalendarsToCombobox() throws IOException {
+        googleCalendarsDropdown.getItems().clear();
+        
+        for (CalendarListEntry c : GoogleCalendar.getCalendars()) {
+            googleCalendarsDropdown.getItems().add(c);
+        }
+
+        googleCalendarsDropdown.setCellFactory(
+                new Callback<ListView<CalendarListEntry>, ListCell<CalendarListEntry>>() {
+            @Override
+            public ListCell<CalendarListEntry> call(ListView<CalendarListEntry> w) {
+                ListCell cell = new ListCell<CalendarListEntry>() {
+                    @Override
+                    protected void updateItem(CalendarListEntry item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setText("");
+                        } else {
+                            setText(item.getSummary());
+                        }
+                    }
+                };
+                return cell;
+            }
+        });
+
+        googleCalendarsDropdown.setConverter(
+                new StringConverter<CalendarListEntry>() {
+            private Map<String, CalendarListEntry> map = new HashMap<>();
+
+            @Override
+            public String toString(CalendarListEntry w) {
+                if (w != null) {
+                    String str = w.getSummary();
+                    map.put(w.getSummary(), w);
+                    return str;
+                } else {
+                    return "";
+                }
+
+            }
+
+            @Override
+            public CalendarListEntry fromString(String string) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+    }
+    
+    @FXML
+    public void createGoogleCalendar() throws IOException, GeneralSecurityException {
+        GoogleCalendar.createCalendar(newGoogleCalendarField.getText());
+        loadGoogleCalendarsToCombobox();
     }
 
     public void setLabels() {
@@ -214,12 +315,18 @@ public class CalendarViewController implements Initializable {
         startMinute.promptTextProperty().setValue(labels.getString("m"));
         endHour.promptTextProperty().setValue(labels.getString("h"));
         endMinute.promptTextProperty().setValue(labels.getString("m"));
+        descriptionLabel.setText(labels.getString("description"));
+        chooseCalendarText.setText(labels.getString("chooseCalendar"));
+        createCalendarText.setText(labels.getString("createCalendar"));
     }
 
     public void setButtons() {
         saveButton.setText(buttons.getString("save"));
         cancelEventEditBtn.setText(buttons.getString("cancel"));
+        createNewCalendarButton.setText(buttons.getString("create"));
+        sendToGoogleButton.setText(buttons.getString("sendEvent"));
         connectToGoogle.setText(buttons.getString("connectToGoogle"));
+        disconnectGoogle.setText(buttons.getString("disconnectFromGoogle"));
     }
 
     /**
@@ -306,6 +413,8 @@ public class CalendarViewController implements Initializable {
                 }
             }
 
+            eventModel.setDescription(descriptionTextField.getText());
+
             eventModel.setBeginHour(startHour.getValue());
             eventModel.setBeginMinute(startMinute.getValue());
             eventModel.setEndHour(endHour.getValue());
@@ -362,6 +471,20 @@ public class CalendarViewController implements Initializable {
 
     }
 
+    @FXML
+    public void sendToGoogle() {
+        try {
+            GoogleCalendar.main();
+            for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
+                GoogleCalendar.sendSelectedEventToGoogleCalendar(e, googleCalendarsDropdown.getSelectionModel().getSelectedItem().getId());
+
+            }
+        } catch (IOException | GeneralSecurityException ex) {
+            Logger.getLogger(CalendarViewController.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     /**
      * This method is for getting the events from the database to the table on
      * the Calendar Tab
@@ -406,10 +529,10 @@ public class CalendarViewController implements Initializable {
         });
 
         // Adds menu for editing and deleting objects from eventTable. Fired by mouses right-click
-        MenuItem info = new MenuItem("Tiedot");
-        MenuItem edit = new MenuItem("Muokkaa");
-        MenuItem delete = new MenuItem("Poista");
-        MenuItem sendToGoogle = new MenuItem("Vie Google Kalenteriin");
+        MenuItem info = new MenuItem(labels.getString("info"));
+        MenuItem edit = new MenuItem(labels.getString("edit"));
+        MenuItem delete = new MenuItem(labels.getString("delete"));
+        MenuItem sendToGoogle = new MenuItem(labels.getString("sendToGoogle"));
 
         // Showing useful information to user
         info.setOnAction((ActionEvent event) -> {
@@ -449,18 +572,7 @@ public class CalendarViewController implements Initializable {
         });
 
         sendToGoogle.setOnAction((ActionEvent event) -> {
-
-            try {
-                GoogleCalendar.main();
-                for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
-                    GoogleCalendar.sendSelectedEventToGoogleCalendar(e);
-
-                }
-            } catch (IOException | GeneralSecurityException ex) {
-                Logger.getLogger(CalendarViewController.class
-                        .getName()).log(Level.SEVERE, null, ex);
-            }
-
+            sendToGoogle();
         });
 
         // Palkanlaskennan testausta varten

@@ -99,7 +99,7 @@ public class Calculation {
         DayOfWeek startDay = DayOfWeek.from(eventStartDate);
         DayOfWeek endDay = DayOfWeek.from(eventEndDate);
 
-        Set<ExtraPay> extraPays = event.getWorkProfile().getExtraPays();
+        List<ExtraPay> extraPays = event.getWorkProfile().getExtraPays();
 
         for (ExtraPay ep : extraPays) {
 
