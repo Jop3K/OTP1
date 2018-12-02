@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -362,10 +363,11 @@ public class CalculationTest {
         testEvent2.setEventPay(Calculation.Calculate(testEvent2));
         testEvent3.setEventPay(Calculation.Calculate(testEvent3));
         testEvent4.setEventPay(Calculation.Calculate(testEvent4));
-
+        
+        Year year = Year.now();
         Month month = LocalDateTime.now().getMonth();
 
-        double calculated = Calculation.calcPayForMonth(month, events);
+        double calculated = Calculation.calcPayForMonth(year,month);
 
         double expected = 300;
 
