@@ -40,6 +40,9 @@ public class EventModel {
     @Column(name = "googleId")
     private String googleId;
 
+    @Column(name = "googleCalendarId")
+    private String googleCalendarId;
+
     @Column(name = "description")
     private String description;
 
@@ -229,6 +232,14 @@ public class EventModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getGoogleCalendarId() {
+        return googleCalendarId;
+    }
+
+    public void setGoogleCalendarId(String googleCalendarId) {
+        this.googleCalendarId = googleCalendarId;
     }
 
 }

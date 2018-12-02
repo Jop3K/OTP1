@@ -32,7 +32,7 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage stage) throws IOException {
-        Locale.setDefault(new Locale("is"));
+        Locale.setDefault(new Locale("fi"));
 //        stage.getIcons().add(new Image("/img/salarypal.png"));
 
         stage.setTitle(ResourceBundle.getBundle("MessagesBundle").getString("welcome"));
