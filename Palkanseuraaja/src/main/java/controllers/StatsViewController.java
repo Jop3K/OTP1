@@ -103,7 +103,7 @@ public class StatsViewController implements Initializable {
         	setComboBoxes();
         	
         }));
-        incomesBarChart = statsModel.setUpIncomesByMonthsBarChart(incomesBarChart);
+        incomesBarChart = statsModel.setUpIncomesBarChart(incomesBarChart);
         
       
     }

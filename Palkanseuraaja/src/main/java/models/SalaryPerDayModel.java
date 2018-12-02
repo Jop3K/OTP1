@@ -1,6 +1,10 @@
 package models;
 
 public class SalaryPerDayModel implements ISalaryModel {
+	/**
+	 * Data class used in Calculation and IncomesByYearsDataStrategy
+	 * @author Joonas
+	 */
 
 	private String day;
 	private double salary;

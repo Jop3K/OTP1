@@ -3,7 +3,10 @@ package models;
 import java.time.Year;
 
 public class SalaryPerYearModel implements ISalaryModel {
-
+	/**
+	 * Data class used in Calculation and IncomesByYearsDataStrategy
+	 * @author Joonas
+	 */
 	private Year year;
 	private double totalSalary;
 	

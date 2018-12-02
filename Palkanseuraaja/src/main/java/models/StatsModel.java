@@ -20,7 +20,10 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 
 public class StatsModel{
-	
+	/**
+	 * Model class for StatsController. Used to setting up and creating data for BarChart in StatsView.
+	 * @author Joonas
+	 */
 	private List<SalaryPerMonthModel> IncomesByMonths;
 	private ObservableList<XYChart.Series<String, Double>> IncomesByMonthsBarChartData;
 	private BarChartData dataGenerator;
@@ -36,14 +39,23 @@ public class StatsModel{
 		this.dataGenerator = dataGenerator;
 		
 	}
-
-	public BarChart setUpIncomesByMonthsBarChart(BarChart incomesBarChart) {
+	/**
+	 * Method for setting up IncomesBarChart
+	 * @param incomesBarChart BarChart
+	 * @return BarChart
+	 */
+	public BarChart setUpIncomesBarChart(BarChart incomesBarChart) {
 		this.incomesBarChart = incomesBarChart;
 		this.incomesBarChart.setData(dataGenerator.setBarChartData());
 		return this.incomesBarChart;
 		
 		}
 	
+	/**
+	 * Switches data generator strategy for generating data based on parameters given.
+	 * @param year Year
+	 * @param month Month
+	 */
 	public void updateAllData(Year year, Month month){
 		
 		System.out.print(year + " k: " + month);
@@ -57,40 +69,14 @@ public class StatsModel{
 		else{
 			setDataGenerator(new IncomesByYearsDataStrategy());
 		}
-		System.out.println(1+"***");
+
 		incomesBarChart.getData().clear();
-		System.out.println(2+"**");
 		incomesBarChart.layout();
-		System.out.println(3+"***");
-		incomesBarChart.setData(dataGenerator.setBarChartData());
-		System.out.println(4+"***");
+		incomesBarChart.setData(dataGenerator.setBarChartData());		
 		
 	}
 	
-	private void setUpIncomesByMonthsBarChartData() {
 	
-		XYChart.Series<String, Double> monthIncome = new XYChart.Series<String, Double>(getDataForIncomesByMonthsBarChartData());
-		IncomesByMonthsBarChartData.add(monthIncome);
-		
-	}
-	
-	private ObservableList<XYChart.Data<String,Double>> getDataForIncomesByMonthsBarChartData(){
-		
-		ObservableList<XYChart.Data<String,Double>> xyList = FXCollections.observableArrayList();	           
-		
-		for(SalaryPerMonthModel s : IncomesByMonths) {
-			
-			xyList.add(new XYChart.Data(s.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), s.getTotalSalary()));		
-		}
-		
-		return xyList;
-	}
-	
-	private void updateIncomesByMonthsBarChartData() {
-		
-		for (int i = 0; i<IncomesByMonthsBarChartData.size(); i++)
-			IncomesByMonthsBarChartData.get(i).setData(getDataForIncomesByMonthsBarChartData());
-	}
 
 
 

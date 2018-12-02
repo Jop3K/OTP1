@@ -11,6 +11,10 @@ import javafx.scene.chart.XYChart.Series;
 import javafx.scene.input.MouseEvent;
 
 public class IncomesByYearsDataStrategy implements BarChartData {
+	/**
+	 * Strategy class that generate data for BarChart in StatsView. 
+	 * @author Joonas
+	 */
 
 	private StatsModel statsModel;
 	private List<SalaryPerYearModel> salaryPerYearList;

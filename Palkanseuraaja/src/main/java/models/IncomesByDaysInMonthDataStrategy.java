@@ -13,7 +13,10 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 
 public class IncomesByDaysInMonthDataStrategy implements BarChartData {
-
+	/**
+	 * Strategy class that generate data for BarChart in StatsView. 
+	 * @author Joonas
+	 */
 	private List<SalaryPerDayModel> list = new ArrayList();
 	private YearMonth yearMonth;
 
