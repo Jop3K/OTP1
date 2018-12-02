@@ -2,7 +2,7 @@ package models;
 
 import java.time.Year;
 
-public class SalaryPerYearModel {
+public class SalaryPerYearModel implements ISalaryModel {
 
 	private Year year;
 	private double totalSalary;

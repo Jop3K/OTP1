@@ -16,38 +16,24 @@ public class IncomesByMonthsDataStrategy implements BarChartData {
 
 	private StatsModel statsModel;
 	private List<SalaryPerMonthModel> salaryPerMonthList;
-	private ObservableList<XYChart.Series<String, Double>> IncomesByMonthsBarChartData;
 	private Year year;
 
 	public IncomesByMonthsDataStrategy(Year year) {
 		this.year = year;
 		salaryPerMonthList = Calculation.calcPayForEveryMonthInYear(year);
-		IncomesByMonthsBarChartData = FXCollections.observableArrayList();
-		
-	}
-	@Override
-	public void addMouseClickListeners(StatsModel statsModel) {
-		for (Series<String,Double> serie: (ObservableList<XYChart.Series<String, Double>>)IncomesByMonthsBarChartData){
-            for (XYChart.Data<String, Double> item: serie.getData()){
-                item.getNode().setOnMouseClicked((MouseEvent event) -> {
-                	
-                	Month month = null;
-                	month = month.valueOf(item.getXValue());
-                	YearMonth yearMonth = YearMonth.of(year.getValue(), month);
-                   // statsModel.setDataGenerator(new IncomesByDaysInMonthDataStrategy(yearMonth));
-                });
-            }
-		}
+		FXCollections.observableArrayList();
 		
 	}
 
+
 	@Override
 	public ObservableList<XYChart.Series<String, Double>> setBarChartData() {
+		ObservableList<XYChart.Series<String, Double>> IncomesByMonthsBarChartData = FXCollections.observableArrayList();
 		XYChart.Series<String, Double> monthIncome = new XYChart.Series<String, Double>(getData());
 		IncomesByMonthsBarChartData.add(monthIncome);
 		ObservableList<XYChart.Series<String, Double>> sortedList = IncomesByMonthsBarChartData.sorted();
 		
-		return sortedList;
+		return IncomesByMonthsBarChartData;
 	}
 	public ObservableList<XYChart.Data<String,Double>> getData(){
 		update();

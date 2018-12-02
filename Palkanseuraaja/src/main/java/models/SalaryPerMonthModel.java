@@ -2,7 +2,7 @@ package models;
 
 import java.time.*;
 
-public class SalaryPerMonthModel {
+public class SalaryPerMonthModel implements ISalaryModel {
 	private Month month;
 	private double totalSalary;
 

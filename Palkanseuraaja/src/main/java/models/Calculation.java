@@ -99,7 +99,7 @@ public class Calculation {
         DayOfWeek startDay = DayOfWeek.from(eventStartDate);
         DayOfWeek endDay = DayOfWeek.from(eventEndDate);
 
-        List<ExtraPay> extraPays = event.getWorkProfile().getExtraPays();
+       List<ExtraPay> extraPays = event.getWorkProfile().getExtraPays();
 
         for (ExtraPay ep : extraPays) {
 
@@ -172,20 +172,20 @@ public class Calculation {
     static List calcPayForEveryYear() {
     	
     	List<Year> years = new ArrayList();
-    	List<SalaryPerYearModel> result = new ArrayList();
+    	List<ISalaryModel> result = new ArrayList();
     	   	
     	years = FindYearsFromEvents();
 	  
     	  for (Year y : years) {
     		double salary = calcPayForYear(y);
-      		SalaryPerYearModel tmp = new SalaryPerYearModel(y, salary);
+      		ISalaryModel tmp = new SalaryPerYearModel(y, salary);
       		result.add(tmp);
     	  }
 
     	  return result;
     }
 
-    private static List<Year> FindYearsFromEvents() {
+    public static List<Year> FindYearsFromEvents() {
     	List<Year> years = new ArrayList();
     	int yearToCompare = 0;
     	
@@ -216,12 +216,24 @@ public class Calculation {
 
     	return totalPay;
     }
-    static List calcPayForEveryDayInMonth(YearMonth YearMonth) {
+    static List calcPayForEveryDayInMonth(Year year, Month month) {
 
     	List result = new ArrayList();
-    	for (EventModel event : data.getInstance()) {
+    	double salary = 0;
+    	
+    	  for (EventModel event : data.getInstance()) {
+    		  
+          LocalDate eventBegin = event.getBeginDay();
+          Month eventMonth = eventBegin.getMonth();
 
-    	}
+          if(eventBegin.getYear() != year.getValue()) continue;
+
+          if (eventMonth == month) {
+              ISalaryModel tmp = new SalaryPerDayModel(event.getBeginDay().getDayOfMonth(), event.getEventPay());
+              result.add(tmp);
+          }
+
+      }
 
     	return result;
     }
@@ -239,7 +251,7 @@ public class Calculation {
     	for (Month month : Month.values()) {
 
     		double salary = calcPayForMonth(year, month);
-    		SalaryPerMonthModel tmp = new SalaryPerMonthModel(month, salary);
+    		ISalaryModel tmp = new SalaryPerMonthModel(month, salary);
     		result.add(tmp);
 
     		}
@@ -252,10 +264,10 @@ public class Calculation {
      * @param events List<EventModel> tapahtumat mistä tilastot lasketaan
      * @return Valitun kuukauden tulojen summa
      */
-   private static double calcPayForMonth(Year year, Month month) {
+    static double calcPayForMonth(Year year, Month month) {
         double totalPay = 0;
 
-        for (EventModel event : data.getInstance()) { System.out.println(event.getId());
+        for (EventModel event : data.getInstance()) { 
             LocalDate eventBegin = event.getBeginDay();
             Month eventMonth = eventBegin.getMonth();
 

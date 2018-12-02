@@ -27,7 +27,7 @@ public class IncomesByYearsDataStrategy implements BarChartData {
 	public ObservableList<XYChart.Series<String, Double>> setBarChartData() {
 		XYChart.Series<String, Double> yearlyIncome = new XYChart.Series<String, Double>(getData());
 		IncomesByYearsBarChartData.add(yearlyIncome);
-		ObservableList<XYChart.Series<String, Double>> sortedList = IncomesByYearsBarChartData.sorted();
+		
 		
 		return IncomesByYearsBarChartData;
 	}
@@ -53,7 +53,7 @@ public class IncomesByYearsDataStrategy implements BarChartData {
                 	Year year = Year.parse(item.getXValue());
                 	
                     statsModel.setDataGenerator(new IncomesByMonthsDataStrategy(year));
-                    statsModel.updateAllData();
+                   // statsModel.updateAllData();
                 });
             }
 		}

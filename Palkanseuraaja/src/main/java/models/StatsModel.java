@@ -24,11 +24,11 @@ public class StatsModel{
 	private List<SalaryPerMonthModel> IncomesByMonths;
 	private ObservableList<XYChart.Series<String, Double>> IncomesByMonthsBarChartData;
 	private BarChartData dataGenerator;
-	private BarChart incomesByMonthsBarChart;
+	private BarChart incomesBarChart;
 	public StatsModel() {
 
 		IncomesByMonthsBarChartData = FXCollections.observableArrayList();
-		dataGenerator = new IncomesByYearsDataStrategy();
+		dataGenerator = new IncomesByMonthsDataStrategy(Year.now());
 		
 		}
 
@@ -37,19 +37,34 @@ public class StatsModel{
 		
 	}
 
-	public BarChart setUpIncomesByMonthsBarChart(BarChart incomesByMonthsBarChart) {
-	this.incomesByMonthsBarChart = incomesByMonthsBarChart;
-	//IncomesByMonthsBarChartData = dataGenerator.setBarChartData();
-	incomesByMonthsBarChart.setData(dataGenerator.setBarChartData());
-	dataGenerator.addMouseClickListeners(this);
-		
-		return incomesByMonthsBarChart;
+	public BarChart setUpIncomesByMonthsBarChart(BarChart incomesBarChart) {
+		this.incomesBarChart = incomesBarChart;
+		this.incomesBarChart.setData(dataGenerator.setBarChartData());
+		return this.incomesBarChart;
 		
 		}
 	
-	public void updateAllData(){
+	public void updateAllData(Year year, Month month){
 		
-		incomesByMonthsBarChart.setData(dataGenerator.setBarChartData());
+		System.out.print(year + " k: " + month);
+		if (month == null) {
+			setDataGenerator(new IncomesByMonthsDataStrategy(year));		
+		}
+		else if (year != null && month !=null) {
+			setDataGenerator(new IncomesByDaysInMonthDataStrategy(year, month));
+			
+		}
+		else{
+			setDataGenerator(new IncomesByYearsDataStrategy());
+		}
+		System.out.println(1+"***");
+		incomesBarChart.getData().clear();
+		System.out.println(2+"**");
+		incomesBarChart.layout();
+		System.out.println(3+"***");
+		incomesBarChart.setData(dataGenerator.setBarChartData());
+		System.out.println(4+"***");
+		
 	}
 	
 	private void setUpIncomesByMonthsBarChartData() {
