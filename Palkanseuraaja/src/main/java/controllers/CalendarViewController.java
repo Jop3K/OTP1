@@ -77,8 +77,6 @@ public class CalendarViewController implements Initializable {
 
     private TableColumn<EventModel, Date> endColumn;
 
-    private EventObservableDataList data;
-
     private EventModel eventModel;
 
     // elements for localization below:
@@ -451,19 +449,20 @@ public class CalendarViewController implements Initializable {
                 // Lasketaan palkka ennen tallennusta
                 eventModel.calcPay();
                 UserDAO.save(eventModel);
-                data.getInstance().add(eventModel);
+                EventObservableDataList.getInstance().add(eventModel);
                 clearChoices();
                 JOptionPane.showMessageDialog(null, "Luonti onnistui!");
-                eventCountLabel.setText(Integer.toString(data.getInstance().size()));
+                eventCountLabel.setText(Integer.toString(EventObservableDataList.getInstance().size()));
             } else {
                 // Lasketaan palkka ennen tallennusta
                 eventModel.calcPay();
                 UserDAO.update(eventModel);
                 eventTable.getColumns().get(0).setVisible(false); //Workaround for fireing changelistener in observablelist(updates object to table)
                 eventTable.getColumns().get(0).setVisible(true);
-                eventModel = new EventModel();
                 clearChoices();
             }
+
+            eventModel = new EventModel();
 
         } else {
             JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
@@ -520,12 +519,12 @@ public class CalendarViewController implements Initializable {
     }
 
     /**
-     * This method is for getting the events from the database to the table on
+     * This method is for getting the events from the EventObservableDataListbase to the table on
      * the Calendar Tab
      */
     public void setTable() {
 
-        eventCountLabel.setText(Integer.toString(data.getInstance().size()));
+        eventCountLabel.setText(Integer.toString(EventObservableDataList.getInstance().size()));
 
         workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
         workProfileColumn.setResizable(true);
@@ -540,7 +539,7 @@ public class CalendarViewController implements Initializable {
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("description"));
         descriptionColumn.setResizable(true);
         //Lisätään mahdollisuus filtteröidä taulussa näkyviä tapahtumia päivämäärän mukaan
-        FilteredList<EventModel> filteredData = new FilteredList<>(data.getInstance(), p -> true);
+        FilteredList<EventModel> filteredData = new FilteredList<>(EventObservableDataList.getInstance(), p -> true);
         eventDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
 
             filteredData.setPredicate(EventModel -> {
@@ -610,7 +609,7 @@ public class CalendarViewController implements Initializable {
         });
         delete.setOnAction((ActionEvent event) -> {
             for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
-                data.getInstance().remove(e);
+                EventObservableDataList.getInstance().remove(e);
                 UserDAO.delete(e);
             }
         });

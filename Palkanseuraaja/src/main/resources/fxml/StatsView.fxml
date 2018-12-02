@@ -31,9 +31,9 @@
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="238.0" minHeight="10.0" prefHeight="230.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="426.0" minHeight="10.0" prefHeight="286.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="320.0" minHeight="10.0" prefHeight="225.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
                 <Label fx:id="stats" alignment="CENTER" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Tilastot" textAlignment="CENTER" textFill="#3c3737" wrapText="false" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
@@ -95,7 +95,7 @@
                         <NumberAxis side="LEFT" />
                     </yAxis>
                 </LineChart>
-                <BarChart fx:id="incomesByMonthsBarChart" barGap="1.0" categoryGap="1.0" title="Vuoden aikaiset tulot" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2">
+                <BarChart fx:id="incomesBarChart" animated="false" barGap="1.0" categoryGap="1.0" layoutY="100.0" title="Vuoden aikaiset tulot" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2">
                     <xAxis>
                         <CategoryAxis side="BOTTOM" />
                     </xAxis>
@@ -121,6 +121,8 @@
              
                
                 </Button>
+            <ComboBox fx:id="monthPick" onAction="#populateBarChart" prefWidth="150.0" GridPane.columnIndex="1" />
+            <ComboBox fx:id="yearPick" onAction="#populateBarChart" prefWidth="150.0" />
             </children>
         </GridPane>
     </children>
