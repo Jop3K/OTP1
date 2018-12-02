@@ -1,10 +1,7 @@
 package models;
 
-import com.google.api.client.auth.oauth2.Credential;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.*;
 
 @Entity
@@ -31,6 +28,9 @@ public class User {
 
     @Column(name = "salt", nullable = false)
     private String salt;
+
+    @Column(name = "defaultGoogleCalendarId")
+    private String defaultGoogleCalendarId;
 
     public User() throws NoSuchAlgorithmException, NoSuchProviderException {
         salt = new PasswordHashing().generateSalt().toString();
@@ -82,6 +82,14 @@ public class User {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public String getDefaultGoogleCalendarId() {
+        return defaultGoogleCalendarId;
+    }
+
+    public void setDefaultGoogleCalendarId(String defaultGoogleCalendarId) {
+        this.defaultGoogleCalendarId = defaultGoogleCalendarId;
     }
 
     @Override

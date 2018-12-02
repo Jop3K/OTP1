@@ -1,9 +1,7 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.*;
 
 @Entity
@@ -32,7 +30,11 @@ public class WorkProfile {
     @OneToMany(mappedBy = "workProfile")
     private List<EventModel> events = new ArrayList<>();
 
+    @Column(name = "isDeleted", nullable = true)
+    private boolean isDeleted = false;
+
     public WorkProfile() {
+        isDeleted = false;
     }
 
     public int getId() {
@@ -41,14 +43,6 @@ public class WorkProfile {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public double getPay() {
@@ -62,13 +56,21 @@ public class WorkProfile {
     public void calculateEventPays() {
         List<EventModel> events = EventObservableDataList.getInstance();
 
-        for(EventModel event : events) {
+        for (EventModel event : events) {
             event.calcPay();
         }
     }
 
     public String getName() {
         return name;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void setName(String name) {
@@ -90,10 +92,26 @@ public class WorkProfile {
     public void setEvents(List<EventModel> events) {
         this.events = events;
     }
-    
+
+    public List<ExtraPay> getExtrapays() {
+        return extrapays;
+    }
+
+    public void setExtrapays(List<ExtraPay> extrapays) {
+        this.extrapays = extrapays;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
     @Override
-    public String toString(){
-    	return getName();
+    public String toString() {
+        return getName();
     }
 
 }

@@ -228,7 +228,7 @@ public class WorkProfileViewController implements Initializable {
 
                 }
 
-                UserDAO.save(workProfile);
+                UserDAO.save(CurrentUser.getUser());
 
                 // Tallennetaan eventit uudelleen jos palkka extrapayt vaihtuu (palkka lasketaan tässä tilanteessa uudelleen)
                 if (!tuntipalkka.getText().isEmpty() || extrapayChooser.getSelectionModel().getSelectedItem() != null) {
@@ -414,18 +414,24 @@ public class WorkProfileViewController implements Initializable {
 
     @FXML
     void deleteWorkProfile() {
-        CurrentUser.getWorkProfiles().remove(profileChooser.getSelectionModel().getSelectedItem());
-        UserDAO.save(CurrentUser.getUser());
+        profileChooser.getSelectionModel().getSelectedItem().setIsDeleted(true);
+        UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
         profileChooser.getItems().remove(profileChooser.getSelectionModel().getSelectedItem());
         profileChooser.getSelectionModel().clearSelection();
+        for (WorkProfile w : CurrentUser.getWorkProfiles()) {
+            System.out.println(w.getName());
+        }
     }
 
     @FXML
     private void deleteExtraPay() {
-        profileChooser.getSelectionModel().getSelectedItem().getExtraPays().remove(extrapayChooser.getSelectionModel().getSelectedItem());
-        UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
+        extrapayChooser.getSelectionModel().getSelectedItem().setIsDeleted(true);
+        UserDAO.save(extrapayChooser.getSelectionModel().getSelectedItem());
         extrapayChooser.getItems().remove(extrapayChooser.getSelectionModel().getSelectedItem());
         extrapayChooser.getSelectionModel().clearSelection();
+        for (ExtraPay e : profileChooser.getSelectionModel().getSelectedItem().getExtraPays()) {
+            System.out.println(e.getName());
+        }
     }
 
     /**
@@ -645,10 +651,9 @@ public class WorkProfileViewController implements Initializable {
 
         profileList = CurrentUser.getWorkProfiles();
 
-        for (WorkProfile w : profileList) {
+        profileList.stream().filter((w) -> (w.isDeleted() == false)).forEachOrdered((w) -> {
             profileChooser.getItems().add(w);
-        }
-
+        });
     }
 
     /**
@@ -661,13 +666,10 @@ public class WorkProfileViewController implements Initializable {
         extrapayList = profileChooser.getSelectionModel().getSelectedItem().getExtraPays();
 
         if (!extrapayList.isEmpty()) {
-
-            for (ExtraPay e : extrapayList) {
+            extrapayList.stream().filter((e) -> (e.isDeleted() == false)).forEachOrdered((e) -> {
                 extrapayChooser.getItems().add(e);
-            }
-
+            });
         }
-
     }
 
     /**
