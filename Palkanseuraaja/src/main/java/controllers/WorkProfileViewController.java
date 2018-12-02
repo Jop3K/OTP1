@@ -126,12 +126,6 @@ public class WorkProfileViewController implements Initializable {
 
     }
 
-    /**
-     * This methods is for handling the saving of a Work Profile onclick of the
-     * "save" button
-     *
-     * @param event required parameter for ActionEvent
-     */
     public void setLabels() {
         workInfo.setText(labels.getString("workInfo"));
         chooseProfile.setText(labels.getString("chooseProfile"));
@@ -169,6 +163,12 @@ public class WorkProfileViewController implements Initializable {
         deleteExtraPayButton.setText(buttons.getString("delete"));
     }
 
+    /**
+     * This methods is for handling the saving of a Work Profile onclick of the
+     * "save" button
+     *
+     * @param event required parameter for ActionEvent
+     */
     @FXML // button handler for "save profile" button click
     private void handleSaveProfileButtonClick(ActionEvent event) {
 

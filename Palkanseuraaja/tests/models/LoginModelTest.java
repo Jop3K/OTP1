@@ -20,10 +20,10 @@ public class LoginModelTest {
 	@TestInJfxThread
 	public void testLoginFieldValidation() {
 		assertFalse(fail.loginFieldValidation("", "password"));
-		assertEquals(fail.getAlert().getHeaderText(), "Syötä käyttäjätunnus ja salasana!");
+		assertEquals(fail.getAlert().getHeaderText(), "Syötä käyttäjätunnus ja salasana");
 		
 		assertFalse(fail.loginFieldValidation("username", ""));
-		assertEquals(fail.getAlert().getHeaderText(), "Syötä käyttäjätunnus ja salasana!");
+		assertEquals(fail.getAlert().getHeaderText(), "Syötä käyttäjätunnus ja salasana");
 		
 		assertTrue(fail.loginFieldValidation("username", "password"));
 		

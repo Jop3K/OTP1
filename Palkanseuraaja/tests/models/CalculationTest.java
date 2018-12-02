@@ -340,18 +340,18 @@ public class CalculationTest {
     public void canCalcPayForGivenMonth() {
         ArrayList<EventModel> events = new ArrayList<>();
 
-        LocalDateTime start = LocalDateTime.now().minusDays(3);
+        LocalDateTime start = LocalDateTime.of(2018, 10, 24, 5, 5, 5);
 
         LocalDateTime end = start.plusHours(10);
 
         EventModel testEvent2 = new EventModel(start, end, profile);
 
-        start = LocalDateTime.now().minusDays(7);
+        start = start.minusDays(7);
         end = start.plusHours(10);
 
         EventModel testEvent3 = new EventModel(start, end, profile);
 
-        start = LocalDateTime.now().minusDays(10);
+        start = start.minusDays(10);
         end = start.plusHours(10);
 
         EventModel testEvent4 = new EventModel(start, end, profile);
@@ -364,10 +364,10 @@ public class CalculationTest {
         testEvent3.setEventPay(Calculation.Calculate(testEvent3));
         testEvent4.setEventPay(Calculation.Calculate(testEvent4));
         
-        Year year = Year.now();
-        Month month = LocalDateTime.now().getMonth();
+        Year year = Year.of(start.getYear());
+        Month month = start.getMonth();
 
-        double calculated = Calculation.calcPayForMonth(year,month);
+        double calculated = Calculation.calcPayForMonth(year, month, events);
 
         double expected = 300;
 

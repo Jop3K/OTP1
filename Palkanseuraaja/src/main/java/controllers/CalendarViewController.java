@@ -372,16 +372,11 @@ public class CalendarViewController implements Initializable {
      *
      * @return we return the boolean value for the validation
      */
-    private boolean isValid() {
-        if (startDay.getValue() == null || endDay.getValue() == null
-                || startHour.getSelectionModel().isEmpty() || endHour.getSelectionModel().isEmpty()
-                || startMinute.getSelectionModel().isEmpty() || endMinute.getSelectionModel().isEmpty()
-                || profileChooser.getSelectionModel().isEmpty()) {
-            return false;
-
-        } else {
-            return true;
-        }
+    boolean isValid() {
+        return startDay.getValue() != null && endDay.getValue() != null
+                && !startHour.getSelectionModel().isEmpty() && !endHour.getSelectionModel().isEmpty()
+                && !startMinute.getSelectionModel().isEmpty() && !endMinute.getSelectionModel().isEmpty()
+                && !profileChooser.getSelectionModel().isEmpty();
         //startDay != null || endDay != null || startHour != null || endHour != null || startMinute != null || endMinute != null || profileChooser != null;
     }
 
@@ -397,7 +392,7 @@ public class CalendarViewController implements Initializable {
         LocalDate endDate = endDay.getValue();
 
         try {
-            if (isValid() == false) {
+            if (!isValid()) {
 
                 JOptionPane.showMessageDialog(null, messages.getString("fillAllFields"));
                 return;
@@ -612,6 +607,7 @@ public class CalendarViewController implements Initializable {
                 EventObservableDataList.getInstance().remove(e);
                 UserDAO.delete(e);
             }
+            eventCountLabel.setText(Integer.toString(EventObservableDataList.getInstance().size()));
         });
 
         sendToGoogle.setOnAction((ActionEvent event) -> {
