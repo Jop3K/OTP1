@@ -55,7 +55,7 @@ public class RegisterModel {
             return false;
         }
 
-        if(tmp.getPw1().length() < 4 ) {
+        if (tmp.getPw1().length() < 4) {
             Alert pwAlert = new Alert(Alert.AlertType.ERROR);
             pwAlert.setTitle(alerts.getString("error"));
             pwAlert.setHeaderText(alerts.getString("passwordTooShort"));
@@ -74,7 +74,7 @@ public class RegisterModel {
         }
 
         //Jos nimet on alle kolme merkkiä
-        if(tmp.fName.length() < 3 || tmp.lName.length() < 3) {
+        if (tmp.fName.length() < 3 || tmp.lName.length() < 3) {
             Alert nameAlert = new Alert(AlertType.ERROR);
             nameAlert.setTitle(alerts.getString("error"));
             nameAlert.setHeaderText(alerts.getString("nameTooShort"));
@@ -88,7 +88,7 @@ public class RegisterModel {
         boolean fNameWrong = m.find();
         boolean lNameWrong = m2.find();
 
-        if(fNameWrong || lNameWrong) {
+        if (fNameWrong || lNameWrong) {
             Alert nameAlert = new Alert(AlertType.ERROR);
             nameAlert.setTitle(alerts.getString("error"));
             nameAlert.setHeaderText(alerts.getString("nameIllegalChars"));

@@ -2,7 +2,6 @@ package dataAccessObjects;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Hibernate;
@@ -16,7 +15,6 @@ import models.PasswordHashing;
 import models.User;
 import models.WeekDays;
 import models.WorkProfile;
-import org.hibernate.jdbc.Work;
 import org.hibernate.query.Query;
 
 public class UserDAO extends DataAccessObject {

@@ -1,12 +1,25 @@
-package models;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ModelsRefactored;
 
 import java.time.DayOfWeek;
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import models.ExtraPay;
 
-@Entity
-@Table(name = "weekdays")
-
-public class WeekDays {
+/**
+ *
+ * @author Artur
+ */
+public class WeekDays implements IWeekDays {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +54,7 @@ public class WeekDays {
     public WeekDays() {
     }
 
+    @Override
     public boolean isDayOfWeek(DayOfWeek dow) {
         switch (dow) {
             case MONDAY:

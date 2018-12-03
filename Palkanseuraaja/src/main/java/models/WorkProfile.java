@@ -34,7 +34,6 @@ public class WorkProfile {
     private boolean isDeleted = false;
 
     public WorkProfile() {
-        isDeleted = false;
     }
 
     public int getId() {

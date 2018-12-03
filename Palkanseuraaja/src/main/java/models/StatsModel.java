@@ -19,69 +19,67 @@ import java.time.*;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
-public class StatsModel{
-	/**
-	 * Model class for StatsController. Used to setting up and creating data for BarChart in StatsView.
-	 * @author Joonas
-	 */
-	private List<SalaryPerMonthModel> IncomesByMonths;
-	private ObservableList<XYChart.Series<String, Double>> IncomesByMonthsBarChartData;
-	private BarChartData dataGenerator;
-	private BarChart incomesBarChart;
-	public StatsModel() {
+public class StatsModel {
 
-		IncomesByMonthsBarChartData = FXCollections.observableArrayList();
-		dataGenerator = new IncomesByMonthsDataStrategy(Year.now());
-		
-		}
+    /**
+     * Model class for StatsController. Used to setting up and creating data for
+     * BarChart in StatsView.
+     *
+     * @author Joonas
+     */
+    private List<SalaryPerMonthModel> IncomesByMonths;
+    private ObservableList<XYChart.Series<String, Double>> IncomesByMonthsBarChartData;
+    private BarChartData dataGenerator;
+    private BarChart incomesBarChart;
 
-	public void setDataGenerator(BarChartData dataGenerator) {
-		this.dataGenerator = dataGenerator;
-		
-	}
-	/**
-	 * Method for setting up IncomesBarChart
-	 * @param incomesBarChart BarChart
-	 * @return BarChart
-	 */
-	public BarChart setUpIncomesBarChart(BarChart incomesBarChart) {
-		this.incomesBarChart = incomesBarChart;
-		this.incomesBarChart.setData(dataGenerator.setBarChartData());
-		return this.incomesBarChart;
-		
-		}
-	
-	/**
-	 * Switches data generator strategy for generating data based on parameters given.
-	 * @param year Year
-	 * @param month Month
-	 */
-	public void updateAllData(Year year, Month month){
-		
-		System.out.print(year + " k: " + month);
-		if (month == null) {
-			setDataGenerator(new IncomesByMonthsDataStrategy(year));		
-		}
-		else if (year != null && month !=null) {
-			setDataGenerator(new IncomesByDaysInMonthDataStrategy(year, month));
-			
-		}
-		else{
-			setDataGenerator(new IncomesByYearsDataStrategy());
-		}
+    public StatsModel() {
 
-		incomesBarChart.getData().clear();
-		incomesBarChart.layout();
-		incomesBarChart.setData(dataGenerator.setBarChartData());		
-		
-	}
-	
-	
+        IncomesByMonthsBarChartData = FXCollections.observableArrayList();
+        dataGenerator = new IncomesByMonthsDataStrategy(Year.now());
 
+    }
 
+    public void setDataGenerator(BarChartData dataGenerator) {
+        this.dataGenerator = dataGenerator;
 
-	
-	
-	
+    }
+
+    /**
+     * Method for setting up IncomesBarChart
+     *
+     * @param incomesBarChart BarChart
+     * @return BarChart
+     */
+    public BarChart setUpIncomesBarChart(BarChart incomesBarChart) {
+        this.incomesBarChart = incomesBarChart;
+        this.incomesBarChart.setData(dataGenerator.setBarChartData());
+        return this.incomesBarChart;
+
+    }
+
+    /**
+     * Switches data generator strategy for generating data based on parameters
+     * given.
+     *
+     * @param year Year
+     * @param month Month
+     */
+    public void updateAllData(Year year, Month month) {
+
+        System.out.print(year + " k: " + month);
+        if (month == null) {
+            setDataGenerator(new IncomesByMonthsDataStrategy(year));
+        } else if (year != null && month != null) {
+            setDataGenerator(new IncomesByDaysInMonthDataStrategy(year, month));
+
+        } else {
+            setDataGenerator(new IncomesByYearsDataStrategy());
+        }
+
+        incomesBarChart.getData().clear();
+        incomesBarChart.layout();
+        incomesBarChart.setData(dataGenerator.setBarChartData());
+
+    }
 
 }

@@ -6,10 +6,6 @@ import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -233,7 +229,7 @@ public class GoogleCalendar {
         calendar.setTimeZone("Europe/Helsinki");
 
         // Insert the new calendar
-        com.google.api.services.calendar.model.Calendar createdCalendar = service.calendars().insert(calendar).execute();
+        service.calendars().insert(calendar).execute();
     }
 
     public static String getPrimaryCalendarId() throws IOException {
