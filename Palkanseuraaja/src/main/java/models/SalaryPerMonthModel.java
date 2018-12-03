@@ -2,7 +2,11 @@ package models;
 
 import java.time.*;
 
-public class SalaryPerMonthModel {
+public class SalaryPerMonthModel implements ISalaryModel {
+	/**
+	 * Data class used in Calculation and IncomesByYearsDataStrategy
+	 * @author Joonas
+	 */
 	private Month month;
 	private double totalSalary;
 

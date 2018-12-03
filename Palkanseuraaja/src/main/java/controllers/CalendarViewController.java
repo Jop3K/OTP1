@@ -1,6 +1,6 @@
 package controllers;
 
-import application.GoogleCalendar;
+import com.google.api.services.calendar.model.CalendarListEntry;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -9,6 +9,8 @@ import dataAccessObjects.UserDAO;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -20,6 +22,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
 import models.CurrentCalendarViewController;
 import models.CurrentUser;
 import models.EventModel;
@@ -71,8 +76,6 @@ public class CalendarViewController implements Initializable {
     @FXML
 
     private TableColumn<EventModel, Date> endColumn;
-
-    private EventObservableDataList data;
 
     private EventModel eventModel;
 
@@ -126,9 +129,33 @@ public class CalendarViewController implements Initializable {
     @FXML
     private TableColumn<EventModel, String> workProfileColumn;
     @FXML
+    private TableColumn<EventModel, String> descriptionColumn;
+    @FXML
     private TableColumn<EventModel, Date> startColumn;
     @FXML
     private Label eventCountLabel;
+    @FXML
+    private Button disconnectGoogle;
+    @FXML
+    private Text connection;
+    @FXML
+    private ComboBox<CalendarListEntry> googleCalendarsDropdown;
+    @FXML
+    private Button sendToGoogleButton;
+    @FXML
+    private Label descriptionLabel;
+    @FXML
+    private TextField descriptionTextField;
+    @FXML
+    private Text chooseCalendarText;
+    @FXML
+    private Text createCalendarText;
+    @FXML
+    private TextField newGoogleCalendarField;
+    @FXML
+    private Button createNewCalendarButton;
+    @FXML
+    private Button setDefaultCalendarButton;
 
     /**
      * The constructor for "eventModel"
@@ -155,8 +182,19 @@ public class CalendarViewController implements Initializable {
         setLabels();
         setButtons();
 
-        // TODO Auto-generated method stub
         CurrentCalendarViewController.setCalendarViewController(this);
+
+        //Tooltip test (does not work yet)
+        final Tooltip tooltipHour = new Tooltip();
+        final Tooltip tooltipMinute = new Tooltip();
+
+        tooltipHour.setText("0-23");
+        tooltipMinute.setText("0-59");
+
+        startHour.setTooltip(tooltipHour);
+        endHour.setTooltip(tooltipHour);
+        startMinute.setTooltip(tooltipMinute);
+        endMinute.setTooltip(tooltipMinute);
 
         //Täytetään taulu
         setTable();
@@ -165,6 +203,14 @@ public class CalendarViewController implements Initializable {
         generateTimeToComboboxes();
 
         loadWorkProfilesToProfileChooser();
+
+        if (GoogleCalendar.isConnected()) {
+            connection.setText(labels.getString("connected"));
+            connection.setFill(Color.GREEN);
+        } else {
+            connection.setText(labels.getString("disconnected"));
+            connection.setFill(Color.RED);
+        }
 
     }
 
@@ -176,8 +222,86 @@ public class CalendarViewController implements Initializable {
      */
     @FXML
     public void connectToGoogle() throws IOException, GeneralSecurityException {
-        //TODO
-        GoogleCalendar.main();
+        try {
+            GoogleCalendar.connect();
+            connection.setText(labels.getString("connected"));
+            connection.setFill(Color.GREEN);
+            loadGoogleCalendarsToCombobox();
+            for (CalendarListEntry c : googleCalendarsDropdown.getItems()) {
+                if (c.getId().equals(CurrentUser.getUser().getDefaultGoogleCalendarId())) {
+                    googleCalendarsDropdown.getSelectionModel().select(c);
+                } else {
+                    if (c.isPrimary()) {
+                        googleCalendarsDropdown.getSelectionModel().select(c);
+                    }
+                }
+            }
+        } catch (IOException ex) {
+            System.out.println(labels.getString("error"));
+        }
+    }
+
+    @FXML
+    public void disconnectFromGoogle() throws IOException, GeneralSecurityException {
+        GoogleCalendar.disconnect();
+        connection.setText(labels.getString("disconnected"));
+        connection.setFill(Color.RED);
+        googleCalendarsDropdown.getItems().clear();
+    }
+
+    public void loadGoogleCalendarsToCombobox() throws IOException {
+        googleCalendarsDropdown.getItems().clear();
+
+        for (CalendarListEntry c : GoogleCalendar.getCalendars()) {
+            googleCalendarsDropdown.getItems().add(c);
+        }
+
+        googleCalendarsDropdown.setCellFactory(
+                new Callback<ListView<CalendarListEntry>, ListCell<CalendarListEntry>>() {
+            @Override
+            public ListCell<CalendarListEntry> call(ListView<CalendarListEntry> w) {
+                ListCell cell = new ListCell<CalendarListEntry>() {
+                    @Override
+                    protected void updateItem(CalendarListEntry item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setText("");
+                        } else {
+                            setText(item.getSummary());
+                        }
+                    }
+                };
+                return cell;
+            }
+        });
+
+        googleCalendarsDropdown.setConverter(
+                new StringConverter<CalendarListEntry>() {
+            private Map<String, CalendarListEntry> map = new HashMap<>();
+
+            @Override
+            public String toString(CalendarListEntry w) {
+                if (w != null) {
+                    String str = w.getSummary();
+                    map.put(w.getSummary(), w);
+                    return str;
+                } else {
+                    return "";
+                }
+
+            }
+
+            @Override
+            public CalendarListEntry fromString(String string) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+    }
+
+    @FXML
+    public void createGoogleCalendar() throws IOException, GeneralSecurityException {
+        GoogleCalendar.createCalendar(newGoogleCalendarField.getText());
+        loadGoogleCalendarsToCombobox();
     }
 
     public void setLabels() {
@@ -195,18 +319,26 @@ public class CalendarViewController implements Initializable {
         workProfile.setText(labels.getString("workProfile"));
         eventsFound.setText(labels.getString("eventsFound"));
         workProfileColumn.setText(labels.getString("workProfile"));
+        descriptionColumn.setText(labels.getString("description"));
         startColumn.setText(labels.getString("starts"));
         endColumn.setText(labels.getString("ends"));
         startHour.promptTextProperty().setValue(labels.getString("h"));
         startMinute.promptTextProperty().setValue(labels.getString("m"));
         endHour.promptTextProperty().setValue(labels.getString("h"));
         endMinute.promptTextProperty().setValue(labels.getString("m"));
+        descriptionLabel.setText(labels.getString("description"));
+        chooseCalendarText.setText(labels.getString("chooseCalendar"));
+        createCalendarText.setText(labels.getString("createCalendar"));
     }
 
     public void setButtons() {
         saveButton.setText(buttons.getString("save"));
         cancelEventEditBtn.setText(buttons.getString("cancel"));
+        createNewCalendarButton.setText(buttons.getString("create"));
+        sendToGoogleButton.setText(buttons.getString("sendEvent"));
         connectToGoogle.setText(buttons.getString("connectToGoogle"));
+        disconnectGoogle.setText(buttons.getString("disconnectFromGoogle"));
+        setDefaultCalendarButton.setText(buttons.getString("makeDefault"));
     }
 
     /**
@@ -240,16 +372,11 @@ public class CalendarViewController implements Initializable {
      *
      * @return we return the boolean value for the validation
      */
-    private boolean isValid() {
-        if (startDay.getValue() == null || endDay.getValue() == null
-                || startHour.getSelectionModel().isEmpty() || endHour.getSelectionModel().isEmpty()
-                || startMinute.getSelectionModel().isEmpty() || endMinute.getSelectionModel().isEmpty()
-                || profileChooser.getSelectionModel().isEmpty()) {
-            return false;
-
-        } else {
-            return true;
-        }
+    boolean isValid() {
+        return startDay.getValue() != null && endDay.getValue() != null
+                && !startHour.getSelectionModel().isEmpty() && !endHour.getSelectionModel().isEmpty()
+                && !startMinute.getSelectionModel().isEmpty() && !endMinute.getSelectionModel().isEmpty()
+                && !profileChooser.getSelectionModel().isEmpty();
         //startDay != null || endDay != null || startHour != null || endHour != null || startMinute != null || endMinute != null || profileChooser != null;
     }
 
@@ -265,7 +392,7 @@ public class CalendarViewController implements Initializable {
         LocalDate endDate = endDay.getValue();
 
         try {
-            if (isValid() == false) {
+            if (!isValid()) {
 
                 JOptionPane.showMessageDialog(null, messages.getString("fillAllFields"));
                 return;
@@ -293,6 +420,8 @@ public class CalendarViewController implements Initializable {
                 }
             }
 
+            eventModel.setDescription(descriptionTextField.getText());
+
             eventModel.setBeginHour(startHour.getValue());
             eventModel.setBeginMinute(startMinute.getValue());
             eventModel.setEndHour(endHour.getValue());
@@ -315,19 +444,20 @@ public class CalendarViewController implements Initializable {
                 // Lasketaan palkka ennen tallennusta
                 eventModel.calcPay();
                 UserDAO.save(eventModel);
-                data.getInstance().add(eventModel);
+                EventObservableDataList.getInstance().add(eventModel);
                 clearChoices();
                 JOptionPane.showMessageDialog(null, "Luonti onnistui!");
-                eventCountLabel.setText(Integer.toString(data.getInstance().size()));
+                eventCountLabel.setText(Integer.toString(EventObservableDataList.getInstance().size()));
             } else {
                 // Lasketaan palkka ennen tallennusta
                 eventModel.calcPay();
                 UserDAO.update(eventModel);
                 eventTable.getColumns().get(0).setVisible(false); //Workaround for fireing changelistener in observablelist(updates object to table)
                 eventTable.getColumns().get(0).setVisible(true);
-                eventModel = new EventModel();
                 clearChoices();
             }
+
+            eventModel = new EventModel();
 
         } else {
             JOptionPane.showMessageDialog(null, "Täytä kaikki kentät ennen tapahtuman luomista");
@@ -349,23 +479,62 @@ public class CalendarViewController implements Initializable {
 
     }
 
+    @FXML
+    public void sendToGoogle() throws IOException {
+        if (GoogleCalendar.isConnected()) {
+            
+            String calendarId;
+            
+            if (googleCalendarsDropdown.getSelectionModel().getSelectedItem() != null) {
+                calendarId = googleCalendarsDropdown.getSelectionModel().getSelectedItem().getId();
+            } else {
+                calendarId = null;
+            }
+            System.out.println(calendarId);
+            for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
+
+                GoogleCalendar.sendSelectedEventToGoogleCalendar(e, calendarId);
+                
+            }
+
+        } else {
+            System.out.println("Not Connected");
+        }
+    }
+    
+    @FXML
+    public void setDefaultCalendar() {
+        if (GoogleCalendar.isConnected()) {
+            if (googleCalendarsDropdown.getSelectionModel().getSelectedItem() != null) {
+                CurrentUser.getUser().setDefaultGoogleCalendarId(googleCalendarsDropdown.getSelectionModel().getSelectedItem().getId());
+                UserDAO.update(CurrentUser.getUser());
+            }
+        }
+        System.out.println(CurrentUser.getUser().getDefaultGoogleCalendarId());
+    }
+
     /**
-     * This method is for getting the events from the database to the table on
+     * This method is for getting the events from the EventObservableDataListbase to the table on
      * the Calendar Tab
      */
     public void setTable() {
 
-        eventCountLabel.setText(Integer.toString(data.getInstance().size()));
+        eventCountLabel.setText(Integer.toString(EventObservableDataList.getInstance().size()));
 
         workProfileColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("workProfile"));
+        workProfileColumn.setResizable(true);
         //Formatoidaan "alkaa" kolumni näyttämää päivämäärän dd.mm.yy hh:mm muodossa
         ControllerUtil.formatColumnDate(startColumn);
         //Formatoidaan "loppuu" kolumni myös samaan muotoon
         ControllerUtil.formatColumnDate(endColumn);
         startColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("beginTime"));
+        startColumn.setResizable(true);
         endColumn.setCellValueFactory(new PropertyValueFactory<EventModel, Date>("endTime"));
+        endColumn.setResizable(true);
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("description"));
+        descriptionColumn.setResizable(true);
         //Lisätään mahdollisuus filtteröidä taulussa näkyviä tapahtumia päivämäärän mukaan
-        FilteredList<EventModel> filteredData = new FilteredList<>(data.getInstance(), p -> true);
+        FilteredList<EventModel> filteredData = new FilteredList<>(EventObservableDataList.getInstance(), p -> true);
         eventDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
 
             filteredData.setPredicate(EventModel -> {
@@ -393,19 +562,20 @@ public class CalendarViewController implements Initializable {
         });
 
         // Adds menu for editing and deleting objects from eventTable. Fired by mouses right-click
-        MenuItem info = new MenuItem("Tiedot");
-        MenuItem edit = new MenuItem("Muokkaa");
-        MenuItem delete = new MenuItem("Poista");
-        MenuItem sendToGoogle = new MenuItem("Vie Google Kalenteriin");
+        MenuItem info = new MenuItem(labels.getString("info"));
+        MenuItem edit = new MenuItem(labels.getString("edit"));
+        MenuItem delete = new MenuItem(labels.getString("delete"));
+        MenuItem sendToGoogle = new MenuItem(labels.getString("sendToGoogle"));
 
         // Showing useful information to user
         info.setOnAction((ActionEvent event) -> {
 
             EventModel tmp = eventTable.getSelectionModel().getSelectedItem();
 
-            JOptionPane.showMessageDialog(null, "Tapahtuman kesto: " + tmp.getHours() + " tuntia"
-                    + "\nPalkka: " + tmp.getEventPay() + " euroa",
-                    "Tapahtuman tiedot", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, labels.getString("eventDuration") + ": " + tmp.getHours() + " " + labels.getString("hoursPartitiivi")
+                    + "\n" + labels.getString("pay") + ": " + tmp.getEventPay() + " " + labels.getString("eur") + "\n"
+                    + labels.getString("description") + ": " + tmp.getDescription(),
+                    labels.getString("eventInfo"), JOptionPane.INFORMATION_MESSAGE);
 
         });
         edit.setOnAction((ActionEvent event) -> {
@@ -421,33 +591,33 @@ public class CalendarViewController implements Initializable {
             startDay.setValue(eventModel.getBeginDay());
             endDay.setValue(eventModel.getEndDay());
             profileChooser.setValue(eventModel.getWorkProfile());
+            descriptionTextField.setText(eventModel.getDescription());
+            googleCalendarsDropdown.getSelectionModel().clearSelection();
+            if (GoogleCalendar.isConnected()) {
+                for (CalendarListEntry c : googleCalendarsDropdown.getItems()) {
+                    if (c.getId().equals(eventModel.getGoogleCalendarId())) {
+                        googleCalendarsDropdown.getSelectionModel().select(c);
+                    }
+                }
+            }
 
         });
         delete.setOnAction((ActionEvent event) -> {
-
-            EventModel tmp = eventTable.getSelectionModel().getSelectedItem();
-            System.out.print(tmp.toString());
-            UserDAO.delete(tmp);
-            data.getInstance().remove(tmp);
             for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
-                data.getInstance().remove(e);
+                EventObservableDataList.getInstance().remove(e);
                 UserDAO.delete(e);
             }
+            eventCountLabel.setText(Integer.toString(EventObservableDataList.getInstance().size()));
         });
 
         sendToGoogle.setOnAction((ActionEvent event) -> {
-
-            try {
-                GoogleCalendar.main();
-                for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
-                    GoogleCalendar.sendSelectedEventToGoogleCalendar(e);
-
+            if (GoogleCalendar.isConnected()) {
+                try {
+                    sendToGoogle();
+                } catch (IOException ex) {
+                    Logger.getLogger(CalendarViewController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (IOException | GeneralSecurityException ex) {
-                Logger.getLogger(CalendarViewController.class
-                        .getName()).log(Level.SEVERE, null, ex);
             }
-
         });
 
         // Palkanlaskennan testausta varten

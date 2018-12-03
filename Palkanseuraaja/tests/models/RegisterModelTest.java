@@ -33,43 +33,43 @@ public class RegisterModelTest extends TestCase{
 		fail.setfName("M");
 		fail.setlName("M");
 		Assert.assertFalse(fail.formValidation(fail));
-		Assert.assertEquals(fail.getAlert().getHeaderText(), "Etu- ja sukunimen pitää olla vähintään kaksi merkkiä pitkä!");
+		Assert.assertEquals("Etu- ja sukunimen pitää olla vähintään kaksi merkkiä pitkä", fail.getAlert().getHeaderText());
 		
 		//Names doesn't include special characters or numbers
 		fail.setfName("Moi*");
 		fail.setlName("Moi");
 		Assert.assertFalse(fail.formValidation(fail));
-		Assert.assertEquals(fail.getAlert().getHeaderText(), "Etu- ja sukunimi ei saa sisältää erikoismerkkejä tai numeroita!");
+		Assert.assertEquals(fail.getAlert().getHeaderText(), "Etu- ja sukunimi ei saa sisältää erikoismerkkejä tai numeroita");
 		
 		fail.setfName("Moi/");
 		fail.setlName("Moi");
 		Assert.assertFalse(fail.formValidation(fail));
-		Assert.assertEquals(fail.getAlert().getHeaderText(), "Etu- ja sukunimi ei saa sisältää erikoismerkkejä tai numeroita!");
+		Assert.assertEquals(fail.getAlert().getHeaderText(), "Etu- ja sukunimi ei saa sisältää erikoismerkkejä tai numeroita");
 		
 		fail.setfName("Moi");
 		fail.setlName("M.oi");
 		Assert.assertFalse(fail.formValidation(fail));
-		Assert.assertEquals(fail.getAlert().getHeaderText(), "Etu- ja sukunimi ei saa sisältää erikoismerkkejä tai numeroita!");
+		Assert.assertEquals(fail.getAlert().getHeaderText(), "Etu- ja sukunimi ei saa sisältää erikoismerkkejä tai numeroita");
 		
 		fail.setfName("M@i");
 		fail.setlName("Moi");
 		Assert.assertFalse(fail.formValidation(fail));
-		Assert.assertEquals(fail.getAlert().getHeaderText(), "Etu- ja sukunimi ei saa sisältää erikoismerkkejä tai numeroita!");
+		Assert.assertEquals(fail.getAlert().getHeaderText(), "Etu- ja sukunimi ei saa sisältää erikoismerkkejä tai numeroita");
 		
 		fail.setfName("Mo½");
 		fail.setlName("Moi");
 		Assert.assertFalse(fail.formValidation(fail));
-		Assert.assertEquals(fail.getAlert().getHeaderText(), "Etu- ja sukunimi ei saa sisältää erikoismerkkejä tai numeroita!");
+		Assert.assertEquals(fail.getAlert().getHeaderText(), "Etu- ja sukunimi ei saa sisältää erikoismerkkejä tai numeroita");
 		
 		fail.setfName("Moi1");
 		fail.setlName("Moi");
 		Assert.assertFalse(fail.formValidation(fail));
-		Assert.assertEquals(fail.getAlert().getHeaderText(), "Etu- ja sukunimi ei saa sisältää erikoismerkkejä tai numeroita!");
+		Assert.assertEquals(fail.getAlert().getHeaderText(), "Etu- ja sukunimi ei saa sisältää erikoismerkkejä tai numeroita");
 		
 		fail.setfName("Moi");
 		fail.setlName("Moi4");
 		Assert.assertFalse(fail.formValidation(fail));
-		Assert.assertEquals(fail.getAlert().getHeaderText(), "Etu- ja sukunimi ei saa sisältää erikoismerkkejä tai numeroita!");
+		Assert.assertEquals(fail.getAlert().getHeaderText(), "Etu- ja sukunimi ei saa sisältää erikoismerkkejä tai numeroita");
 		
 		
 		
@@ -80,7 +80,7 @@ public class RegisterModelTest extends TestCase{
         
 		fail = new RegisterModel("","","","","");
 		Assert.assertFalse(fail.formValidation(fail));
-		Assert.assertEquals(fail.getAlert().getHeaderText(), "Täytä pakolliset kentät!");
+		Assert.assertEquals(fail.getAlert().getHeaderText(), "Täytä pakolliset kentät");
 		
 	}
     @Test
@@ -96,7 +96,7 @@ public class RegisterModelTest extends TestCase{
     	
     	fail.setPw2("passworddontmatch");
     	assertFalse(fail.formValidation(fail));
-    	assertEquals(fail.getAlert().getHeaderText(), "Salasanat eivät täsmää!");
+    	assertEquals("Salasanat eivät täsmää", fail.getAlert().getHeaderText());
     }
     @Test
     @TestInJfxThread
@@ -105,7 +105,7 @@ public class RegisterModelTest extends TestCase{
     	fail.setPw1("123");
     	fail.setPw2("123");
     	assertFalse(fail.formValidation(fail));
-    	assertEquals(fail.getAlert().getHeaderText(), "Salasanan pitää olla vähintään neljä merkkiä!");
+    	assertEquals("Salasanan pitää olla vähintään neljä merkkiä", fail.getAlert().getHeaderText());
     }
     @Test
     @TestInJfxThread
@@ -113,7 +113,7 @@ public class RegisterModelTest extends TestCase{
     	//Three characters is minimum
     	fail.setuName("mm");
     	assertFalse(fail.formValidation(fail));
-    	assertEquals(fail.getAlert().getHeaderText(), "Käyttäjänimen pitää olla vähintään kolme merkkiä!");
+    	assertEquals("Käyttäjänimen pitää olla vähintään kolme merkkiä", fail.getAlert().getHeaderText());
     }
 
     

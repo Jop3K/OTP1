@@ -16,57 +16,67 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 
 import java.time.*;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 public class StatsModel{
-	private EventObservableDataList data;
+	/**
+	 * Model class for StatsController. Used to setting up and creating data for BarChart in StatsView.
+	 * @author Joonas
+	 */
 	private List<SalaryPerMonthModel> IncomesByMonths;
 	private ObservableList<XYChart.Series<String, Double>> IncomesByMonthsBarChartData;
-
+	private BarChartData dataGenerator;
+	private BarChart incomesBarChart;
 	public StatsModel() {
-		IncomesByMonths = Calculation.calcPayForEveryMonthInYear(data);
+
 		IncomesByMonthsBarChartData = FXCollections.observableArrayList();
+		dataGenerator = new IncomesByMonthsDataStrategy(Year.now());
 		
 		}
 
-	public BarChart setUpIncomesByMonthsBarChart(BarChart incomesByMonthsBarChart) {
-	
-        setUpIncomesByMonthsBarChartData();
-		incomesByMonthsBarChart.setData(IncomesByMonthsBarChartData);
+	public void setDataGenerator(BarChartData dataGenerator) {
+		this.dataGenerator = dataGenerator;
 		
-		return incomesByMonthsBarChart;
+	}
+	/**
+	 * Method for setting up IncomesBarChart
+	 * @param incomesBarChart BarChart
+	 * @return BarChart
+	 */
+	public BarChart setUpIncomesBarChart(BarChart incomesBarChart) {
+		this.incomesBarChart = incomesBarChart;
+		this.incomesBarChart.setData(dataGenerator.setBarChartData());
+		return this.incomesBarChart;
 		
 		}
 	
-	public void updateAllData(){
+	/**
+	 * Switches data generator strategy for generating data based on parameters given.
+	 * @param year Year
+	 * @param month Month
+	 */
+	public void updateAllData(Year year, Month month){
 		
-				IncomesByMonths = Calculation.calcPayForEveryMonthInYear(data);
-				updateIncomesByMonthsBarChartData();
-	}
-	
-	private void setUpIncomesByMonthsBarChartData() {
-	
-		XYChart.Series<String, Double> monthIncome = new XYChart.Series<String, Double>(getDataForIncomesByMonthsBarChartData());
-		IncomesByMonthsBarChartData.add(monthIncome);
-		
-	}
-	
-	private ObservableList<XYChart.Data<String,Double>> getDataForIncomesByMonthsBarChartData(){
-		
-		ObservableList<XYChart.Data<String,Double>> xyList = FXCollections.observableArrayList();	           
-		
-		for(SalaryPerMonthModel s : IncomesByMonths) {
+		System.out.print(year + " k: " + month);
+		if (month == null) {
+			setDataGenerator(new IncomesByMonthsDataStrategy(year));		
+		}
+		else if (year != null && month !=null) {
+			setDataGenerator(new IncomesByDaysInMonthDataStrategy(year, month));
 			
-			xyList.add(new XYChart.Data(s.getMonth().toString(), s.getTotalSalary()));		
 		}
+		else{
+			setDataGenerator(new IncomesByYearsDataStrategy());
+		}
+
+		incomesBarChart.getData().clear();
+		incomesBarChart.layout();
+		incomesBarChart.setData(dataGenerator.setBarChartData());		
 		
-		return xyList;
 	}
 	
-	private void updateIncomesByMonthsBarChartData() {
-		
-		for (int i = 0; i<IncomesByMonthsBarChartData.size(); i++)
-			IncomesByMonthsBarChartData.get(i).setData(getDataForIncomesByMonthsBarChartData());
-	}
+	
 
 
 

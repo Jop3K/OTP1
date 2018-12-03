@@ -8,7 +8,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
- * Työvuoro/tapahtuma luokka. Käytetään työvuorojen esittämiseen ja tallentamiseen. Liittyvät aina johonkin työprofiiliin.
+ * Työvuoro/tapahtuma luokka. Käytetään työvuorojen esittämiseen ja
+ * tallentamiseen. Liittyvät aina johonkin työprofiiliin.
  *
  */
 @Entity
@@ -38,6 +39,13 @@ public class EventModel {
 
     @Column(name = "googleId")
     private String googleId;
+
+    @Column(name = "googleCalendarId")
+    private String googleCalendarId;
+
+    @Column(name = "description")
+    private String description;
+
     @Column
     private double eventPay;
 
@@ -79,12 +87,7 @@ public class EventModel {
     }
 
     public void calcPay() {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime eventStart = LocalDateTime.of(beginDay, LocalTime.of(Integer.parseInt(endHour), Integer.parseInt(endMinute)));
-
-        if (eventStart.isAfter(now)) {
-            eventPay = Calculation.Calculate(this);
-        }
+        eventPay = Calculation.Calculate(this);
     }
 
     public double getEventPay() {
@@ -221,6 +224,22 @@ public class EventModel {
 
     public void setEndDateTime(String endDateTime) {
         this.endDateTime = endDateTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getGoogleCalendarId() {
+        return googleCalendarId;
+    }
+
+    public void setGoogleCalendarId(String googleCalendarId) {
+        this.googleCalendarId = googleCalendarId;
     }
 
 }

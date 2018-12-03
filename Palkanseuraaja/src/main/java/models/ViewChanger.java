@@ -3,6 +3,7 @@ package models;
 import application.Main;
 import java.io.IOException;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,7 +31,7 @@ public class ViewChanger {
         Parent root = null;
         Stage stage = new Stage();
 
-        stage.setTitle(ResourceBundle.getBundle("LabelsBundle").getString("title") + " v0.02a // " + ResourceBundle.getBundle("LabelsBundle").getString("username") + ": " + CurrentUser.getUser().getUsername());
+        stage.setTitle(ResourceBundle.getBundle("LabelsBundle").getString("title") + " v0.03a // " + ResourceBundle.getBundle("LabelsBundle").getString("username") + ": " + CurrentUser.getUser().getUsername());
 //        stage.getIcons().add(new Image("/img/salarypal.png"));
         try {
             root = FXMLLoader.load(Main.class.getResource(name));
@@ -42,6 +43,11 @@ public class ViewChanger {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
+        stage.setOnCloseRequest(e -> {
+            Platform.exit();
+            System.exit(0);
+        });
 
     }
 
