@@ -12,7 +12,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.input.MouseEvent;
 
-public class IncomesByMonthsDataStrategy implements BarChartData {
+public class IncomesByMonthsDataStrategy extends AbstractDataStrategy {
 	/**
 	 * Strategy class that generate data for BarChart in StatsView. 
 	 * @author Joonas
@@ -28,18 +28,7 @@ public class IncomesByMonthsDataStrategy implements BarChartData {
 		
 	}
 
-
-	@Override
-	public ObservableList<XYChart.Series<String, Double>> setBarChartData() {
-		ObservableList<XYChart.Series<String, Double>> IncomesByMonthsBarChartData = FXCollections.observableArrayList();
-		XYChart.Series<String, Double> monthIncome = new XYChart.Series<String, Double>(getData());
-		IncomesByMonthsBarChartData.add(monthIncome);
-		ObservableList<XYChart.Series<String, Double>> sortedList = IncomesByMonthsBarChartData.sorted();
-		
-		return IncomesByMonthsBarChartData;
-	}
 	public ObservableList<XYChart.Data<String,Double>> getData(){
-		update();
 		ObservableList<XYChart.Data<String,Double>> xyList = FXCollections.observableArrayList();	           
 		
 		for(SalaryPerMonthModel s : salaryPerMonthList) {
@@ -51,11 +40,5 @@ public class IncomesByMonthsDataStrategy implements BarChartData {
 		return xyList;
 	}
 
-
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-		salaryPerMonthList = Calculation.calcPayForEveryMonthInYear(year);
-	}
 
 }

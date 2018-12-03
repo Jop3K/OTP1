@@ -161,7 +161,6 @@ public class EventModel {
 
     public void setBeginHour(String beginHour) {
         beginTime.setHours(Integer.parseInt(beginHour));
-        System.out.println(beginTime);
         this.beginHour = beginHour;
     }
 

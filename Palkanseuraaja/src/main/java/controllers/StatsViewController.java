@@ -80,7 +80,7 @@ public class StatsViewController implements Initializable {
     
     private EventObservableDataList data;
     private StatsModel statsModel;
-    private final String NOT_CHOOSED = "Ei valittu";
+    private final String SHOW_ALL = "Näytä kaikki";
 
     public StatsViewController() {
         statsModel = new StatsModel();
@@ -113,7 +113,7 @@ public class StatsViewController implements Initializable {
     	yearPick.getItems().clear();
     	
 		List<Year> yearsFromEvents = Calculation.FindYearsFromEvents();
-		monthPick.getItems().add(NOT_CHOOSED);
+		monthPick.getItems().add(SHOW_ALL);
 		for (Year y : yearsFromEvents){
 			yearPick.getItems().add(y);
 		}
@@ -121,7 +121,7 @@ public class StatsViewController implements Initializable {
 			monthPick.getItems().add(m);
 		}
 		yearPick.setValue(Year.now());
-		monthPick.setValue(NOT_CHOOSED);
+		monthPick.setValue(SHOW_ALL);
 		
 	}
 
@@ -172,15 +172,30 @@ public class StatsViewController implements Initializable {
      
     }
     
-    public void populateBarChart(){
-    	Year year = yearPick.getSelectionModel().getSelectedItem();
-    	System.out.println(monthPick.getSelectionModel().getSelectedItem());
-    	if(!monthPick.getSelectionModel().getSelectedItem().equals(NOT_CHOOSED)) {
-	    	Month month = (Month) monthPick.getSelectionModel().getSelectedItem();
-	    	statsModel.updateAllData(year, month);	
-	    }
-    	else{
-    	statsModel.updateAllData(year, null);
+    public void populateBarChartFromYearPick(){
+    	
+    		Year year =  yearPick.getSelectionModel().getSelectedItem();
+    	
+	    	if(!monthPick.getSelectionModel().getSelectedItem().equals(SHOW_ALL)) {
+	    		
+	    	monthPick.setValue(SHOW_ALL); //Reseting monthPick dropdown
+	    	statsModel.updateAllData(year, null);
+	    	}
+	    	else{
+	    		statsModel.updateAllData(year, null);
+	    	}
     	}
-     }
+     
+    
+    public void populateBarChartFromMonthPick(){
+    	Year year = (Year)yearPick.getSelectionModel().getSelectedItem();
+    	
+    	if(monthPick.getSelectionModel().getSelectedItem().equals(SHOW_ALL)) {
+    		statsModel.updateAllData(year, null);
+    	}
+    	else {
+    		Month month = (Month) monthPick.getSelectionModel().getSelectedItem();
+	    	statsModel.updateAllData(year, month);
+    	}
+    }
 }

@@ -8,6 +8,5 @@ public interface BarChartData {
 	
 	
 	public ObservableList setBarChartData();
-	public void update();
 	public ObservableList getData();
 }
