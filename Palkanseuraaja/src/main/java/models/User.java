@@ -1,7 +1,5 @@
 package models;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import javax.persistence.*;
 
 @Entity
@@ -32,8 +30,7 @@ public class User {
     @Column(name = "defaultGoogleCalendarId")
     private String defaultGoogleCalendarId;
 
-    public User() throws NoSuchAlgorithmException, NoSuchProviderException {
-        salt = new PasswordHashing().generateSalt().toString();
+    public User() {
     }
 
     public int getId() {

@@ -93,5 +93,10 @@ public class LoginView {
     public String getPasswordField() {
         return passwordField.getText();
     }
+    
+    public void clearFields() {
+        usernameField.clear();
+        passwordField.clear();
+    }
 
 }

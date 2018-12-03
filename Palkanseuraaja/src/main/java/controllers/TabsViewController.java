@@ -15,7 +15,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.stage.Stage;
 import models.CurrentUser;
-import models.ViewChanger;
 
 /**
  * FXML Controller class
@@ -26,7 +25,7 @@ public class TabsViewController implements Initializable {
 
     private ResourceBundle labels;
     private ResourceBundle alerts;
-    
+
     @FXML
     private Tab calendarTab;
     @FXML
@@ -50,12 +49,13 @@ public class TabsViewController implements Initializable {
         profileTab.setText(labels.getString("workProfile"));
         statsTab.setText(labels.getString("statistics"));
         logoutButton.setText(labels.getString("logout"));
-        
+
     }
 
     @FXML
     public void logoutButtonHandler() {
         CurrentUser.setUser(null);
+        ModelsRefactored.ViewManagerRefactored.ViewManager.INSTANCE.clearLoginViewFields();
         ModelsRefactored.ViewManagerRefactored.ViewManager.INSTANCE.closeStage();
         ModelsRefactored.ViewManagerRefactored.ViewManager.INSTANCE.switchToLoginView();
     }

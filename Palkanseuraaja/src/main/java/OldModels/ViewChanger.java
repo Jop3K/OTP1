@@ -1,4 +1,5 @@
-package models;
+/*
+package OldModels;
 
 import application.Main;
 import controllers.LoginController;
@@ -10,6 +11,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import models.CurrentUser;
+import models.LoginModel;
 import views.LoginView;
 
 // luokka joka vaihtaa näkymiä
@@ -79,3 +82,4 @@ public class ViewChanger {
         this.stage = stage;
     }
 }
+**/

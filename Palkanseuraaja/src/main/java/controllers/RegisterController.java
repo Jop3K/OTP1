@@ -86,12 +86,7 @@ public class RegisterController {
             if (registerModel.formValidation(registerModel)) {
 
                 try {
-                    User user = new User();
-                    user.setFirstname(registerModel.getfName());
-                    user.setLastname(registerModel.getlName());
-                    user.setPassword(new PasswordHashing().get_SHA_256_SecurePassword(registerModel.getPw1(), user.getSalt().getBytes()));
-                    user.setUsername(registerModel.getuName());
-
+                    User user = registerModel.buildUser();
                     //luodaan käyttäjä tietokantaan, jos käyttäjänimeä ei ole varattu.
                     if (UserDAO.save(user)) {
                         //ilmoitetaan onnistumisesta
@@ -102,7 +97,9 @@ public class RegisterController {
                         //Ilmoitetaan käyttäjätunnuksen olevan varattu
                         registerView.showAlert(UserDAO.getAlert());
                     }
-                } catch (NoSuchAlgorithmException | NoSuchProviderException ex) {
+                } catch (NoSuchAlgorithmException ex) {
+                    Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NoSuchProviderException ex) {
                     Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {//ilmoitetaan formin validaatiosta tapahtuneesta virheestä

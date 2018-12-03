@@ -76,5 +76,9 @@ public enum ViewManager implements IViewManager {
             // TODO Auto-generated catch block
         }
     }
+    
+    public void clearLoginViewFields() {
+        loginView.clearFields();
+    }
 
 }

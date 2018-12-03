@@ -1,5 +1,7 @@
 package models;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,6 +17,8 @@ public class RegisterModel {
     private String pw1;
     private String pw2;
 
+    private PasswordHashing passwordHashing;
+
     private ResourceBundle alerts;
     private Alert alert;
 
@@ -27,6 +31,8 @@ public class RegisterModel {
         this.uName = uName;
         this.pw1 = pw1;
         this.pw2 = pw2;
+
+        passwordHashing = new PasswordHashing();
 
         alerts = ResourceBundle.getBundle("AlertMessagesBundle");
         alert = new Alert(null);
@@ -152,6 +158,17 @@ public class RegisterModel {
 
     public void setAlert(Alert alert) {
         this.alert = alert;
+    }
+
+    public User buildUser() throws NoSuchAlgorithmException, NoSuchProviderException {
+        User user = new User();
+        user.setUsername(uName);
+        user.setFirstname(fName);
+        user.setLastname(lName);
+        user.setSalt(passwordHashing.generateSalt().toString());
+        user.setPassword(passwordHashing.get_SHA_256_SecurePassword(pw1, user.getSalt().getBytes()));
+
+        return user;
     }
 
 }
