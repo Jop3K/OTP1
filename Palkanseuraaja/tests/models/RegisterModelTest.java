@@ -19,11 +19,12 @@ public class RegisterModelTest extends TestCase{
 	
 
 
-	RegisterModel fail, pass;
+	RegisterModelRefactored fail;
+        RegisterModel pass;
 
 	@Before
     public void setUp() throws Exception {
-    	fail = new RegisterModel("name", "lastname", "username", "password","password");
+    	fail = new RegisterModelRefactored("name", "lastname", "username", "password","password");
     	
     }
 	@Test
@@ -78,7 +79,7 @@ public class RegisterModelTest extends TestCase{
     @TestInJfxThread
 	public void testEmptyRegisterForm() {
         
-		fail = new RegisterModel("","","","","");
+		fail = new RegisterModelRefactored("","","","","");
 		Assert.assertFalse(fail.formValidation(fail));
 		Assert.assertEquals(fail.getAlert().getHeaderText(), "Täytä pakolliset kentät");
 		

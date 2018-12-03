@@ -482,9 +482,9 @@ public class CalendarViewController implements Initializable {
     @FXML
     public void sendToGoogle() throws IOException {
         if (GoogleCalendar.isConnected()) {
-            
+
             String calendarId;
-            
+
             if (googleCalendarsDropdown.getSelectionModel().getSelectedItem() != null) {
                 calendarId = googleCalendarsDropdown.getSelectionModel().getSelectedItem().getId();
             } else {
@@ -494,14 +494,14 @@ public class CalendarViewController implements Initializable {
             for (EventModel e : eventTable.getSelectionModel().getSelectedItems()) {
 
                 GoogleCalendar.sendSelectedEventToGoogleCalendar(e, calendarId);
-                
+
             }
 
         } else {
             System.out.println("Not Connected");
         }
     }
-    
+
     @FXML
     public void setDefaultCalendar() {
         if (GoogleCalendar.isConnected()) {
@@ -514,8 +514,8 @@ public class CalendarViewController implements Initializable {
     }
 
     /**
-     * This method is for getting the events from the EventObservableDataListbase to the table on
-     * the Calendar Tab
+     * This method is for getting the events from the
+     * EventObservableDataListbase to the table on the Calendar Tab
      */
     public void setTable() {
 

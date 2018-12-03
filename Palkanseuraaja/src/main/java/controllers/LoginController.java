@@ -12,17 +12,14 @@ import views.LoginView;
 
 public class LoginController {
 
-    private final LoginView loginView;
-    private final LoginModel loginModel;
+    private LoginView loginView;
 
     /**
      * The constructor for LoginController
      *
      * @param loginView
-     * @param loginModel
      */
-    public LoginController(LoginView loginView, LoginModel loginModel) {
-        this.loginModel = loginModel;
+    public LoginController(LoginView loginView) {
         this.loginView = loginView;
         //Lisätään listenerit loginViewin buttoneille
         loginView.addRegisterButtonEventListener(new RegisterButtonListener());
@@ -61,16 +58,21 @@ public class LoginController {
          */
         @Override
         public void handle(Event arg0) {
+            LoginModel loginModel = new LoginModel(loginView.getUsernameField(), loginView.getPasswordField());
+            System.out.println("test1");
             //Varmistaa, että kumpikaan kentistä ei ole tyhjä
-            if (loginModel.loginFieldValidation(loginView.getUsernameField(), loginView.getPasswordField())) {
+            if (loginModel.loginFieldValidation()) {
                 try {
+                    System.out.println("test2");
                     // new PasswordHashing(loginView.getPasswordField()).get_SHA_256_SecurePassword()
                     //Yritetään sisäänkirjaumista ottamalla yhteys tietokantaan
                     if (UserDAO.login(loginView.getUsernameField(), loginView.getPasswordField())) {
+                        System.out.println("test3");
                         //Kirjautuminen onnistui ja luodaan ilmoitus siitä.
                         //loginView.showAlert(dao.getAlert());
                         //Ohjataan ohjelmaan
                         ModelsRefactored.ViewManagerRefactored.ViewManager.INSTANCE.switchToApplicationView();
+                        System.out.println("test4");
                     } else {
                         //Kirjautuminen epäonnistui. Ilmoitetaan siitä
                         loginView.showAlert(UserDAO.getAlert());

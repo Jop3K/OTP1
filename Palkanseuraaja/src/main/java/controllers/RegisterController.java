@@ -3,7 +3,7 @@ package controllers;
 import java.security.NoSuchAlgorithmException;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import models.RegisterModel;
+import models.RegisterModelRefactored;
 import models.User;
 import views.RegisterView;
 
@@ -11,7 +11,6 @@ import dataAccessObjects.UserDAO;
 import java.security.NoSuchProviderException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import models.PasswordHashing;
 
 /**
  * This is the controller for "Register user" -view
@@ -22,21 +21,16 @@ import models.PasswordHashing;
 public class RegisterController {
 
     private final RegisterView registerView;
-    private RegisterModel registerModel;
 
     /**
      * The base constructor for the RegisterController class
      *
      * @param registerView
-     * @param registerModel
      */
     public RegisterController(RegisterView registerView) {
-
         this.registerView = registerView;
-
         this.registerView.addCreateButtonEventHandler(new createButtonListener());
         this.registerView.addBackButtonEventHandler(new backButtonListener());
-
     }
 
     /**
@@ -79,12 +73,11 @@ public class RegisterController {
              */
 
             //Luodaan uusi RegisterModel-olio, joka varastoi tietoonsa registerViewin textfieldien
-            registerModel = new RegisterModel(registerView.getFname(), registerView.getLname(), registerView.getUname(),
+            RegisterModelRefactored registerModel = new RegisterModelRefactored(registerView.getFname(), registerView.getLname(), registerView.getUname(),
                     registerView.getPword1(), registerView.getPword2());
 
             //Tarkistetaan formi
-            if (registerModel.formValidation(registerModel)) {
-
+            if (registerModel.formValidation()) {
                 try {
                     User user = registerModel.buildUser();
                     //luodaan käyttäjä tietokantaan, jos käyttäjänimeä ei ole varattu.

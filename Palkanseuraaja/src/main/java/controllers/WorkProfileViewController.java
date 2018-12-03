@@ -102,6 +102,12 @@ public class WorkProfileViewController implements Initializable {
     private Button deleteWorkProfileButton;
     @FXML
     private Button deleteExtraPayButton;
+    @FXML
+    private Label extraPayPerHour;
+    @FXML
+    private Button newExtraPayButton;
+    @FXML
+    private Button editExtraPayButton;
 
     private List<WorkProfile> profileList;
 
@@ -151,6 +157,7 @@ public class WorkProfileViewController implements Initializable {
         setBeginMinute.promptTextProperty().setValue(labels.getString("m"));
         setEndHour.promptTextProperty().setValue(labels.getString("h"));
         setEndMinute.promptTextProperty().setValue(labels.getString("m"));
+        extraPayPerHour.setText(labels.getString("extraPayPerHour"));
     }
 
     public void setButtons() {
@@ -161,6 +168,8 @@ public class WorkProfileViewController implements Initializable {
         saveLisa.setText(buttons.getString("createOrUpdateExtraPay"));
         deleteWorkProfileButton.setText(buttons.getString("delete"));
         deleteExtraPayButton.setText(buttons.getString("delete"));
+        newExtraPayButton.setText(buttons.getString("newExtraPay"));
+        editExtraPayButton.setText(buttons.getString("edit"));
     }
 
     /**
@@ -402,6 +411,16 @@ public class WorkProfileViewController implements Initializable {
             alert.showAndWait();
         }
 
+    }
+    
+    @FXML
+    private void newExtraPayButtonHandler() {
+        clearTextFieldsExtraPay();
+    }
+    
+    @FXML
+    private void editExtraPayButtonHandler() {
+        
     }
 
     private boolean weekdaysValidation() {

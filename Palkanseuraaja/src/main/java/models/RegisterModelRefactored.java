@@ -1,5 +1,6 @@
 package models;
 
+import ModelsRefactored.IValidationModel;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.ResourceBundle;
@@ -9,7 +10,7 @@ import java.util.regex.Pattern;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
-public class RegisterModel {
+public class RegisterModelRefactored implements IValidationModel {
 
     private String fName;
     private String lName;
@@ -22,10 +23,10 @@ public class RegisterModel {
     private ResourceBundle alerts;
     private Alert alert;
 
-    public RegisterModel() {
+    public RegisterModelRefactored() {
     }
 
-    public RegisterModel(String fName, String lName, String uName, String pw1, String pw2) {
+    public RegisterModelRefactored(String fName, String lName, String uName, String pw1, String pw2) {
         this.fName = fName;
         this.lName = lName;
         this.uName = uName;
@@ -40,10 +41,11 @@ public class RegisterModel {
     }
     // Metodia käytetään tarkistamaan, että onko kaikki pakolliset kentät täytetty viewissä
 
-    public boolean formValidation(RegisterModel tmp) {
+    @Override
+    public boolean formValidation() {
         //Tarkistetaan, onko kaikki kentät täytetty
-        if (tmp.getfName().equals("") || tmp.getlName().equals("") || tmp.getuName().equals("") || tmp.getPw1().equals("")
-                || tmp.getPw2().equals("")) {
+        if (fName.equals("") || lName.equals("") || uName.equals("") || pw1.equals("")
+                || pw2.equals("")) {
             alert.setAlertType(AlertType.ERROR);
             alert.setTitle(alerts.getString("error"));
             alert.setHeaderText(alerts.getString("fillMandatoryFields"));
@@ -52,7 +54,7 @@ public class RegisterModel {
         }
 
         //Salasanan validaation
-        if (!tmp.getPw1().equals(tmp.getPw2())) {
+        if (pw1.equals(pw2)) {
 
             Alert pwAlert = new Alert(Alert.AlertType.ERROR);
             pwAlert.setTitle(alerts.getString("error"));
@@ -61,7 +63,7 @@ public class RegisterModel {
             return false;
         }
 
-        if (tmp.getPw1().length() < 4) {
+        if (pw1.length() < 4) {
             Alert pwAlert = new Alert(Alert.AlertType.ERROR);
             pwAlert.setTitle(alerts.getString("error"));
             pwAlert.setHeaderText(alerts.getString("passwordTooShort"));
@@ -70,7 +72,7 @@ public class RegisterModel {
         }
 
         //Jos käyttäjänimi on alle kolme merkkiä
-        if (tmp.getuName().length() < 3) {
+        if (uName.length() < 3) {
 
             Alert unameAlert = new Alert(Alert.AlertType.ERROR);
             unameAlert.setTitle(alerts.getString("error"));
@@ -80,7 +82,7 @@ public class RegisterModel {
         }
 
         //Jos nimet on alle kolme merkkiä
-        if (tmp.fName.length() < 3 || tmp.lName.length() < 3) {
+        if (fName.length() < 3 || lName.length() < 3) {
             Alert nameAlert = new Alert(AlertType.ERROR);
             nameAlert.setTitle(alerts.getString("error"));
             nameAlert.setHeaderText(alerts.getString("nameTooShort"));
