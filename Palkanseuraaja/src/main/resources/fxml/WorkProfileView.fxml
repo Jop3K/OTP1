@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.WorkProfileViewController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.WorkProfileViewController">
     <children>
         <GridPane gridLinesVisible="true" prefHeight="800.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
@@ -48,7 +48,7 @@
                         <Insets bottom="340.0" left="10.0" />
                     </GridPane.margin>
                 </Label>
-                <Button fx:id="saveLisa" mnemonicParsing="false" onAction="#handleSaveLisaButtonClick" text="Luo tai päivitä palkkalisä" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Button fx:id="saveLisa" mnemonicParsing="false" onAction="#handleSaveLisaButtonClick" text="Tallenna tai päivitä palkkalisä" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
                         <Insets left="250.0" top="270.0" />
                     </GridPane.margin>
@@ -68,7 +68,7 @@
                         <Insets left="10.0" top="70.0" />
                     </GridPane.margin>
                 </ComboBox>
-                <TextField fx:id="extrapay" layoutX="20.0" layoutY="208.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <TextField fx:id="extraPayField" layoutX="20.0" layoutY="208.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
                         <Insets left="10.0" right="200.0" top="140.0" />
                     </GridPane.margin>
@@ -233,10 +233,10 @@
             </Button>
             <Button fx:id="editExtraPayButton" mnemonicParsing="false" onAction="#editExtraPayButtonHandler" text="Muokkaa" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
-                  <Insets left="450.0" top="270.0" />
+                  <Insets left="470.0" top="270.0" />
                </GridPane.margin>
             </Button>
-            <Label fx:id="extraPay1" text="Tuntilisä" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label fx:id="extraPayPerHour" text="Tuntilisä" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="10.0" top="80.0" />
                </GridPane.margin>

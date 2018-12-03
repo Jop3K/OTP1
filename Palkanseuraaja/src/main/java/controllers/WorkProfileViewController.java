@@ -108,6 +108,8 @@ public class WorkProfileViewController implements Initializable {
     private Button newExtraPayButton;
     @FXML
     private Button editExtraPayButton;
+    @FXML
+    private TextField extraPayField;
 
     private List<WorkProfile> profileList;
 
@@ -165,7 +167,7 @@ public class WorkProfileViewController implements Initializable {
         extrapayChooser.promptTextProperty().set(buttons.getString("createOrChoose"));
         saveProfile.setText(buttons.getString("save"));
         editButton.setText(buttons.getString("edit"));
-        saveLisa.setText(buttons.getString("createOrUpdateExtraPay"));
+        saveLisa.setText(buttons.getString("saveOrUpdateExtrapay"));
         deleteWorkProfileButton.setText(buttons.getString("delete"));
         deleteExtraPayButton.setText(buttons.getString("delete"));
         newExtraPayButton.setText(buttons.getString("newExtraPay"));
@@ -412,15 +414,55 @@ public class WorkProfileViewController implements Initializable {
         }
 
     }
-    
+
     @FXML
     private void newExtraPayButtonHandler() {
         clearTextFieldsExtraPay();
+        enableExtraPayFields();
     }
-    
+
     @FXML
     private void editExtraPayButtonHandler() {
-        
+        if (editExtraPayButton.getText().equals(buttons.getString("edit"))) {
+            enableExtraPayFields();
+            editExtraPayButton.setText(buttons.getString("cancel"));
+        } else {
+            disableExtraPayFields();
+            editExtraPayButton.setText(buttons.getString("edit"));
+        }
+    }
+
+    private void enableExtraPayFields() {
+        extraPayNameField.setDisable(false);
+        monday.setDisable(false);
+        tuesday.setDisable(false);
+        wednesday.setDisable(false);
+        thursday.setDisable(false);
+        friday.setDisable(false);
+        saturday.setDisable(false);
+        sunday.setDisable(false);
+        setBeginHour.setDisable(false);
+        setBeginMinute.setDisable(false);
+        setEndHour.setDisable(false);
+        setEndMinute.setDisable(false);
+        extraPayField.setDisable(false);
+    }
+
+    private void disableExtraPayFields() {
+        extraPayNameField.setDisable(true);
+        monday.setDisable(true);
+        tuesday.setDisable(true);
+        wednesday.setDisable(true);
+        thursday.setDisable(true);
+        friday.setDisable(true);
+        saturday.setDisable(true);
+        sunday.setDisable(true);
+        setBeginHour.setDisable(true);
+        setBeginMinute.setDisable(true);
+        setEndHour.setDisable(true);
+        setEndMinute.setDisable(true);
+        extraPayField.setDisable(true);
+        editExtraPayButton.setText(buttons.getString("edit"));
     }
 
     private boolean weekdaysValidation() {
@@ -468,8 +510,8 @@ public class WorkProfileViewController implements Initializable {
         editButton.setText(buttons.getString("edit"));
         editButton.setDisable(true);
 
-        extraPayNameField.setDisable(true);
-
+        clearTextFieldsExtraPay();
+        disableExtraPayFields();
     }
 
     /**
@@ -501,7 +543,7 @@ public class WorkProfileViewController implements Initializable {
         if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
             extraPayNameField.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtraPay()));
             loadValuesToExtrapayFields();
-            extraPayNameField.setDisable(true);
+            disableExtraPayFields();
         }
     }
 
@@ -540,12 +582,6 @@ public class WorkProfileViewController implements Initializable {
         profileName.setText(profileChooser.getSelectionModel().getSelectedItem().getName());
         tuntipalkka.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getPay()));
 
-        if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
-            extraPayNameField.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtraPay()));
-        } else {
-            extraPayNameField.clear();
-        }
-
         loadValuesToExtrapayChooser();
 
     }
@@ -576,7 +612,9 @@ public class WorkProfileViewController implements Initializable {
         setBeginHour.getSelectionModel().clearSelection();
         setBeginMinute.getSelectionModel().clearSelection();
         setEndHour.getSelectionModel().clearSelection();
-        setEndHour.getSelectionModel().clearSelection();
+        setEndMinute.getSelectionModel().clearSelection();
+        
+        extraPayField.clear();
     }
 
     /**
@@ -585,7 +623,7 @@ public class WorkProfileViewController implements Initializable {
     private void disableFields() {
         profileName.setDisable(true);
         tuntipalkka.setDisable(true);
-        extraPayNameField.setDisable(true);
+        extrapayChooser.setDisable(false);
     }
 
     /**
@@ -594,10 +632,6 @@ public class WorkProfileViewController implements Initializable {
     private void enableFields() {
         profileName.setDisable(false);
         tuntipalkka.setDisable(false);
-        if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
-            extrapayChooser.setDisable(false);
-        }
-        extraPayNameField.setDisable(true);
     }
 
     /**
@@ -658,6 +692,13 @@ public class WorkProfileViewController implements Initializable {
         if (extrapayChooser.getSelectionModel().getSelectedItem().getEndMinute() != null) {
             String endMinute = extrapayChooser.getSelectionModel().getSelectedItem().getEndMinute();
             setEndMinute.getSelectionModel().select(endMinute);
+        }
+        if (extrapayChooser.getSelectionModel().getSelectedItem().getEndMinute() != null) {
+            String endMinute = extrapayChooser.getSelectionModel().getSelectedItem().getEndMinute();
+            setEndMinute.getSelectionModel().select(endMinute);
+        }
+        if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
+            extraPayField.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtraPay()));
         }
 
     }
