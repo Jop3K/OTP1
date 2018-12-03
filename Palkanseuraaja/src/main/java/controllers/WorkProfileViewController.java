@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,7 +14,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
-import javafx.util.Callback;
 import models.*;
 
 /**
@@ -74,11 +71,9 @@ public class WorkProfileViewController implements Initializable {
     @FXML
     private Button newProfile;
     @FXML
-    private TextField lisanNimi;
+    private TextField extraPayNameField;
     @FXML
     private Font x121;
-    @FXML
-    private TextField extrapay;
     @FXML
     private ComboBox<String> setEndHour;
     @FXML
@@ -103,12 +98,14 @@ public class WorkProfileViewController implements Initializable {
     private CheckBox saturday;
     @FXML
     private CheckBox sunday;
+    @FXML
+    private Button deleteWorkProfileButton;
+    @FXML
+    private Button deleteExtraPayButton;
 
     private List<WorkProfile> profileList;
 
     private List<ExtraPay> extrapayList;
-
-    public CurrentWorkProfile currentWorkProfile;
 
     /**
      * Initializes the controller class.
@@ -125,16 +122,10 @@ public class WorkProfileViewController implements Initializable {
         loadValuesToProfileChooser();
         generateTimes();
 
-        extrapay.setDisable(true);
+        extraPayNameField.setDisable(true);
 
     }
 
-    /**
-     * This methods is for handling the saving of a Work Profile onclick of the
-     * "save" button
-     *
-     * @param event required parameter for ActionEvent
-     */
     public void setLabels() {
         workInfo.setText(labels.getString("workInfo"));
         chooseProfile.setText(labels.getString("chooseProfile"));
@@ -160,7 +151,6 @@ public class WorkProfileViewController implements Initializable {
         setBeginMinute.promptTextProperty().setValue(labels.getString("m"));
         setEndHour.promptTextProperty().setValue(labels.getString("h"));
         setEndMinute.promptTextProperty().setValue(labels.getString("m"));
-
     }
 
     public void setButtons() {
@@ -169,33 +159,53 @@ public class WorkProfileViewController implements Initializable {
         saveProfile.setText(buttons.getString("save"));
         editButton.setText(buttons.getString("edit"));
         saveLisa.setText(buttons.getString("createOrUpdateExtraPay"));
+        deleteWorkProfileButton.setText(buttons.getString("delete"));
+        deleteExtraPayButton.setText(buttons.getString("delete"));
     }
 
+    /**
+     * This methods is for handling the saving of a Work Profile onclick of the
+     * "save" button
+     *
+     * @param event required parameter for ActionEvent
+     */
     @FXML // button handler for "save profile" button click
     private void handleSaveProfileButtonClick(ActionEvent event) {
 
         if (!profileChooser.getSelectionModel().isEmpty()) { // if profile is chosen, updates it
 
-            if (!profileName.getText().isEmpty()) {
-                profileChooser.getSelectionModel().getSelectedItem().setName(profileName.getText());
+            if (workProfileValidation()) {
+
+                if (!profileName.getText().isEmpty()) {
+                    profileChooser.getSelectionModel().getSelectedItem().setName(profileName.getText());
+                }
+                if (!tuntipalkka.getText().isEmpty()) {
+                    profileChooser.getSelectionModel().getSelectedItem().setPay(Double.parseDouble(tuntipalkka.getText()));
+                }
+                if (!extraPayNameField.getText().isEmpty()) {
+                    extrapayChooser.getSelectionModel().getSelectedItem().setExtraPay(Double.parseDouble(extraPayNameField.getText()));
+                    UserDAO.save(extrapayChooser.getSelectionModel().getSelectedItem());
+                }
+
+                profileChooser.getSelectionModel().getSelectedItem().calculateEventPays();
+
+                UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
+
+                int profileIndex = profileChooser.getSelectionModel().getSelectedIndex();
+
+                loadValuesToProfileChooser();
+
+                profileChooser.getSelectionModel().select(profileIndex);
+
+                disableFields();
+                editButton.setText(buttons.getString("edit"));
+
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(alerts.getString("error"));
+                alert.setHeaderText(alerts.getString("fillAllFields"));
+                alert.showAndWait();
             }
-            if (!tuntipalkka.getText().isEmpty()) {
-                profileChooser.getSelectionModel().getSelectedItem().setPay(Double.parseDouble(tuntipalkka.getText()));
-            }
-            if (!extrapay.getText().isEmpty()) {
-                extrapayChooser.getSelectionModel().getSelectedItem().setExtraPay(Double.parseDouble(extrapay.getText()));
-                UserDAO.save(extrapayChooser.getSelectionModel().getSelectedItem());
-            }
-
-            profileChooser.getSelectionModel().getSelectedItem().calculateEventPays();
-
-            UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
-
-            profileChooser.getItems().add(profileChooser.getSelectionModel().getSelectedItem());
-            profileChooser.getSelectionModel().selectLast();
-
-            disableFields();
-            editButton.setText(buttons.getString("edit"));
 
         } else {
 
@@ -212,13 +222,13 @@ public class WorkProfileViewController implements Initializable {
 
                 if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
 
-                    extrapayChooser.getSelectionModel().getSelectedItem().setExtraPay(Double.parseDouble(extrapay.getText()));
+                    extrapayChooser.getSelectionModel().getSelectedItem().setExtraPay(Double.parseDouble(extraPayNameField.getText()));
 
                     UserDAO.save(extrapayChooser.getSelectionModel().getSelectedItem());
 
                 }
 
-                UserDAO.save(workProfile);
+                UserDAO.save(CurrentUser.getUser());
 
                 // Tallennetaan eventit uudelleen jos palkka extrapayt vaihtuu (palkka lasketaan tässä tilanteessa uudelleen)
                 if (!tuntipalkka.getText().isEmpty() || extrapayChooser.getSelectionModel().getSelectedItem() != null) {
@@ -244,6 +254,13 @@ public class WorkProfileViewController implements Initializable {
         }
     }
 
+    public boolean workProfileValidation() {
+        if (profileName.getText().isEmpty() || tuntipalkka.getText().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * We use this ActionEvent method to save a new additional pay
      *
@@ -255,8 +272,8 @@ public class WorkProfileViewController implements Initializable {
 
             if (!extrapayChooser.getSelectionModel().isEmpty() && timesAreValid()) { // if selected, updates
 
-                if (!extrapay.getText().isEmpty()) {
-                    extrapayChooser.getSelectionModel().getSelectedItem().setName(lisanNimi.getText());
+                if (!extraPayNameField.getText().isEmpty()) {
+                    extrapayChooser.getSelectionModel().getSelectedItem().setName(extraPayNameField.getText());
                 }
 
                 if (monday.isSelected()) {
@@ -302,67 +319,78 @@ public class WorkProfileViewController implements Initializable {
 
                 UserDAO.save(extrapayChooser.getSelectionModel().getSelectedItem());
 
+                loadValuesToExtrapayChooser();
+
             } else { // when no ExtraPay is selected, creates a new ExtraPay
 
-                if (!lisanNimi.getText().isEmpty() && timesAreValid()) {
+                if (!extraPayNameField.getText().isEmpty() && timesAreValid()) {
                     ExtraPay lisa = new ExtraPay();
-                    lisa.setName(lisanNimi.getText());
+                    lisa.setName(extraPayNameField.getText());
                     lisa.setBeginHour(setBeginHour.getSelectionModel().getSelectedItem());
                     lisa.setBeginMinute(setBeginMinute.getSelectionModel().getSelectedItem());
                     lisa.setEndHour(setEndHour.getSelectionModel().getSelectedItem());
                     lisa.setEndMinute(setEndMinute.getSelectionModel().getSelectedItem());
 
-                    WeekDays weekdays = new WeekDays();
+                    if (weekdaysValidation()) {
 
-                    if (monday.isSelected()) {
-                        weekdays.setMonday(true);
-                    } else {
-                        weekdays.setMonday(false);
-                    }
-                    if (tuesday.isSelected()) {
-                        weekdays.setTuesday(true);
-                    } else {
-                        weekdays.setTuesday(false);
-                    }
-                    if (wednesday.isSelected()) {
-                        weekdays.setWednesday(true);
-                    } else {
-                        weekdays.setWednesday(false);
-                    }
-                    if (thursday.isSelected()) {
-                        weekdays.setThursday(true);
-                    } else {
-                        weekdays.setThursday(false);
-                    }
-                    if (friday.isSelected()) {
-                        weekdays.setFriday(true);
-                    } else {
-                        weekdays.setFriday(false);
-                    }
-                    if (saturday.isSelected()) {
-                        weekdays.setSaturday(true);
-                    } else {
-                        weekdays.setSaturday(false);
-                    }
-                    if (sunday.isSelected()) {
-                        weekdays.setSunday(true);
-                    } else {
-                        weekdays.setSunday(false);
-                    }
+                        WeekDays weekdays = new WeekDays();
 
-                    lisa.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
-                    lisa.setWeekdays(weekdays);
-                    weekdays.setExtrapay(lisa);
-                    UserDAO.save(lisa);
+                        if (monday.isSelected()) {
+                            weekdays.setMonday(true);
+                        } else {
+                            weekdays.setMonday(false);
+                        }
+                        if (tuesday.isSelected()) {
+                            weekdays.setTuesday(true);
+                        } else {
+                            weekdays.setTuesday(false);
+                        }
+                        if (wednesday.isSelected()) {
+                            weekdays.setWednesday(true);
+                        } else {
+                            weekdays.setWednesday(false);
+                        }
+                        if (thursday.isSelected()) {
+                            weekdays.setThursday(true);
+                        } else {
+                            weekdays.setThursday(false);
+                        }
+                        if (friday.isSelected()) {
+                            weekdays.setFriday(true);
+                        } else {
+                            weekdays.setFriday(false);
+                        }
+                        if (saturday.isSelected()) {
+                            weekdays.setSaturday(true);
+                        } else {
+                            weekdays.setSaturday(false);
+                        }
+                        if (sunday.isSelected()) {
+                            weekdays.setSunday(true);
+                        } else {
+                            weekdays.setSunday(false);
+                        }
+
+                        lisa.setWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
+                        lisa.setWeekdays(weekdays);
+                        weekdays.setExtrapay(lisa);
+                        UserDAO.save(lisa);
+                        extrapayChooser.getItems().add(lisa);
+
+                        clearTextFieldsExtraPay();
+
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle(alerts.getString("error"));
+                        alert.setHeaderText(alerts.getString("chooseWeekdays"));
+                        alert.showAndWait();
+                    }
 
                     // Moved to here because no need to load values if adding failed
-                    clearTextFieldsExtraPay();
-                    loadValuesToExtrapayChooser();
-
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle(alerts.getString("error"));
-                    alert.setHeaderText(alerts.getString("error"));
+                    alert.setHeaderText(alerts.getString("fillAllFields"));
                     alert.showAndWait();
                 }
             }
@@ -370,10 +398,40 @@ public class WorkProfileViewController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR);
 
             alert.setTitle(alerts.getString("error"));
-            alert.setHeaderText(alerts.getString("error"));
+            alert.setHeaderText(alerts.getString("chooseProfile"));
             alert.showAndWait();
         }
 
+    }
+
+    private boolean weekdaysValidation() {
+        if (!monday.isSelected() && !tuesday.isSelected() && !wednesday.isSelected()
+                && !thursday.isSelected() && !friday.isSelected() && !saturday.isSelected() && !sunday.isSelected()) {
+            return false;
+        }
+        return true;
+    }
+
+    @FXML
+    void deleteWorkProfile() {
+        profileChooser.getSelectionModel().getSelectedItem().setIsDeleted(true);
+        UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
+        profileChooser.getItems().remove(profileChooser.getSelectionModel().getSelectedItem());
+        profileChooser.getSelectionModel().clearSelection();
+        for (WorkProfile w : CurrentUser.getWorkProfiles()) {
+            System.out.println(w.getName());
+        }
+    }
+
+    @FXML
+    private void deleteExtraPay() {
+        extrapayChooser.getSelectionModel().getSelectedItem().setIsDeleted(true);
+        UserDAO.save(extrapayChooser.getSelectionModel().getSelectedItem());
+        extrapayChooser.getItems().remove(extrapayChooser.getSelectionModel().getSelectedItem());
+        extrapayChooser.getSelectionModel().clearSelection();
+        for (ExtraPay e : profileChooser.getSelectionModel().getSelectedItem().getExtraPays()) {
+            System.out.println(e.getName());
+        }
     }
 
     /**
@@ -391,7 +449,7 @@ public class WorkProfileViewController implements Initializable {
         editButton.setText(buttons.getString("edit"));
         editButton.setDisable(true);
 
-        extrapay.setDisable(true);
+        extraPayNameField.setDisable(true);
 
     }
 
@@ -405,10 +463,8 @@ public class WorkProfileViewController implements Initializable {
 
         if (profileChooser.getSelectionModel().getSelectedItem() != null) {
 
-            currentWorkProfile = new CurrentWorkProfile(profileChooser.getSelectionModel().getSelectedItem());
-
             loadValuesToTextFields();
-            extrapay.clear();
+            extraPayNameField.clear();
 
             editButton.setDisable(false);
 
@@ -424,9 +480,9 @@ public class WorkProfileViewController implements Initializable {
     @FXML
     private void handleExtrapayChooserClick(ActionEvent event) {
         if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
-            extrapay.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtraPay()));
-
+            extraPayNameField.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtraPay()));
             loadValuesToExtrapayFields();
+            extraPayNameField.setDisable(true);
         }
     }
 
@@ -466,9 +522,9 @@ public class WorkProfileViewController implements Initializable {
         tuntipalkka.setText(Double.toString(profileChooser.getSelectionModel().getSelectedItem().getPay()));
 
         if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
-            extrapay.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtraPay()));
+            extraPayNameField.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtraPay()));
         } else {
-            extrapay.clear();
+            extraPayNameField.clear();
         }
 
         loadValuesToExtrapayChooser();
@@ -481,14 +537,14 @@ public class WorkProfileViewController implements Initializable {
     private void clearTextFieldsProfile() {
         profileName.clear();
         tuntipalkka.clear();
-        extrapay.clear();
+        extraPayNameField.clear();
     }
 
     /**
      * Clears text fields on the ExtraPay side
      */
     private void clearTextFieldsExtraPay() {
-        lisanNimi.clear();
+        extraPayNameField.clear();
         monday.setSelected(false);
         tuesday.setSelected(false);
         wednesday.setSelected(false);
@@ -510,7 +566,7 @@ public class WorkProfileViewController implements Initializable {
     private void disableFields() {
         profileName.setDisable(true);
         tuntipalkka.setDisable(true);
-        extrapay.setDisable(true);
+        extraPayNameField.setDisable(true);
     }
 
     /**
@@ -522,7 +578,7 @@ public class WorkProfileViewController implements Initializable {
         if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
             extrapayChooser.setDisable(false);
         }
-        extrapay.setDisable(false);
+        extraPayNameField.setDisable(true);
     }
 
     /**
@@ -530,7 +586,7 @@ public class WorkProfileViewController implements Initializable {
      */
     private void loadValuesToExtrapayFields() {
 
-        lisanNimi.setText(extrapayChooser.getSelectionModel().getSelectedItem().getName());
+        extraPayNameField.setText(extrapayChooser.getSelectionModel().getSelectedItem().getName());
 
         if (extrapayChooser.getSelectionModel().getSelectedItem().getWeekdays().isMonday()) {
             monday.setSelected(true);
@@ -595,10 +651,9 @@ public class WorkProfileViewController implements Initializable {
 
         profileList = CurrentUser.getWorkProfiles();
 
-        for (WorkProfile w : profileList) {
+        profileList.stream().filter((w) -> (w.isDeleted() == false)).forEachOrdered((w) -> {
             profileChooser.getItems().add(w);
-        }
-
+        });
     }
 
     /**
@@ -608,16 +663,13 @@ public class WorkProfileViewController implements Initializable {
 
         extrapayChooser.getItems().clear();
 
-        extrapayList = CurrentWorkProfile.getProfilesExtraPays();
+        extrapayList = profileChooser.getSelectionModel().getSelectedItem().getExtraPays();
 
         if (!extrapayList.isEmpty()) {
-
-            for (ExtraPay e : extrapayList) {
+            extrapayList.stream().filter((e) -> (e.isDeleted() == false)).forEachOrdered((e) -> {
                 extrapayChooser.getItems().add(e);
-            }
-
+            });
         }
-
     }
 
     /**
@@ -628,13 +680,13 @@ public class WorkProfileViewController implements Initializable {
 
             String tmp;
 
-            if(i < 10) {
+            if (i < 10) {
                 tmp = "0" + i;
             } else {
                 tmp = "" + i;
             }
 
-            if(i < 24) {
+            if (i < 24) {
                 setBeginHour.getItems().add(tmp);
                 setEndHour.getItems().add(tmp);
             }

@@ -5,7 +5,8 @@ import java.time.LocalTime;
 
 /**
  *
- * Palkkalisä luokka. Käytetään palkkalisien esittämiseen ja tallentamiseen. Liittyvät aina johonkin työprofiiliin.
+ * Palkkalisä luokka. Käytetään palkkalisien esittämiseen ja tallentamiseen.
+ * Liittyvät aina johonkin työprofiiliin.
  *
  */
 @Entity
@@ -35,15 +36,19 @@ public class ExtraPay {
     @Column(name = "endminute")
     private String endMinute;
 
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = WorkProfile.class)
+    @ManyToOne(targetEntity = WorkProfile.class)
     @JoinColumn(name = "workprofile_id")
     private WorkProfile workProfile;
 
-    @OneToOne(cascade = CascadeType.ALL, targetEntity = WeekDays.class)
+    @OneToOne(targetEntity = WeekDays.class)
     @JoinColumn(name = "weekdays_id")
     private WeekDays weekdays;
 
+    @Column(name = "isDeleted")
+    private boolean isDeleted;
+
     public ExtraPay() {
+        isDeleted = false;
     }
 
     // Tämä lisätty sitä varten että olisi helpompi tehdä ExtraPay olioita testeissä
@@ -131,6 +136,24 @@ public class ExtraPay {
         this.weekdays = weekdays;
     }
 
+    public double getExtrapay() {
+        return extrapay;
+    }
+
+    public void setExtrapay(double extrapay) {
+        this.extrapay = extrapay;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
     @Override
-    public String toString() { return getName(); }
+    public String toString() {
+        return getName();
+    }
 }

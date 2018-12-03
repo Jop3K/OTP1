@@ -7,13 +7,15 @@ package controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Month;
+import java.time.Year;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,13 +27,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import models.Calculation;
 import models.EventObservableDataList;
 import models.StatsModel;
 
 /**
  * FXML Controller class
  *
- * @author Artur, Joni
+ * @author Artur, Joni, Joonas
  */
 public class StatsViewController implements Initializable {
 
@@ -65,14 +68,19 @@ public class StatsViewController implements Initializable {
     @FXML
     private Button statsSettingsBtn;
     @FXML
-    private BarChart incomesByMonthsBarChart;
+    private BarChart incomesBarChart;
     @FXML
     private ComboBox incomeDropdown;
     @FXML
     private ComboBox workshiftDropdown;
-
+    @FXML
+    private ComboBox<Year> yearPick;
+    @FXML
+    private ComboBox monthPick;
+    
     private EventObservableDataList data;
     private StatsModel statsModel;
+    private final String SHOW_ALL = "Näytä kaikki";
 
     public StatsViewController() {
         statsModel = new StatsModel();
@@ -88,14 +96,36 @@ public class StatsViewController implements Initializable {
 
         setLabels();
         setButtons();
+        setComboBoxes();
 
-        data.getInstance().addListener((ListChangeListener)(c -> {statsModel.updateAllData();}));
-        incomesByMonthsBarChart = statsModel.setUpIncomesByMonthsBarChart(incomesByMonthsBarChart);
-    
+        data.getInstance().addListener((ListChangeListener)(c -> {
+        	statsModel.updateAllData(Year.now(), null);
+        	setComboBoxes();
+        	
+        }));
+        incomesBarChart = statsModel.setUpIncomesBarChart(incomesBarChart);
+        
       
     }
 
-    public void setLabels() {
+    private void setComboBoxes() {
+    	monthPick.getItems().clear();
+    	yearPick.getItems().clear();
+    	
+		List<Year> yearsFromEvents = Calculation.FindYearsFromEvents();
+		monthPick.getItems().add(SHOW_ALL);
+		for (Year y : yearsFromEvents){
+			yearPick.getItems().add(y);
+		}
+		for (Month m : Month.values()){
+			monthPick.getItems().add(m);
+		}
+		yearPick.setValue(Year.now());
+		monthPick.setValue(SHOW_ALL);
+		
+	}
+
+	public void setLabels() {
         stats.setText(labels.getString("stats"));
         revenue.setText(labels.getString("revenue"));
         incomeDropdown.getItems().add(labels.getString("today"));
@@ -109,7 +139,7 @@ public class StatsViewController implements Initializable {
         workshiftDropdown.getItems().add(labels.getString("month"));
         workshiftDropdown.getItems().add(labels.getString("year"));
         workShifts.setText(labels.getString("workShifts"));
-        incomesByMonthsBarChart.setTitle(labels.getString("yearlyIncome"));
+        incomesBarChart.setTitle(labels.getString("yearlyIncome"));
         //settings.setText(labels.getString("settings"));
         //payLimit.setText(labels.getString("payLimit"));
         //currency.setText(labels.getString("currency"));
@@ -132,7 +162,7 @@ public class StatsViewController implements Initializable {
     	        
     	        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
     	        Stage stage = new Stage();
-    	        stage.setTitle("Tilaston asetukset");
+    	        stage.setTitle(labels.getString("statsSettings"));
     	        stage.setScene(scene);
     	        stage.show();
     	    } catch (IOException er) {
@@ -142,4 +172,30 @@ public class StatsViewController implements Initializable {
      
     }
     
+    public void populateBarChartFromYearPick(){
+    	
+    		Year year =  yearPick.getSelectionModel().getSelectedItem();
+    	
+	    	if(!monthPick.getSelectionModel().getSelectedItem().equals(SHOW_ALL)) {
+	    		
+	    	monthPick.setValue(SHOW_ALL); //Reseting monthPick dropdown
+	    	statsModel.updateAllData(year, null);
+	    	}
+	    	else{
+	    		statsModel.updateAllData(year, null);
+	    	}
+    	}
+     
+    
+    public void populateBarChartFromMonthPick(){
+    	Year year = (Year)yearPick.getSelectionModel().getSelectedItem();
+    	
+    	if(monthPick.getSelectionModel().getSelectedItem().equals(SHOW_ALL)) {
+    		statsModel.updateAllData(year, null);
+    	}
+    	else {
+    		Month month = (Month) monthPick.getSelectionModel().getSelectedItem();
+	    	statsModel.updateAllData(year, month);
+    	}
+    }
 }

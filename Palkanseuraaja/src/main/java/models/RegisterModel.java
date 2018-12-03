@@ -1,6 +1,8 @@
 package models;
 
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -41,12 +43,22 @@ public class RegisterModel {
             alert.setHeaderText(alerts.getString("fillMandatoryFields"));
 
             return false;
-        } //Salasanan validaation
-        else if (!tmp.getPw1().equals(tmp.getPw2())) {
+        }
+
+        //Salasanan validaation
+        if (!tmp.getPw1().equals(tmp.getPw2())) {
 
             Alert pwAlert = new Alert(Alert.AlertType.ERROR);
             pwAlert.setTitle(alerts.getString("error"));
             pwAlert.setHeaderText(alerts.getString("passwordsDontMatch"));
+            this.alert = pwAlert;
+            return false;
+        }
+
+        if(tmp.getPw1().length() < 4 ) {
+            Alert pwAlert = new Alert(Alert.AlertType.ERROR);
+            pwAlert.setTitle(alerts.getString("error"));
+            pwAlert.setHeaderText(alerts.getString("passwordTooShort"));
             this.alert = pwAlert;
             return false;
         }
@@ -58,6 +70,29 @@ public class RegisterModel {
             unameAlert.setTitle(alerts.getString("error"));
             unameAlert.setHeaderText(alerts.getString("usernameTooShort"));
             this.alert = unameAlert;
+            return false;
+        }
+
+        //Jos nimet on alle kolme merkkiä
+        if(tmp.fName.length() < 3 || tmp.lName.length() < 3) {
+            Alert nameAlert = new Alert(AlertType.ERROR);
+            nameAlert.setTitle(alerts.getString("error"));
+            nameAlert.setHeaderText(alerts.getString("nameTooShort"));
+            this.alert = nameAlert;
+            return false;
+        }
+
+        Pattern p = Pattern.compile("[^a-z ]", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(fName);
+        Matcher m2 = p.matcher(lName);
+        boolean fNameWrong = m.find();
+        boolean lNameWrong = m2.find();
+
+        if(fNameWrong || lNameWrong) {
+            Alert nameAlert = new Alert(AlertType.ERROR);
+            nameAlert.setTitle(alerts.getString("error"));
+            nameAlert.setHeaderText(alerts.getString("nameIllegalChars"));
+            this.alert = nameAlert;
             return false;
         }
 
