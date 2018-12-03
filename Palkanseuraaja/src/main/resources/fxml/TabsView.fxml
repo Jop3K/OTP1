@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -28,11 +29,10 @@
                 </Tab>
             </tabs>
         </TabPane>
-      <MenuButton fx:id="userSettingsMenu" layoutX="1150.0" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="129.0" text="User">
-        <items>
-          <MenuItem mnemonicParsing="false" text="Action 1" />
-          <MenuItem mnemonicParsing="false" text="Action 2" />
-        </items>
-      </MenuButton>
+      <Button fx:id="logoutButton" layoutX="1150.0" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Kirjaudu ulos">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>
