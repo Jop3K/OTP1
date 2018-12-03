@@ -1,6 +1,5 @@
 package views;
 
-import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

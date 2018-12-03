@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -27,11 +26,6 @@
                 </Tab>
             </tabs>
         </TabPane>
-      <MenuButton fx:id="userSettingsMenu" layoutX="1150.0" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="129.0" text="User">
-        <items>
-          <MenuItem fx:id="userSettingsItem" mnemonicParsing="false" onAction="#openUserSettings" text="Asetukset" />
-          <MenuItem fx:id="userLogoutItem" mnemonicParsing="false" text="Kirjaudu ulos" />
-        </items>
-      </MenuButton>
+      <Button fx:id="logoutButton" layoutX="1190.0" layoutY="2.0" mnemonicParsing="false" onAction="#logoutButtonHandler" text="Log Out" />
     </children>
 </AnchorPane>

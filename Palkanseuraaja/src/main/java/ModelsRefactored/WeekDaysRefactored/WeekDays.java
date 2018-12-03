@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package ModelsRefactored;
+package ModelsRefactored.WeekDaysRefactored;
 
 import java.time.DayOfWeek;
 import javax.persistence.CascadeType;
@@ -15,10 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import models.ExtraPay;
 
-/**
- *
- * @author Artur
- */
 public class WeekDays implements IWeekDays {
 
     @Id

@@ -1,6 +1,7 @@
 package models;
 
 import application.Main;
+import controllers.LoginController;
 import java.io.IOException;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -8,8 +9,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import views.LoginView;
 
 // luokka joka vaihtaa näkymiä
 public class ViewChanger {
@@ -43,7 +44,7 @@ public class ViewChanger {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
+
         stage.setOnCloseRequest(e -> {
             Platform.exit();
             System.exit(0);
@@ -52,12 +53,22 @@ public class ViewChanger {
     }
 
     public void viewBuilder(Parent ikkuna) {
-
         Scene window = new Scene(ikkuna, 800, 800);
-
+        Stage stage = new Stage();
         stage.setScene(window);
-
         stage.show();
+    }
+
+    public void switchToLoginView(ViewChanger viewChanger) {
+        LoginView loginView = new LoginView();
+        LoginModel loginModel = new LoginModel();
+        LoginController loginController = new LoginController(loginView, loginModel, viewChanger);
+        viewChanger.viewBuilder(loginView.getView());
+
+        viewChanger.getStage().setOnCloseRequest(e -> {
+            Platform.exit();
+            System.exit(0);
+        });
     }
 
     public Stage getStage() {

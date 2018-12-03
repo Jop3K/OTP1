@@ -1,21 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package ModelsRefactored;
+package ModelsRefactored.UserRefactored;
 
 import java.util.ArrayList;
 import java.util.List;
-import models.CurrentUser;
 import models.EventModel;
 import models.User;
 import models.WorkProfile;
 
-/**
- *
- * @author Artur
- */
 public enum CurrentUserRefactored implements ICurrentUser {
 
     INSTANCE;

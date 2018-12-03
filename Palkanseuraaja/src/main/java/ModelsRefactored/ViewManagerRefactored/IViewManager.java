@@ -3,12 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ModelsRefactored;
+package ModelsRefactored.ViewManagerRefactored;
+
+import javafx.stage.Stage;
 
 /**
  *
  * @author Artur
  */
-public class UserRefactored extends AbstractUserRefactored {
+public interface IViewManager {
+    
+    public void setStage(Stage stage);
+    public void closeStage();
     
 }

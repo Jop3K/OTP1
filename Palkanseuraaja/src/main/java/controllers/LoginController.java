@@ -1,6 +1,5 @@
 package controllers;
 
-import models.ViewChanger;
 import dataAccessObjects.UserDAO;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -8,28 +7,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import models.EventModel;
 import models.LoginModel;
-import models.RegisterModel;
 import views.LoginView;
-import views.RegisterView;
 
 public class LoginController {
 
-    
-    private ViewChanger viewChanger;
-    private LoginView loginView;
-    private LoginModel loginModel;
+    private final LoginView loginView;
+    private final LoginModel loginModel;
 
     /**
      * The constructor for LoginController
-     * @param loginView 
-     * @param loginModel 
-     * @param viewChanger for changing the View when logging in successfully 
+     *
+     * @param loginView
+     * @param loginModel
      */
-    public LoginController(LoginView loginView, LoginModel loginModel, ViewChanger viewChanger) {
-        
-        this.viewChanger = viewChanger;
+    public LoginController(LoginView loginView, LoginModel loginModel) {
         this.loginModel = loginModel;
         this.loginView = loginView;
         //Lisätään listenerit loginViewin buttoneille
@@ -40,6 +32,7 @@ public class LoginController {
 
     /**
      * The class we use for handling the register button onclick event
+     *
      * @author Joni, Artur, Joonas
      *
      */
@@ -48,11 +41,7 @@ public class LoginController {
         @Override
         //Ohjaa registerViewiin
         public void handle(Event event) {
-
-            RegisterView registerView = new RegisterView();
-            RegisterModel registerModel = new RegisterModel();
-            RegisterController registerViewController = new RegisterController(registerView, registerModel, viewChanger);
-            viewChanger.viewBuilder(registerView.getView());
+            ModelsRefactored.ViewManagerRefactored.ViewManager.INSTANCE.switchToRegisterView();
             //sulkee tietokantayhteyden
         }
 
@@ -61,14 +50,15 @@ public class LoginController {
 
     /**
      * The class we use for handling the "Login" button onclick event
+     *
      * @author Joni, Artur, Joonas
-     * 
+     *
      */
     class LoginButtonListener implements EventHandler {
 
-    	/**
-    	 * Method for handling the login event
-    	 */
+        /**
+         * Method for handling the login event
+         */
         @Override
         public void handle(Event arg0) {
             //Varmistaa, että kumpikaan kentistä ei ole tyhjä
@@ -80,10 +70,7 @@ public class LoginController {
                         //Kirjautuminen onnistui ja luodaan ilmoitus siitä.
                         //loginView.showAlert(dao.getAlert());
                         //Ohjataan ohjelmaan
-                        EventModel eventModel = new EventModel();
-                        CalendarViewController calendarViewController = new CalendarViewController();
-                        viewChanger.switchStage("/fxml/TabsView.fxml", viewChanger);
-
+                        ModelsRefactored.ViewManagerRefactored.ViewManager.INSTANCE.switchToApplicationView();
                     } else {
                         //Kirjautuminen epäonnistui. Ilmoitetaan siitä
                         loginView.showAlert(UserDAO.getAlert());

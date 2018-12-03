@@ -11,11 +11,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.stage.Stage;
 import models.CurrentUser;
+import models.ViewChanger;
 
 /**
  * FXML Controller class
@@ -26,7 +26,7 @@ public class TabsViewController implements Initializable {
 
     private ResourceBundle labels;
     private ResourceBundle alerts;
-
+    
     @FXML
     private Tab calendarTab;
     @FXML
@@ -34,11 +34,9 @@ public class TabsViewController implements Initializable {
     @FXML
     private Tab statsTab;
     @FXML
-    private MenuButton userSettingsMenu;
+    private Button logoutButton;
+
     @FXML
-    private MenuItem userSettingsItem;
-    @FXML
-    private MenuItem userLogoutItem;
 
     /**
      * Initializes the controller class.
@@ -51,14 +49,15 @@ public class TabsViewController implements Initializable {
         calendarTab.setText(labels.getString("calendar"));
         profileTab.setText(labels.getString("workProfile"));
         statsTab.setText(labels.getString("statistics"));
-        userSettingsItem.setText(labels.getString("userSettings"));
-        userLogoutItem.setText(labels.getString("logout"));
-
-        userSettingsMenu.setText(CurrentUser.getUser().getUsername());
+        logoutButton.setText(labels.getString("logout"));
+        
     }
 
-    public void refresh() {
-        //TODO
+    @FXML
+    public void logoutButtonHandler() {
+        CurrentUser.setUser(null);
+        ModelsRefactored.ViewManagerRefactored.ViewManager.INSTANCE.closeStage();
+        ModelsRefactored.ViewManagerRefactored.ViewManager.INSTANCE.switchToLoginView();
     }
 
     public void openUserSettings(ActionEvent event) {
