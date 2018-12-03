@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
@@ -33,6 +34,8 @@ public class TabsViewController implements Initializable {
     private Tab profileTab;
     @FXML
     private Tab statsTab;
+    @FXML
+    private Button logoutButton;
 
     /**
      * Initializes the controller class.
@@ -52,21 +55,9 @@ public class TabsViewController implements Initializable {
         //TODO
     }
 
-    public void openUserSettings(ActionEvent event) {
+    public void logoutEvent(ActionEvent event) {
 
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getResource("/fxml/UserSettingsView.fxml"));
-
-            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-            Stage stage = new Stage();
-            stage.setTitle(labels.getString("userSettings"));
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException er) {
-            Logger logger = Logger.getLogger(getClass().getName());
-            logger.log(Level.SEVERE, alerts.getString("failedToCreateWindow"), er);
-        }
+    	
     }
 
 }
