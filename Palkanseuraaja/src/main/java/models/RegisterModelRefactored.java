@@ -54,7 +54,7 @@ public class RegisterModelRefactored implements IValidationModel {
         }
 
         //Salasanan validaation
-        if (pw1.equals(pw2)) {
+        if (!pw1.equals(pw2)) {
 
             Alert pwAlert = new Alert(Alert.AlertType.ERROR);
             pwAlert.setTitle(alerts.getString("error"));

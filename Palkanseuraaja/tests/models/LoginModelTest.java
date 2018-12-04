@@ -13,19 +13,21 @@ public class LoginModelTest {
 	LoginModel fail;
 	@Before
 	public void setUp() throws Exception {
-		fail = new LoginModel();
 	}
 
 	@Test
 	@TestInJfxThread
 	public void testLoginFieldValidation() {
-		assertFalse(fail.loginFieldValidation("", "password"));
+                fail = new LoginModel("", "password");
+		assertFalse(fail.loginFieldValidation());
 		assertEquals(fail.getAlert().getHeaderText(), "Syötä käyttäjätunnus ja salasana");
 		
-		assertFalse(fail.loginFieldValidation("username", ""));
+                fail = new LoginModel("username", "");
+		assertFalse(fail.loginFieldValidation());
 		assertEquals(fail.getAlert().getHeaderText(), "Syötä käyttäjätunnus ja salasana");
 		
-		assertTrue(fail.loginFieldValidation("username", "password"));
+                fail = new LoginModel("username", "password");
+		assertTrue(fail.loginFieldValidation());
 		
 	}
 
