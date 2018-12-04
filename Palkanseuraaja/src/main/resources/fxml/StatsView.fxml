@@ -124,7 +124,7 @@
                <GridPane.margin>
                   <Insets bottom="90.0" left="200.0" />
                </GridPane.margin></ComboBox>
-            <Label text="Vuosi">
+            <Label fx:id="year" text="Vuosi">
                <GridPane.margin>
                   <Insets bottom="160.0" left="200.0" />
                </GridPane.margin>
@@ -132,7 +132,7 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label text="Kuukausi">
+            <Label fx:id="month" text="Kuukausi">
                <GridPane.margin>
                   <Insets bottom="160.0" left="50.0" />
                </GridPane.margin>

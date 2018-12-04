@@ -441,8 +441,11 @@ public class WorkProfileViewController implements Initializable {
 
     @FXML
     private void newExtraPayButtonHandler() {
+        extrapayChooser.getSelectionModel().clearSelection();
         clearTextFieldsExtraPay();
         enableExtraPayFields();
+        editExtraPayButton.setText(buttons.getString("cancel"));
+        editExtraPayButton.setDisable(false);
     }
 
     @FXML
@@ -450,9 +453,11 @@ public class WorkProfileViewController implements Initializable {
         if (editExtraPayButton.getText().equals(buttons.getString("edit"))) {
             enableExtraPayFields();
             editExtraPayButton.setText(buttons.getString("cancel"));
+            saveLisa.setDisable(false);
         } else {
             disableExtraPayFields();
             editExtraPayButton.setText(buttons.getString("edit"));
+            saveLisa.setDisable(true);
         }
     }
 
@@ -487,6 +492,7 @@ public class WorkProfileViewController implements Initializable {
         setEndMinute.setDisable(true);
         extraPayField.setDisable(true);
         editExtraPayButton.setText(buttons.getString("edit"));
+        editExtraPayButton.setDisable(true);
     }
 
     private boolean weekdaysValidation() {
@@ -570,6 +576,8 @@ public class WorkProfileViewController implements Initializable {
             extraPayNameField.setText(Double.toString(extrapayChooser.getSelectionModel().getSelectedItem().getExtraPay()));
             loadValuesToExtrapayFields();
             disableExtraPayFields();
+            editExtraPayButton.setDisable(false);
+            saveLisa.setDisable(true);
         }
     }
 

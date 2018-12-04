@@ -77,10 +77,14 @@ public class StatsViewController implements Initializable {
     private ComboBox<Year> yearPick;
     @FXML
     private ComboBox monthPick;
+    @FXML
+    private Label month;
+    @FXML
+    private Label year;
     
     private EventObservableDataList data;
     private StatsModel statsModel;
-    private final String NOT_CHOOSED = "Ei valittu";
+    private String NOT_CHOOSED;
 
     public StatsViewController() {
         statsModel = new StatsModel();
@@ -93,6 +97,7 @@ public class StatsViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         labels = ResourceBundle.getBundle("LabelsBundle");
         buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
+        NOT_CHOOSED = labels.getString("notChosen");
 
         setLabels();
         setButtons();
@@ -143,6 +148,8 @@ public class StatsViewController implements Initializable {
         //settings.setText(labels.getString("settings"));
         //payLimit.setText(labels.getString("payLimit"));
         //currency.setText(labels.getString("currency"));
+        month.setText(labels.getString("month"));
+        year.setText(labels.getString("year"));
     }
 
     public void setButtons() {
