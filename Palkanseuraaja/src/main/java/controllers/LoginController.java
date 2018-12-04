@@ -1,6 +1,7 @@
 package controllers;
 
 import dataAccessObjects.UserDAO;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.logging.Level;
@@ -12,7 +13,7 @@ import views.LoginView;
 
 public class LoginController {
 
-    private LoginView loginView;
+    private final LoginView loginView;
 
     /**
      * The constructor for LoginController
@@ -77,7 +78,7 @@ public class LoginController {
                         //Kirjautuminen epäonnistui. Ilmoitetaan siitä
                         loginView.showAlert(UserDAO.getAlert());
                     }
-                } catch (NoSuchAlgorithmException | NoSuchProviderException ex) {
+                } catch (NoSuchAlgorithmException | NoSuchProviderException | IOException ex) {
                     Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {

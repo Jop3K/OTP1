@@ -5,10 +5,10 @@ import javafx.scene.control.Alert;
 
 public class LoginModel {
 
-    private String username;
-    private String password;
+    private final String username;
+    private final String password;
     
-    private ResourceBundle alerts;
+    private final ResourceBundle alerts;
     private Alert alert;
 
     public LoginModel(String username, String password) {
