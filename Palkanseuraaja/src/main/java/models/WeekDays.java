@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "weekdays")
 
-public class WeekDays {
+public class WeekDays implements IWeekDays {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +41,7 @@ public class WeekDays {
     public WeekDays() {
     }
 
+    @Override
     public boolean isDayOfWeek(DayOfWeek dow) {
         switch (dow) {
             case MONDAY:

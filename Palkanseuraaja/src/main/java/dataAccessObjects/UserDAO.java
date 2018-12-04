@@ -8,10 +8,9 @@ import org.hibernate.Hibernate;
 import java.util.ResourceBundle;
 import org.hibernate.criterion.Restrictions;
 import javafx.scene.control.Alert;
-import models.CurrentUser;
 import models.EventModel;
 import models.ExtraPay;
-import models.PasswordHashing;
+import models.PasswordHashingModelRefactored;
 import models.User;
 import models.WeekDays;
 import models.WorkProfile;
@@ -19,7 +18,6 @@ import org.hibernate.query.Query;
 
 public class UserDAO extends DataAccessObject {
 
-    private static CurrentUser currentUser;
     private static Alert alert;
     private static ResourceBundle alerts;
 
@@ -35,11 +33,12 @@ public class UserDAO extends DataAccessObject {
 
         openCurrentSession();
         Query q = getCurrentSession().createQuery("FROM User WHERE username='" + username + "'");
-        currentUser = new CurrentUser((User) q.uniqueResult());
+        models.CurrentUserRefactored.INSTANCE.setUser((User) q.uniqueResult());
 
         closeCurrentSession();
 
-        if (currentUser.getUser() == null || !(currentUser.getUser().getPassword().equals(new PasswordHashing().get_SHA_256_SecurePassword(password, currentUser.getUser().getSalt().getBytes())))) {
+        if (models.CurrentUserRefactored.INSTANCE.getUser() == null
+                || !(models.CurrentUserRefactored.INSTANCE.getUser().getPassword().equals(new PasswordHashingModelRefactored().get_SHA_256_SecurePassword(password, models.CurrentUserRefactored.INSTANCE.getUser().getSalt().getBytes())))) {
             alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle(alerts.getString("loginFailed"));
             alert.setHeaderText(alerts.getString("checkUsernamePassword"));
@@ -47,7 +46,7 @@ public class UserDAO extends DataAccessObject {
             return false;
         }
 
-        currentUser.setWorkProfiles(getUsersWorkProfilesFromDatabase());
+        models.CurrentUserRefactored.INSTANCE.setWorkProfiles(getUsersWorkProfilesFromDatabase());
 
         alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(alerts.getString("loginSuccessful"));
@@ -160,18 +159,15 @@ public class UserDAO extends DataAccessObject {
         List users = openCurrentSession().createCriteria(User.class)
                 .add(Restrictions.eq("username", user.getUsername())).list();
         closeCurrentSession();
-
         //Jos käyttäjiä ei löytynyt
-        if (users.isEmpty()) {
-            return true;
-        }
-        return false;
+
+        return users.isEmpty();
     }
 
     public static List<WorkProfile> getUsersWorkProfilesFromDatabase() {
 
         openCurrentSession();
-        Query q = getCurrentSession().createQuery("FROM WorkProfile WHERE user_id='" + CurrentUser.getUser().getId() + "'");
+        Query q = getCurrentSession().createQuery("FROM WorkProfile WHERE user_id='" + models.CurrentUserRefactored.INSTANCE.getUser().getId() + "'");
 
         List<WorkProfile> profiles = q.list();
 

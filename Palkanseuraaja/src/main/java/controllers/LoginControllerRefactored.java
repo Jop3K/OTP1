@@ -39,7 +39,7 @@ public class LoginControllerRefactored {
         @Override
         //Ohjaa registerViewiin
         public void handle(Event event) {
-            ModelsRefactored.ViewManagerRefactored.ViewManager.INSTANCE.switchToRegisterView();
+            models.ViewManager.INSTANCE.switchToRegisterView();
             //sulkee tietokantayhteyden
         }
 
@@ -69,7 +69,7 @@ public class LoginControllerRefactored {
                         //Kirjautuminen onnistui ja luodaan ilmoitus siitä.
                         //loginView.showAlert(dao.getAlert());
                         //Ohjataan ohjelmaan
-                        ModelsRefactored.ViewManagerRefactored.ViewManager.INSTANCE.switchToApplicationView();
+                        models.ViewManager.INSTANCE.switchToApplicationView();
                     } else {
                         //Kirjautuminen epäonnistui. Ilmoitetaan siitä
                         loginView.showAlert(UserDAO.getAlert());

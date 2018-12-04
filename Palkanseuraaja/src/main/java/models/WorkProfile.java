@@ -55,9 +55,9 @@ public class WorkProfile {
     public void calculateEventPays() {
         List<EventModel> events = EventObservableDataList.getInstance();
 
-        for (EventModel event : events) {
+        events.forEach((event) -> {
             event.calcPay();
-        }
+        });
     }
 
     public String getName() {
@@ -90,14 +90,6 @@ public class WorkProfile {
 
     public void setEvents(List<EventModel> events) {
         this.events = events;
-    }
-
-    public List<ExtraPay> getExtrapays() {
-        return extrapays;
-    }
-
-    public void setExtrapays(List<ExtraPay> extrapays) {
-        this.extrapays = extrapays;
     }
 
     public boolean isDeleted() {

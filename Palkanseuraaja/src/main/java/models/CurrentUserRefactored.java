@@ -1,10 +1,7 @@
-package ModelsRefactored.UserRefactored;
+package models;
 
 import java.util.ArrayList;
 import java.util.List;
-import models.EventModel;
-import models.User;
-import models.WorkProfile;
 
 public enum CurrentUserRefactored implements ICurrentUser {
 
@@ -24,21 +21,18 @@ public enum CurrentUserRefactored implements ICurrentUser {
     }
 
     @Override
-    public void reset() {
+    public void nullUser() {
         user = null;
     }
 
-    @Override
     public void setWorkProfiles(List<WorkProfile> profileList) {
         this.profileList = profileList;
     }
 
-    @Override
     public List<WorkProfile> getWorkProfiles() {
         return profileList;
     }
 
-    @Override
     public List<EventModel> getAllEvents() {
         List<EventModel> eventList = new ArrayList<>();
         profileList.forEach((w) -> {

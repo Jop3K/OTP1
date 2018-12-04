@@ -240,7 +240,7 @@ public class WorkProfileViewController implements Initializable {
                 WorkProfile workProfile = new WorkProfile();
 
                 workProfile.setName(profileName.getText());
-                workProfile.setUser(CurrentUser.getUser());
+                workProfile.setUser(models.CurrentUserRefactored.INSTANCE.getUser());
 
                 try {
                     if (!tuntipalkka.getText().isEmpty()) {
@@ -503,7 +503,7 @@ public class WorkProfileViewController implements Initializable {
         UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
         profileChooser.getItems().remove(profileChooser.getSelectionModel().getSelectedItem());
         profileChooser.getSelectionModel().clearSelection();
-        for (WorkProfile w : CurrentUser.getWorkProfiles()) {
+        for (WorkProfile w : models.CurrentUserRefactored.INSTANCE.getWorkProfiles()) {
             System.out.println(w.getName());
         }
     }
@@ -735,7 +735,7 @@ public class WorkProfileViewController implements Initializable {
     private void loadValuesToProfileChooser() {
         profileChooser.getItems().clear();
 
-        profileList = CurrentUser.getWorkProfiles();
+        profileList = models.CurrentUserRefactored.INSTANCE.getWorkProfiles();
 
         profileList.stream().filter((w) -> (w.isDeleted() == false)).forEachOrdered((w) -> {
             profileChooser.getItems().add(w);

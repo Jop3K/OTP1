@@ -1,4 +1,4 @@
-package ModelsRefactored.ViewManagerRefactored;
+package models;
 
 import application.Main;
 import controllers.LoginControllerRefactored;
@@ -10,7 +10,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import models.CurrentUser;
 import views.LoginView;
 import views.RegisterView;
 
@@ -68,7 +67,7 @@ public enum ViewManager implements IViewManager {
     public void switchToApplicationView() throws IOException {
         Scene window = new Scene(FXMLLoader.load(Main.class.getResource("/fxml/TabsView.fxml")));
         stage.setScene(window);
-        stage.setTitle(labels.getString("title") + " v0.03a // " + labels.getString("username") + ": " + CurrentUser.getUser().getUsername());
+        stage.setTitle(labels.getString("title") + " v0.03a // " + labels.getString("username") + ": " + models.CurrentUserRefactored.INSTANCE.getUser().getUsername());
         stage.getIcons().add(new Image("/img/salarypal.png"));
         stage.show();
 

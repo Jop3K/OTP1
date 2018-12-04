@@ -29,14 +29,11 @@ public class Main extends Application {
         Locale.setDefault(new Locale("is"));
         stage.getIcons().add(new Image("/img/salarypal.png"));
         stage.setTitle(ResourceBundle.getBundle("MessagesBundle").getString("welcome"));
-        
+
         UserDAO dao = new UserDAO();
-        
-        ModelsRefactored.ViewManagerRefactored.ViewManager viewChanger = ModelsRefactored.ViewManagerRefactored.ViewManager.INSTANCE;
 
-        viewChanger.setStage(stage);
-        viewChanger.switchToLoginView();
-
+        models.ViewManager.INSTANCE.setStage(stage);
+        models.ViewManager.INSTANCE.switchToLoginView();
     }
 
     /**

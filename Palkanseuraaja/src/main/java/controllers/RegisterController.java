@@ -43,7 +43,7 @@ public class RegisterController {
 
         @Override
         public void handle(Event event) {
-            ModelsRefactored.ViewManagerRefactored.ViewManager.INSTANCE.switchToLoginView();
+            models.ViewManager.INSTANCE.switchToLoginView();
             //suljetaan tietokantayhteys
         }
     }
@@ -85,7 +85,7 @@ public class RegisterController {
                         //ilmoitetaan onnistumisesta
                         registerView.showAlert(UserDAO.getAlert());
                         //Ohjataan takaisin loginiin
-                        ModelsRefactored.ViewManagerRefactored.ViewManager.INSTANCE.switchToLoginView();
+                        models.ViewManager.INSTANCE.switchToLoginView();
                     } else {
                         //Ilmoitetaan käyttäjätunnuksen olevan varattu
                         registerView.showAlert(UserDAO.getAlert());

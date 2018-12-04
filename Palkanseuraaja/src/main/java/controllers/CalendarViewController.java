@@ -26,7 +26,6 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import models.CurrentCalendarViewController;
-import models.CurrentUser;
 import models.EventModel;
 import models.EventObservableDataList;
 import models.WorkProfile;
@@ -228,7 +227,7 @@ public class CalendarViewController implements Initializable {
             connection.setFill(Color.GREEN);
             loadGoogleCalendarsToCombobox();
             for (CalendarListEntry c : googleCalendarsDropdown.getItems()) {
-                if (c.getId().equals(CurrentUser.getUser().getDefaultGoogleCalendarId())) {
+                if (c.getId().equals(models.CurrentUserRefactored.INSTANCE.getUser().getDefaultGoogleCalendarId())) {
                     googleCalendarsDropdown.getSelectionModel().select(c);
                 } else {
                     if (c.isPrimary()) {
@@ -473,7 +472,7 @@ public class CalendarViewController implements Initializable {
 
         profileChooser.getItems().clear();
 
-        for (WorkProfile w : CurrentUser.getWorkProfiles()) {
+        for (WorkProfile w : models.CurrentUserRefactored.INSTANCE.getWorkProfiles()) {
             profileChooser.getItems().add(w);
         }
 
@@ -506,11 +505,11 @@ public class CalendarViewController implements Initializable {
     public void setDefaultCalendar() {
         if (GoogleCalendar.isConnected()) {
             if (googleCalendarsDropdown.getSelectionModel().getSelectedItem() != null) {
-                CurrentUser.getUser().setDefaultGoogleCalendarId(googleCalendarsDropdown.getSelectionModel().getSelectedItem().getId());
-                UserDAO.update(CurrentUser.getUser());
+                models.CurrentUserRefactored.INSTANCE.getUser().setDefaultGoogleCalendarId(googleCalendarsDropdown.getSelectionModel().getSelectedItem().getId());
+                UserDAO.update(models.CurrentUserRefactored.INSTANCE.getUser());
             }
         }
-        System.out.println(CurrentUser.getUser().getDefaultGoogleCalendarId());
+        System.out.println(models.CurrentUserRefactored.INSTANCE.getUser().getDefaultGoogleCalendarId());
     }
 
     /**

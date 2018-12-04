@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
-import models.CurrentUser;
 
 /**
  * FXML Controller class
@@ -43,9 +42,9 @@ public class TabsViewController implements Initializable {
 
     @FXML
     public void logoutButtonHandler() {
-        CurrentUser.setUser(null);
-        ModelsRefactored.ViewManagerRefactored.ViewManager.INSTANCE.clearLoginViewFields();
-        ModelsRefactored.ViewManagerRefactored.ViewManager.INSTANCE.switchToLoginView();
+        models.CurrentUserRefactored.INSTANCE.setUser(null);
+        models.ViewManager.INSTANCE.clearLoginViewFields();
+        models.ViewManager.INSTANCE.switchToLoginView();
     }
 
 }

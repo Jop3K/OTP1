@@ -1,4 +1,4 @@
-package ModelsRefactored.WeekDaysRefactored;
+package models;
 
 import java.time.DayOfWeek;
 

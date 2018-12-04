@@ -18,7 +18,7 @@ public class RegisterModelRefactored implements IValidationModel {
     private String pw1;
     private String pw2;
 
-    private PasswordHashing passwordHashing;
+    private PasswordHashingModelRefactored passwordHashing;
 
     private ResourceBundle alerts;
     private Alert alert;
@@ -33,7 +33,7 @@ public class RegisterModelRefactored implements IValidationModel {
         this.pw1 = pw1;
         this.pw2 = pw2;
 
-        passwordHashing = new PasswordHashing();
+        passwordHashing = new PasswordHashingModelRefactored();
 
         alerts = ResourceBundle.getBundle("AlertMessagesBundle");
         alert = new Alert(null);

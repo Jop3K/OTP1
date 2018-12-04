@@ -28,7 +28,6 @@ import java.util.ResourceBundle;
 import java.util.TimeZone;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import models.CurrentUser;
 import models.EventModel;
 
 /**
@@ -39,7 +38,7 @@ public class GoogleCalendar {
 
     private static final String APPLICATION_NAME = "Palkanseuraaja";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    private static final String pathToTokens = "tokens/" + CurrentUser.getUser().getUsername();
+    private static final String pathToTokens = "tokens/" + models.CurrentUserRefactored.INSTANCE.getUser().getUsername();
     private static final String TOKENS_DIRECTORY_PATH = pathToTokens;
 
     /**
