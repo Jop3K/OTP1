@@ -10,7 +10,7 @@ import de.saxsys.javafx.test.JfxRunner;
 import de.saxsys.javafx.test.TestInJfxThread;
 @RunWith(JfxRunner.class)
 public class LoginModelTest {
-	LoginModel fail;
+	LoginModelRefactored fail;
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -18,15 +18,15 @@ public class LoginModelTest {
 	@Test
 	@TestInJfxThread
 	public void testLoginFieldValidation() {
-                fail = new LoginModel("", "password");
+                fail = new LoginModelRefactored("", "password");
 		assertFalse(fail.loginFieldValidation());
 		assertEquals(fail.getAlert().getHeaderText(), "Syötä käyttäjätunnus ja salasana");
 		
-                fail = new LoginModel("username", "");
+                fail = new LoginModelRefactored("username", "");
 		assertFalse(fail.loginFieldValidation());
 		assertEquals(fail.getAlert().getHeaderText(), "Syötä käyttäjätunnus ja salasana");
 		
-                fail = new LoginModel("username", "password");
+                fail = new LoginModelRefactored("username", "password");
 		assertTrue(fail.loginFieldValidation());
 		
 	}

@@ -126,11 +126,11 @@ public class WeekDays {
         this.sunday = sunday;
     }
 
-    public ExtraPay getExtrapay() {
+    public ExtraPay getExtraPay() {
         return extrapay;
     }
 
-    public void setExtrapay(ExtraPay extrapay) {
+    public void setExtraPay(ExtraPay extrapay) {
         this.extrapay = extrapay;
     }
 

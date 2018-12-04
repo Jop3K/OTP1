@@ -8,10 +8,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import models.LoginModel;
+import models.LoginModelRefactored;
 import views.LoginView;
 
-public class LoginController {
+public class LoginControllerRefactored {
 
     private final LoginView loginView;
 
@@ -20,7 +20,7 @@ public class LoginController {
      *
      * @param loginView
      */
-    public LoginController(LoginView loginView) {
+    public LoginControllerRefactored(LoginView loginView) {
         this.loginView = loginView;
         //Lisätään listenerit loginViewin buttoneille
         loginView.addRegisterButtonEventListener(new RegisterButtonListener());
@@ -59,27 +59,23 @@ public class LoginController {
          */
         @Override
         public void handle(Event arg0) {
-            LoginModel loginModel = new LoginModel(loginView.getUsernameField(), loginView.getPasswordField());
-            System.out.println("test1");
+            LoginModelRefactored loginModel = new LoginModelRefactored(loginView.getUsernameField(), loginView.getPasswordField());
             //Varmistaa, että kumpikaan kentistä ei ole tyhjä
             if (loginModel.loginFieldValidation()) {
                 try {
-                    System.out.println("test2");
                     // new PasswordHashing(loginView.getPasswordField()).get_SHA_256_SecurePassword()
                     //Yritetään sisäänkirjaumista ottamalla yhteys tietokantaan
                     if (UserDAO.login(loginView.getUsernameField(), loginView.getPasswordField())) {
-                        System.out.println("test3");
                         //Kirjautuminen onnistui ja luodaan ilmoitus siitä.
                         //loginView.showAlert(dao.getAlert());
                         //Ohjataan ohjelmaan
                         ModelsRefactored.ViewManagerRefactored.ViewManager.INSTANCE.switchToApplicationView();
-                        System.out.println("test4");
                     } else {
                         //Kirjautuminen epäonnistui. Ilmoitetaan siitä
                         loginView.showAlert(UserDAO.getAlert());
                     }
                 } catch (NoSuchAlgorithmException | NoSuchProviderException | IOException ex) {
-                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(LoginControllerRefactored.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
                 //Jompikumpi tai molemmat kentät ovat tyhjät. Ilmoitetaan siitä

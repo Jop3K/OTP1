@@ -3,7 +3,7 @@ package models;
 import java.util.ResourceBundle;
 import javafx.scene.control.Alert;
 
-public class LoginModel {
+public class LoginModelRefactored {
 
     private final String username;
     private final String password;
@@ -11,7 +11,7 @@ public class LoginModel {
     private final ResourceBundle alerts;
     private Alert alert;
 
-    public LoginModel(String username, String password) {
+    public LoginModelRefactored(String username, String password) {
         this.username = username;
         this.password = password;
         alerts = ResourceBundle.getBundle("AlertMessagesBundle");

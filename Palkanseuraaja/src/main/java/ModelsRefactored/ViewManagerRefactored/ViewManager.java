@@ -1,7 +1,7 @@
 package ModelsRefactored.ViewManagerRefactored;
 
 import application.Main;
-import controllers.LoginController;
+import controllers.LoginControllerRefactored;
 import controllers.RegisterController;
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -24,7 +24,7 @@ public enum ViewManager implements IViewManager {
 
     private Stage stage;
     private final LoginView loginView;
-    private final LoginController loginController;
+    private final LoginControllerRefactored loginController;
     private final RegisterView registerView;
     private final RegisterController registerController;
 
@@ -32,7 +32,7 @@ public enum ViewManager implements IViewManager {
 
     private ViewManager() {
         loginView = new LoginView();
-        loginController = new LoginController(loginView);
+        loginController = new LoginControllerRefactored(loginView);
         registerView = new RegisterView();
         registerController = new RegisterController(registerView);
 
@@ -66,9 +66,7 @@ public enum ViewManager implements IViewManager {
     }
 
     public void switchToApplicationView() throws IOException {
-        System.out.println("test5");
         Scene window = new Scene(FXMLLoader.load(Main.class.getResource("/fxml/TabsView.fxml")));
-        System.out.println("test6");
         stage.setScene(window);
         stage.setTitle(labels.getString("title") + " v0.03a // " + labels.getString("username") + ": " + CurrentUser.getUser().getUsername());
         stage.getIcons().add(new Image("/img/salarypal.png"));

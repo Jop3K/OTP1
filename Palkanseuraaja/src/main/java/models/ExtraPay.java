@@ -140,10 +140,6 @@ public class ExtraPay {
         return extrapay;
     }
 
-    public void setExtrapay(double extrapay) {
-        this.extrapay = extrapay;
-    }
-
     public boolean isDeleted() {
         return isDeleted;
     }
