@@ -97,7 +97,6 @@ public class StatsViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         labels = ResourceBundle.getBundle("LabelsBundle");
         buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
-        NOT_CHOOSED = labels.getString("notChosen");
 
         setLabels();
         setButtons();
@@ -150,6 +149,7 @@ public class StatsViewController implements Initializable {
         //currency.setText(labels.getString("currency"));
         month.setText(labels.getString("month"));
         year.setText(labels.getString("year"));
+        NOT_CHOOSED = labels.getString("notSelected");
     }
 
     public void setButtons() {

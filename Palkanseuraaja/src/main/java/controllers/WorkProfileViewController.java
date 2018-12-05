@@ -110,6 +110,8 @@ public class WorkProfileViewController implements Initializable {
     private Button editExtraPayButton;
     @FXML
     private TextField extraPayField;
+    @FXML
+    private Label chooseProfileLabel;
 
     private List<WorkProfile> profileList;
 
@@ -160,6 +162,7 @@ public class WorkProfileViewController implements Initializable {
         setEndHour.promptTextProperty().setValue(labels.getString("h"));
         setEndMinute.promptTextProperty().setValue(labels.getString("m"));
         extraPayPerHour.setText(labels.getString("extraPayPerHour"));
+        chooseProfileLabel.setText(labels.getString("chooseProfile"));
     }
 
     public void setButtons() {
@@ -475,6 +478,8 @@ public class WorkProfileViewController implements Initializable {
         setEndHour.setDisable(false);
         setEndMinute.setDisable(false);
         extraPayField.setDisable(false);
+        saveLisa.setDisable(false);
+        editExtraPayButton.setDisable(false);
     }
 
     private void disableExtraPayFields() {
@@ -492,6 +497,7 @@ public class WorkProfileViewController implements Initializable {
         setEndMinute.setDisable(true);
         extraPayField.setDisable(true);
         editExtraPayButton.setText(buttons.getString("edit"));
+        saveLisa.setDisable(true);
         editExtraPayButton.setDisable(true);
     }
 
@@ -544,6 +550,8 @@ public class WorkProfileViewController implements Initializable {
 
         clearTextFieldsExtraPay();
         disableExtraPayFields();
+        newExtraPayButton.setDisable(true);
+        chooseProfileLabel.setText(labels.getString("chooseProfile"));
     }
 
     /**
@@ -560,7 +568,8 @@ public class WorkProfileViewController implements Initializable {
             extraPayNameField.clear();
 
             editButton.setDisable(false);
-
+            newExtraPayButton.setDisable(false);
+            chooseProfileLabel.setText("");
         }
 
     }
