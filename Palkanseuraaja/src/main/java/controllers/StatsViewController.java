@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.Month;
 import java.time.Year;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -122,7 +124,7 @@ public class StatsViewController implements Initializable {
 			yearPick.getItems().add(y);
 		}
 		for (Month m : Month.values()){
-			monthPick.getItems().add(m);
+			monthPick.getItems().add(m.getDisplayName(TextStyle.FULL, Locale.getDefault()));
 		}
 		yearPick.setValue(Year.now());
 		monthPick.setValue(NOT_CHOOSED);

@@ -1,6 +1,5 @@
 package models;
 
-import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
 import java.time.YearMonth;
@@ -13,60 +12,60 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 
 public class IncomesByDaysInMonthDataStrategy implements BarChartData {
-	/**
-	 * Strategy class that generate data for BarChart in StatsView. 
-	 * @author Joonas
-	 */
-	private List<SalaryPerDayModel> list = new ArrayList();
-	private YearMonth yearMonth;
 
-	public IncomesByDaysInMonthDataStrategy(Year year, Month month) {
-		list = Calculation.calcPayForEveryDayInMonth(year, month);
-		yearMonth  = YearMonth.of(year.getValue(), month);
-	}
+    /**
+     * Strategy class that generate data for BarChart in StatsView.
+     *
+     * @author Joonas
+     */
+    private List<SalaryPerDayModel> list = new ArrayList();
+    private YearMonth yearMonth;
 
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
+    public IncomesByDaysInMonthDataStrategy(Year year, Month month) {
+        list = Calculation.calcPayForEveryDayInMonth(year, month);
+        yearMonth = YearMonth.of(year.getValue(), month);
+    }
 
-	}
+    @Override
+    public void update() {
+        // TODO Auto-generated method stub
 
-	@Override
-	public ObservableList getData() {
-		update();
-		ObservableList<XYChart.Data<String,Double>> xyList = FXCollections.observableArrayList();
+    }
 
-		for (int day = 1; day<yearMonth.lengthOfMonth() + 1; day++) {
-			Data data = new XYChart.Data<>();
-			data.setXValue(Integer.toString(day));
+    @Override
+    public ObservableList getData() {
+        update();
+        ObservableList<XYChart.Data<String, Double>> xyList = FXCollections.observableArrayList();
 
+        for (int day = 1; day < yearMonth.lengthOfMonth() + 1; day++) {
+            Data data = new XYChart.Data<>();
+            data.setXValue(Integer.toString(day));
 
-			for(SalaryPerDayModel s : list){
+            for (SalaryPerDayModel s : list) {
 
-				if(Integer.parseInt(s.getDay()) == day){
-					data.setYValue(s.getSalary());
+                if (Integer.parseInt(s.getDay()) == day) {
+                    data.setYValue(s.getSalary());
 
-				}
-			}
-			if (data.getYValue() == null) {
-				data.setYValue(0); //default value
-			}
-			xyList.add(data);
-			System.out.println(data.getXValue() + " " + data.getYValue());
-		}
+                }
+            }
+            if (data.getYValue() == null) {
+                data.setYValue(0); //default value
+            }
+            xyList.add(data);
+            System.out.println(data.getXValue() + " " + data.getYValue());
+        }
 
+        return xyList;
 
-		return xyList;
+    }
 
-	}
+    @Override
+    public ObservableList setBarChartData() {
+        ObservableList<XYChart.Series<String, Double>> IncomesByDaysInMonthBarChartData = FXCollections.observableArrayList();
+        XYChart.Series<String, Double> dayIncome = new XYChart.Series<String, Double>(getData());
+        IncomesByDaysInMonthBarChartData.add(dayIncome);
 
-	@Override
-	public ObservableList setBarChartData() {
-		ObservableList<XYChart.Series<String, Double>> IncomesByDaysInMonthBarChartData = FXCollections.observableArrayList();
-		XYChart.Series<String, Double>dayIncome = new XYChart.Series<String, Double>(getData());
-		IncomesByDaysInMonthBarChartData.add(dayIncome);
-
-		return IncomesByDaysInMonthBarChartData;
-	}
+        return IncomesByDaysInMonthBarChartData;
+    }
 
 }

@@ -25,7 +25,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import models.CurrentCalendarViewController;
 import models.EventModel;
 import models.EventObservableDataList;
 import models.WorkProfile;
