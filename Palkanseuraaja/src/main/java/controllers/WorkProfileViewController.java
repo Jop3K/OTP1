@@ -170,7 +170,7 @@ public class WorkProfileViewController implements Initializable {
         extrapayChooser.promptTextProperty().set(buttons.getString("createOrChoose"));
         saveProfile.setText(buttons.getString("save"));
         editButton.setText(buttons.getString("edit"));
-        saveLisa.setText(buttons.getString("saveOrUpdateExtrapay"));
+        saveLisa.setText(buttons.getString("save"));
         deleteWorkProfileButton.setText(buttons.getString("delete"));
         deleteExtraPayButton.setText(buttons.getString("delete"));
         newExtraPayButton.setText(buttons.getString("newExtraPay"));
@@ -264,7 +264,7 @@ public class WorkProfileViewController implements Initializable {
                 } catch (NumberFormatException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle(alerts.getString("error"));
-                    alert.setHeaderText(alerts.getString("extraPayIsNumber"));
+                    alert.setHeaderText(alerts.getString("payNumber"));
                     alert.showAndWait();
                 }
 
@@ -346,7 +346,7 @@ public class WorkProfileViewController implements Initializable {
                 } catch (NumberFormatException e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle(alerts.getString("error"));
-                    alert.setHeaderText(alerts.getString("extraPayIsNumber"));
+                    alert.setHeaderText(alerts.getString("extraPayNumber"));
                     alert.showAndWait();
                 }
 

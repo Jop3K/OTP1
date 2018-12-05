@@ -48,9 +48,9 @@
                         <Insets bottom="250.0" left="10.0" />
                     </GridPane.margin>
                 </Label>
-                <Button fx:id="saveLisa" mnemonicParsing="false" onAction="#handleSaveLisaButtonClick" text="Tallenna tai päivitä palkkalisä" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Button fx:id="saveLisa" mnemonicParsing="false" onAction="#handleSaveLisaButtonClick" text="Tallenna" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
-                        <Insets left="250.0" top="270.0" />
+                        <Insets left="300.0" top="270.0" />
                     </GridPane.margin>
                 </Button>
                 <Label fx:id="hourPay" text="Tuntipalkka" GridPane.rowIndex="1">

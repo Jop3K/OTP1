@@ -1,4 +1,4 @@
-package ModelsRefactored;
+package models;
 
 public interface IValidationModel {
 

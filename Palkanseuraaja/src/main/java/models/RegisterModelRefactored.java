@@ -1,6 +1,5 @@
 package models;
 
-import ModelsRefactored.IValidationModel;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.ResourceBundle;
