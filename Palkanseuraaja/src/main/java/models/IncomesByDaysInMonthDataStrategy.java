@@ -25,6 +25,7 @@ public class IncomesByDaysInMonthDataStrategy extends AbstractDataStrategy {
 		yearMonth  = YearMonth.of(year.getValue(), month);
 	}
 
+
 	@Override
 	public ObservableList getData() {
 
@@ -53,4 +54,5 @@ public class IncomesByDaysInMonthDataStrategy extends AbstractDataStrategy {
 		return xyList;
 
 	}
+
 }

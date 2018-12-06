@@ -13,32 +13,34 @@ import javafx.scene.chart.XYChart.Series;
 import javafx.scene.input.MouseEvent;
 
 public class IncomesByMonthsDataStrategy extends AbstractDataStrategy {
-	/**
-	 * Strategy class that generate data for BarChart in StatsView. 
-	 * @author Joonas
-	 */
-	private StatsModel statsModel;
-	private List<SalaryPerMonthModel> salaryPerMonthList;
-	private Year year;
+    /**
+     * Strategy class that generate data for BarChart in StatsView.
+     * @author Joonas
+     */
 
-	public IncomesByMonthsDataStrategy(Year year) {
-		this.year = year;
-		salaryPerMonthList = Calculation.calcPayForEveryMonthInYear(year);
-		FXCollections.observableArrayList();
-		
-	}
+    private List<SalaryPerMonthModel> salaryPerMonthList;
+    private Year year;
 
-	public ObservableList<XYChart.Data<String,Double>> getData(){
-		ObservableList<XYChart.Data<String,Double>> xyList = FXCollections.observableArrayList();	           
-		
-		for(SalaryPerMonthModel s : salaryPerMonthList) {
-			
-			xyList.add(new XYChart.Data(s.getMonth().toString(), s.getTotalSalary()));	
-			System.out.println(s.getTotalSalary() + "  " + s.getMonth());
-		}
-		
-		return xyList;
-	}
+    public IncomesByMonthsDataStrategy(Year year) {
+        this.year = year;
+        salaryPerMonthList = Calculation.calcPayForEveryMonthInYear(year);
+
+
+    }
+
+    
+
+    public ObservableList<XYChart.Data<String,Double>> getData(){
+        ObservableList<XYChart.Data<String,Double>> xyList = FXCollections.observableArrayList();
+
+        for(SalaryPerMonthModel s : salaryPerMonthList) {
+
+            xyList.add(new XYChart.Data(s.getMonth().toString(), s.getTotalSalary()));
+            System.out.println(s.getTotalSalary() + "  " + s.getMonth());
+        }
+
+        return xyList;
+    }
 
 
 }

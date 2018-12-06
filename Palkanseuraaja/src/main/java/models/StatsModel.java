@@ -24,13 +24,10 @@ public class StatsModel{
 	 * Model class for StatsController. Used to setting up and creating data for BarChart in StatsView.
 	 * @author Joonas
 	 */
-	private List<SalaryPerMonthModel> IncomesByMonths;
-	private ObservableList<XYChart.Series<String, Double>> IncomesByMonthsBarChartData;
 	private BarChartData dataGenerator;
 	private BarChart incomesBarChart;
 	public StatsModel() {
-
-		IncomesByMonthsBarChartData = FXCollections.observableArrayList();
+		
 		dataGenerator = new IncomesByMonthsDataStrategy(Year.now());
 		
 		}
@@ -52,14 +49,14 @@ public class StatsModel{
 		}
 	
 	/**
-	 * Switches data generator strategy for generating data based on parameters given.
+	 * Switches BarChartDatas strategy for generating data based on parameters given.
 	 * @param year Year
-	 * @param month Month
+	 * @param month Month  
 	 */
 	public void updateAllData(Year year, Month month){
 		
-		System.out.print(year + " k: " + month);
-		if (month == null) {
+		
+		if (month == null && year!=null) {
 			setDataGenerator(new IncomesByMonthsDataStrategy(year));		
 		}
 		else if (year != null && month !=null) {
@@ -74,6 +71,9 @@ public class StatsModel{
 		incomesBarChart.layout();
 		incomesBarChart.setData(dataGenerator.setBarChartData());		
 		
+	}
+	public BarChartData getDataGenerator() {
+		return dataGenerator;
 	}
 	
 	

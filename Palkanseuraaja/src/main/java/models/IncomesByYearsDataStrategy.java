@@ -16,14 +16,13 @@ public class IncomesByYearsDataStrategy extends AbstractDataStrategy {
 	 * @author Joonas
 	 */
 
-	private StatsModel statsModel;
+	
 	private List<SalaryPerYearModel> salaryPerYearList;
 
 	public IncomesByYearsDataStrategy() {
-		
-		salaryPerYearList = Calculation.calcPayForEveryYear();
-		
+		salaryPerYearList = Calculation.calcPayForEveryYear();		
 	}
+	
 
 	public ObservableList<XYChart.Data<String,Double>> getData(){
 		ObservableList<XYChart.Data<String,Double>> xyList = FXCollections.observableArrayList();	           
