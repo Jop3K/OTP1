@@ -1,8 +1,8 @@
 package controllers;
 
-import junit.framework.TestCase;
+import static junit.framework.TestCase.fail;
 
-public class CalendarViewControllerTest extends TestCase {
+public class CalendarViewControllerTest {
 
 	public void testCalendarViewController() {
 		fail("Not yet implemented");

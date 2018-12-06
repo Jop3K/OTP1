@@ -153,6 +153,14 @@ public class UserDAO extends DataAccessObject {
         return true;
     }
 
+    public static boolean delete(User user) {
+        openCurrentSessionWithTransaction().delete(user);
+
+        closeCurrentSessionWithTransaction();
+
+        return true;
+    }
+
     // palauttaa falsen jos käyttäjänimi löytyy tietokannasta
     public static boolean checkForDuplicateUser(User user) {
 
@@ -185,5 +193,7 @@ public class UserDAO extends DataAccessObject {
     public static Alert getAlert() {
         return alert;
     }
+
+
 
 }

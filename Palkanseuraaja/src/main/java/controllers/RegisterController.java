@@ -90,9 +90,7 @@ public class RegisterController {
                         //Ilmoitetaan käyttäjätunnuksen olevan varattu
                         registerView.showAlert(UserDAO.getAlert());
                     }
-                } catch (NoSuchAlgorithmException ex) {
-                    Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (NoSuchProviderException ex) {
+                } catch (NoSuchAlgorithmException | NoSuchProviderException ex) {
                     Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {//ilmoitetaan formin validaatiosta tapahtuneesta virheestä
