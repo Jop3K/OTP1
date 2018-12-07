@@ -1,8 +1,10 @@
 package models;
 
-import dataAccessObjects.UserDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class EventObservableDataList {
 
@@ -10,7 +12,27 @@ public class EventObservableDataList {
 	
 	private EventObservableDataList() {
 
-		data = FXCollections.observableArrayList(models.CurrentUserRefactored.INSTANCE.getAllEvents());
+		List<EventModel> events = models.CurrentUserRefactored.INSTANCE.getAllEvents();
+
+		// Sort by begin DateTime
+		events.sort((o1, o2) -> {
+
+			LocalDateTime timeOne = o1.getBeginDay().atTime(Integer.parseInt(o1.getBeginHour()), Integer.parseInt(o1.getBeginMinute()));
+
+			LocalDateTime timeTwo = o2.getBeginDay().atTime(Integer.parseInt(o2.getBeginHour()), Integer.parseInt(o2.getBeginMinute()));
+
+			int result = 0;
+
+			if(timeOne.isBefore(timeTwo)) {
+				result = -1;
+			}  else if(timeOne.isAfter(timeTwo)) {
+				result = 1;
+			}
+
+			return result;
+		});
+
+		data = FXCollections.observableArrayList(events);
 	}
 	
 	public static ObservableList<EventModel> getInstance(){

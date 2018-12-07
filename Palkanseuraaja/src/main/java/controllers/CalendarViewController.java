@@ -1,23 +1,13 @@
 package controllers;
 
 import com.google.api.services.calendar.model.CalendarListEntry;
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ResourceBundle;
+import com.sun.javafx.scene.control.skin.DatePickerContent;
 import dataAccessObjects.UserDAO;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
@@ -28,6 +18,20 @@ import javafx.util.StringConverter;
 import models.EventModel;
 import models.EventObservableDataList;
 import models.WorkProfile;
+
+import javax.swing.*;
+import java.io.IOException;
+import java.net.URL;
+import java.security.GeneralSecurityException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static controllers.ControllerUtil.isDayCell;
 
 /**
  * This is the controller for the "Calendar Tab" -View
@@ -41,8 +45,7 @@ public class CalendarViewController implements Initializable {
     private Color x2;
     @FXML
     private Font x1;
-    @FXML
-    private DatePicker dateChooser;
+
     @FXML
     private DatePicker dateStart;
     @FXML
@@ -71,8 +74,15 @@ public class CalendarViewController implements Initializable {
     private TableView<EventModel> eventTable;
     @FXML
     private DatePicker eventDatePicker;
-    @FXML
 
+    // Variables for eventDatePicker
+    private LocalDate rangeStart;
+    private LocalDate rangeEnd;
+    private DateCell startCell;
+    private DateCell endCell;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d.MM.uuuu", Locale.ENGLISH);
+
+    @FXML
     private TableColumn<EventModel, Date> endColumn;
 
     private EventModel eventModel;
@@ -209,6 +219,8 @@ public class CalendarViewController implements Initializable {
             connection.setText(labels.getString("disconnected"));
             connection.setFill(Color.RED);
         }
+
+        formatDatePickerForRangeSelect();
 
     }
 
@@ -435,7 +447,7 @@ public class CalendarViewController implements Initializable {
             return;
         }
 
-        if (isValid() == true) {
+        if (isValid()) {
 
             if (eventModel.getId() == 0) {
                 System.out.print(eventModel.getId());
@@ -531,33 +543,6 @@ public class CalendarViewController implements Initializable {
         endColumn.setResizable(true);
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<EventModel, String>("description"));
         descriptionColumn.setResizable(true);
-        //Lisätään mahdollisuus filtteröidä taulussa näkyviä tapahtumia päivämäärän mukaan
-        FilteredList<EventModel> filteredData = new FilteredList<>(EventObservableDataList.getInstance(), p -> true);
-        eventDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-
-            filteredData.setPredicate(EventModel -> {
-
-                if (newValue == null) {
-                    return true;
-                };
-                java.sql.Date newDate = java.sql.Date.valueOf(newValue);
-                LocalDate ldate = EventModel.getBeginTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                java.sql.Date eventDate = java.sql.Date.valueOf(ldate);
-
-                if (newDate == eventDate) {
-                    return true;
-                }
-
-                if (newDate.equals(eventDate)) {
-                    return true;
-                }
-                return false;
-            });
-
-            clearEventsBtn.setDisable(false);
-            eventCountLabel.setText(Integer.toString(filteredData.size()));
-
-        });
 
         // Adds menu for editing and deleting objects from eventTable. Fired by mouses right-click
         MenuItem info = new MenuItem(labels.getString("info"));
@@ -632,7 +617,7 @@ public class CalendarViewController implements Initializable {
         eventTable.setContextMenu(menu);
 
         //Add items to table
-        eventTable.setItems(filteredData);
+        eventTable.setItems(EventObservableDataList.getInstance());
         eventTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
@@ -657,7 +642,10 @@ public class CalendarViewController implements Initializable {
      */
     public void clearEventDatePicker(ActionEvent e) {
 
+        rangeStart = null;
+        rangeEnd = null;
         eventDatePicker.setValue(null);
+        eventTable.setItems(EventObservableDataList.getInstance());
         clearEventsBtn.setDisable(true);
     }
 
@@ -674,4 +662,115 @@ public class CalendarViewController implements Initializable {
         cancelEventEditBtn.setDisable(true);
     }
 
+    public void formatDatePickerForRangeSelect() {
+
+        eventDatePicker.setConverter(new StringConverter<LocalDate>() {
+
+            @Override
+            public String toString(LocalDate object) {
+
+                if(object == null) return null;
+
+                if(rangeStart != null && rangeStart.equals(rangeEnd)) {
+                    return rangeStart.format(formatter);
+                } else if (rangeStart != null) {
+                    return rangeStart.format(formatter) + " - " + rangeEnd.format(formatter);
+                }
+
+                return object.format(formatter);
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                if (string.contains("-")) {
+                    try {
+                        rangeStart = LocalDate.parse(string.split("-")[0].trim(), formatter);
+                        rangeEnd = LocalDate.parse(string.split("-")[1].trim(), formatter);
+                    } catch (DateTimeParseException dte) {
+                        return LocalDate.parse(string, formatter);
+                    }
+                    return rangeStart;
+                }
+                return LocalDate.parse(string, formatter);
+            }
+        });
+
+        eventDatePicker.showingProperty().addListener((obs, b, b1) -> {
+
+            if (b1) {
+
+                DatePickerContent content = ControllerUtil.getDatePickerContent(eventDatePicker);
+                List<DateCell> cells = ControllerUtil.getDatePickerDateCells(content);
+
+                if (rangeStart != null && rangeEnd != null)
+                    ControllerUtil.formatRangeToSelected(cells, rangeStart, rangeEnd);
+
+                startCell = null;
+                endCell = null;
+                content.setOnMouseDragged(e -> {
+
+                    Node n = e.getPickResult().getIntersectedNode();
+                    DateCell c = ControllerUtil.extractDateCellFromNode(n);
+
+                    if (isDayCell(c)) {
+                        if (startCell == null) {
+                            startCell = c;
+                        }
+                        endCell = c;
+                    }
+
+                    if (startCell != null && endCell != null) {
+
+                        LocalDate start = ControllerUtil.extractEarlierDate(startCell, endCell);
+                        LocalDate end = ControllerUtil.extractLaterDate(startCell, endCell);
+
+                        ControllerUtil.formatRangeToSelected(cells, start, end);
+                    }
+                });
+                content.setOnMouseReleased(e -> {
+
+                    if (startCell != null && endCell != null) {
+
+                        rangeStart = ControllerUtil.extractEarlierDate(startCell, endCell);
+                        rangeEnd = ControllerUtil.extractLaterDate(startCell, endCell);
+                        eventDatePicker.setValue(rangeStart);
+                        ControllerUtil.formatRangeToSelected(cells, rangeStart, rangeEnd);
+
+                        endCell = null;
+                        startCell = null;
+
+                    } else {
+                        Node n = e.getPickResult().getIntersectedNode();
+                        DateCell c = ControllerUtil.extractDateCellFromNode(n);
+                        rangeStart = c.getItem();
+                        rangeEnd = c.getItem();
+                    }
+
+                    eventTable.setItems(filterTableData());
+
+                });
+            }
+        });
+
+    }
+
+
+    public FilteredList<EventModel> filterTableData() {
+
+        FilteredList<EventModel> filteredData = new FilteredList<>(EventObservableDataList.getInstance(), p -> true);
+
+        filteredData.setPredicate(EventModel -> {
+
+            LocalDate eventDate = EventModel.getBeginTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            return ControllerUtil.filterRangeDateSelection(eventDate, rangeStart, rangeEnd);
+
+        });
+
+        clearEventsBtn.setDisable(false);
+        eventCountLabel.setText(Integer.toString(filteredData.size()));
+
+        return filteredData;
+
+    }
 }

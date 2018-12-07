@@ -37,6 +37,7 @@ public class LoginView {
         username = new Label();
         usernameField = new TextField();
         password = new Label();
+        languageLabel = new Label();
         passwordField = new PasswordField();
 
         languageSelect = new ComboBox<>();
@@ -73,7 +74,7 @@ public class LoginView {
 
         username.setText(labels.getString("username") + ":");
         password.setText(labels.getString("password") + ":");
-        languageLabel = new Label(labels.getString("language") + ":");
+        languageLabel.setText(labels.getString("language") + ":");
         login.setText(buttons.getString("login"));
         register.setText(buttons.getString("register"));
     }
