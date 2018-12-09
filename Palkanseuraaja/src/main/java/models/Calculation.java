@@ -2,6 +2,8 @@ package models;
 
 import java.time.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -191,14 +193,16 @@ public class Calculation {
     	
     	for (EventModel e : data.getInstance()){
   		LocalDate eventBegin = e.getBeginDay();
+  		Year year = Year.parse(Integer.toString(eventBegin.getYear()));
   		
-  		if (yearToCompare != eventBegin.getYear()) {
-  			Year year = Year.parse(Integer.toString(eventBegin.getYear()));
-  			years.add(year);
+	  		if (!years.contains(year)) {
+	  			
+	  			years.add(year);
+	  		}
   			
-  			yearToCompare = eventBegin.getYear();
+  			
   		}
-  	  }
+  	  	Collections.sort(years);
 		return years;
 	}
 
