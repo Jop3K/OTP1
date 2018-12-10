@@ -133,7 +133,9 @@ public class WorkProfileViewController implements Initializable {
         generateTimes();
 
         disableExtraPayFields();
-
+        newExtraPayButton.setDisable(true);
+        extrapayChooser.setDisable(true);
+        deleteExtraPayButton.setDisable(true);
     }
 
     public void setLabels() {
@@ -238,7 +240,7 @@ public class WorkProfileViewController implements Initializable {
 
         } else {
 
-            if (!profileName.getText().isEmpty()) { // verifies that profiles' name is entered
+            if (!profileName.getText().isEmpty() && !tuntipalkka.getText().isEmpty()) { // verifies that profiles' name and pay per hour is entered
 
                 WorkProfile workProfile = new WorkProfile();
 
@@ -268,6 +270,11 @@ public class WorkProfileViewController implements Initializable {
                     alert.showAndWait();
                 }
 
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(alerts.getString("error"));
+                alert.setHeaderText(alerts.getString("fillAllFields"));
+                alert.showAndWait();
             }
         }
     }
@@ -511,12 +518,15 @@ public class WorkProfileViewController implements Initializable {
 
     @FXML
     void deleteWorkProfile() {
-        profileChooser.getSelectionModel().getSelectedItem().setIsDeleted(true);
-        UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
-        profileChooser.getItems().remove(profileChooser.getSelectionModel().getSelectedItem());
-        profileChooser.getSelectionModel().clearSelection();
-        for (WorkProfile w : models.CurrentUserRefactored.INSTANCE.getWorkProfiles()) {
-            System.out.println(w.getName());
+        if (profileChooser.getSelectionModel().getSelectedItem() != null) {
+            profileChooser.getSelectionModel().getSelectedItem().setIsDeleted(true);
+            UserDAO.save(profileChooser.getSelectionModel().getSelectedItem());
+            profileChooser.getItems().remove(profileChooser.getSelectionModel().getSelectedItem());
+            profileChooser.getSelectionModel().clearSelection();
+            for (WorkProfile w : models.CurrentUserRefactored.INSTANCE.getWorkProfiles()) {
+                System.out.println(w.getName());
+            }
+            clearTextFieldsProfile();
         }
     }
 
@@ -530,6 +540,8 @@ public class WorkProfileViewController implements Initializable {
             for (ExtraPay e : profileChooser.getSelectionModel().getSelectedItem().getExtraPays()) {
                 System.out.println(e.getName());
             }
+            extrapayChooser.getSelectionModel().clearSelection();
+            clearTextFieldsExtraPay();
         }
     }
 
@@ -552,6 +564,8 @@ public class WorkProfileViewController implements Initializable {
         disableExtraPayFields();
         newExtraPayButton.setDisable(true);
         chooseProfileLabel.setText(labels.getString("chooseProfile"));
+        extrapayChooser.setDisable(true);
+        deleteExtraPayButton.setDisable(true);
     }
 
     /**
@@ -587,6 +601,7 @@ public class WorkProfileViewController implements Initializable {
             disableExtraPayFields();
             editExtraPayButton.setDisable(false);
             saveLisa.setDisable(true);
+            deleteExtraPayButton.setDisable(false);
         }
     }
 
@@ -773,6 +788,7 @@ public class WorkProfileViewController implements Initializable {
                 extrapayChooser.getItems().add(e);
             });
         }
+        extrapayChooser.setDisable(false);
     }
 
     /**

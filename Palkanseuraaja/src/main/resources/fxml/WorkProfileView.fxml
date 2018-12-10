@@ -243,7 +243,7 @@
             </Label>
             <Label fx:id="chooseProfileLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
-                  <Insets left="10.0" top="350.0" />
+                  <Insets left="300.0" top="350.0" />
                </GridPane.margin>
             </Label>
             </children>
