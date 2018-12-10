@@ -620,9 +620,8 @@ public class WorkProfileViewController implements Initializable {
         } else {
 
             loadValuesToTextFields();
-
             disableFields();
-
+            clearTextFieldsExtraPay();
         }
 
     }
