@@ -4,6 +4,7 @@ import application.Main;
 import controllers.LoginControllerRefactored;
 import controllers.RegisterController;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -29,7 +30,7 @@ public enum ViewManager implements IViewManager {
 
     private final ResourceBundle labels;
 
-    private ViewManager() {
+    ViewManager() {
         loginView = new LoginView();
         loginController = new LoginControllerRefactored(loginView);
         registerView = new RegisterView();
@@ -59,6 +60,7 @@ public enum ViewManager implements IViewManager {
     }
 
     public void switchToRegisterView() {
+        registerView.setLabels();
         Scene window = new Scene(registerView.getView(), 800, 800);
         stage.setScene(window);
         stage.show();
@@ -76,5 +78,4 @@ public enum ViewManager implements IViewManager {
     public void clearLoginViewFields() {
         loginView.clearFields();
     }
-
 }

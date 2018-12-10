@@ -20,6 +20,8 @@ public class UserDAOTest {
 
     UserDAO dao = new UserDAO();
     User user;
+    ExtraPay extrapay;
+    WeekDays weekdays;
 
     /**
      * Builds a new user before every test
@@ -44,6 +46,13 @@ public class UserDAOTest {
      */
     @After
     public void tearDown() {
+
+        if(weekdays != null) {
+            UserDAO.delete(weekdays);
+            weekdays = null;
+            extrapay = null;
+        }
+
         UserDAO.delete(user);
         CurrentUserRefactored.INSTANCE.setUser(null);
     }
@@ -83,7 +92,7 @@ public class UserDAOTest {
      */
     @Test
     @TestInJfxThread
-    public void eventAndWorkProfileCanBeSaved() {
+    public void eventWorkProfileExtraPayCanBeSaved() {
 
         try {
             UserDAO.login("junit", "test");
@@ -97,6 +106,23 @@ public class UserDAOTest {
         profile.setUser(user);
 
         UserDAO.save(profile);
+
+        weekdays = new WeekDays();
+
+        weekdays.setWednesday(true);
+
+        UserDAO.save(weekdays);
+
+        extrapay = new ExtraPay();
+
+        weekdays.setExtraPay(extrapay);
+        extrapay.setWeekdays(weekdays);
+        extrapay.setName("testextra");
+        extrapay.setExtraPay(10);
+
+        extrapay.setWorkProfile(profile);
+
+        UserDAO.save(extrapay);
 
         LocalDateTime beginDate = LocalDateTime.now();
         LocalDateTime endDate = beginDate.plusHours(10);
@@ -112,6 +138,16 @@ public class UserDAOTest {
         // Retrieved profile is the same as the one that was saved
         assertEquals(profile.getName(), retrievedProfile.getName());
 
+        ExtraPay retrievedExtraPay = retrievedProfile.getExtraPays().get(0);
+
+        // Retrieved extrapay is the same as the one that was saved
+        assertEquals(extrapay.getName(), retrievedExtraPay.getName());
+
+        WeekDays retrievedWeekDays = retrievedExtraPay.getWeekdays();
+
+        // Retrieved weekdays is the same as the one that was saved
+        assertEquals(retrievedWeekDays.isWednesday() && retrievedWeekDays.isMonday(), weekdays.isWednesday() && weekdays.isMonday());
+
         List<EventModel> events = retrievedProfile.getEvents();
 
         EventModel retrievedEvent = events.get(0);
@@ -119,12 +155,7 @@ public class UserDAOTest {
         // Retrieved event is the same as the one that was saved
         assertEquals(retrievedEvent.getBeginDay(), event.getBeginDay());
 
-    }
 
-    @Test
-    @TestInJfxThread
-    public void extraPayCanBeSaved() {
-        fail("Not yet implemented");
-    }
 
+    }
 }

@@ -1,20 +1,22 @@
 package views;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import models.ViewManager;
 
 public class LoginView {
-    private ResourceBundle labels;
-    private ResourceBundle buttons;
 
     // tekstikentät
     private Label username;
@@ -22,26 +24,58 @@ public class LoginView {
     private Label password;
     private PasswordField passwordField;
 
+    private Label languageLabel;
+    private ComboBox<String> languageSelect;
+
     // napit
     private Button login;
     private Button register;
 
     public LoginView() {
-        labels = ResourceBundle.getBundle("LabelsBundle");
-        buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
         
         // tekstikentät
         username = new Label();
-        username.setText(labels.getString("username") + ":");
         usernameField = new TextField();
         password = new Label();
-        password.setText(labels.getString("password") + ":");
+        languageLabel = new Label();
         passwordField = new PasswordField();
+
+        languageSelect = new ComboBox<>();
+        languageSelect.getItems().addAll("Suomi", "Íslensku");
+
+        languageSelect.getSelectionModel().select(0);
+
+        languageSelect.valueProperty().addListener((ov, t, t1) -> {
+
+            if(t.equals(t1)) {
+                return;
+            }
+
+            if(t1.equals("Suomi")) {
+                Locale.setDefault(new Locale("fi"));
+            } else if(t1.equals("Íslensku")) {
+                Locale.setDefault(new Locale("is"));
+            }
+
+            setLabels();
+
+        });
         
         // napit
         login = new Button();
-        login.setText(buttons.getString("login"));
         register = new Button();
+
+        setLabels();
+    }
+
+    private void setLabels() {
+        ResourceBundle labels = ResourceBundle.getBundle("LabelsBundle");
+        ResourceBundle buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
+
+        username.setText(labels.getString("username") + ":");
+        password.setText(labels.getString("password") + ":");
+        languageLabel.setText(labels.getString("language") + ":");
+        login.setText(buttons.getString("login"));
         register.setText(buttons.getString("register"));
     }
 
@@ -65,10 +99,13 @@ public class LoginView {
         grid.add(password, 0, 1);
         grid.add(passwordField, 1, 1);
         grid.addRow(2, login, register);
+        grid.addRow(3, languageLabel, languageSelect);
 
         // muokkaan nappien asettelua
         GridPane.setMargin(login, new Insets(20, 0, 0, 30));
         GridPane.setMargin(register, new Insets(20, 0, 0, 30));
+        GridPane.setMargin(languageLabel, new Insets(20, 0, 0, 30));
+        GridPane.setMargin(languageSelect, new Insets(20, 0, 0, 30));
 
         return grid; // Palautetaan ruudukkoolio
 

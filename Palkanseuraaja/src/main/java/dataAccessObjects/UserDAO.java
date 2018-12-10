@@ -161,6 +161,14 @@ public class UserDAO extends DataAccessObject {
         return true;
     }
 
+    public static boolean delete(WeekDays weekDays) {
+        openCurrentSessionWithTransaction().delete(weekDays);
+
+        closeCurrentSessionWithTransaction();
+
+        return true;
+    }
+
     // palauttaa falsen jos käyttäjänimi löytyy tietokannasta
     public static boolean checkForDuplicateUser(User user) {
 

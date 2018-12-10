@@ -13,8 +13,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
 public class RegisterView {
-    private ResourceBundle labels;
-    private ResourceBundle buttons;
 
     private Label fname;
     private TextField fnameField;
@@ -31,35 +29,33 @@ public class RegisterView {
     private Label required;
 
     public RegisterView() {
-        labels = ResourceBundle.getBundle("LabelsBundle");
-        buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
         
         fname = new Label();
-        fname.setText(labels.getString("firstname") + ":");
         fnameField = new TextField();
-
         lname = new Label();
-        lname.setText(labels.getString("lastname") + ":");
         lnameField = new TextField();
-
         uname = new Label();
-        uname.setText(labels.getString("username") + ":");
         unameField = new TextField();
-
         pword1 = new Label();
-        pword1.setText(labels.getString("password") + ":");
         pword1Field = new PasswordField();
-
         pword2 = new Label();
-        pword2.setText(labels.getString("passwordAgain") + ":");
         pword2Field = new PasswordField();
-
         create = new Button();
-        create.setText(buttons.getString("createUser"));
         back = new Button();
-        back.setText(buttons.getString("back"));
-        
         required = new Label();
+    }
+
+    public void setLabels() {
+        ResourceBundle labels = ResourceBundle.getBundle("LabelsBundle");
+        ResourceBundle buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
+
+        fname.setText(labels.getString("firstname") + ":");
+        lname.setText(labels.getString("lastname") + ":");
+        uname.setText(labels.getString("username") + ":");
+        pword1.setText(labels.getString("password") + ":");
+        pword2.setText(labels.getString("passwordAgain") + ":");
+        create.setText(buttons.getString("createUser"));
+        back.setText(buttons.getString("back"));
         required.setText(labels.getString("required"));
     }
 
