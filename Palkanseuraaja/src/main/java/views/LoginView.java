@@ -45,8 +45,6 @@ public class LoginView {
     
     private ImageView imgView;
     private Image salarypalImg;
-    ResourceBundle labels = ResourceBundle.getBundle("LabelsBundle");
-    ResourceBundle buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
 
     public LoginView() {
         
@@ -79,7 +77,6 @@ public class LoginView {
         });
         
         welcome = new Label();
-        welcome.setText(labels.getString("welcome"));
         welcome.setFont(new Font("Arial", 18));
         
         // napit
@@ -90,8 +87,10 @@ public class LoginView {
     }
 
     private void setLabels() {
-       
+        ResourceBundle labels = ResourceBundle.getBundle("LabelsBundle");
+        ResourceBundle buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
 
+        welcome.setText(labels.getString("welcome"));
         username.setText(labels.getString("username") + ":");
         password.setText(labels.getString("password") + ":");
         languageLabel.setText(labels.getString("language") + ":");

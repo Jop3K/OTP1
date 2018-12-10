@@ -29,17 +29,11 @@ public class RegisterView {
     private Button create;
     private Button back;
     private Label required;
-    
-    ResourceBundle labels = ResourceBundle.getBundle("LabelsBundle");
-    ResourceBundle buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
+
 
     public RegisterView() {
-
-        labels = ResourceBundle.getBundle("LabelsBundle");
-        buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
         
         register = new Label();
-        register.setText(labels.getString("register"));
         register.setFont(new Font("Arial", 18));
         register.setUnderline(true);
         
@@ -59,8 +53,10 @@ public class RegisterView {
     }
 
     public void setLabels() {
-       
+        ResourceBundle labels = ResourceBundle.getBundle("LabelsBundle");
+        ResourceBundle buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
 
+        register.setText(labels.getString("register"));
         fname.setText(labels.getString("firstname") + ":");
         lname.setText(labels.getString("lastname") + ":");
         uname.setText(labels.getString("username") + ":");
