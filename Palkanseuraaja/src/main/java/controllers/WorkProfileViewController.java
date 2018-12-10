@@ -466,6 +466,7 @@ public class WorkProfileViewController implements Initializable {
             saveLisa.setDisable(false);
         } else {
             disableExtraPayFields();
+            loadValuesToExtrapayFields();
             editExtraPayButton.setText(buttons.getString("edit"));
             saveLisa.setDisable(true);
         }

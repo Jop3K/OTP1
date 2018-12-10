@@ -55,6 +55,7 @@ public enum ViewManager implements IViewManager {
 
     public void switchToLoginView() {
         Scene window = new Scene(loginView.getView(), 800, 800);
+        stage.setTitle(ResourceBundle.getBundle("MessagesBundle").getString("welcome"));
         stage.setScene(window);
         stage.show();
     }
