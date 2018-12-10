@@ -78,7 +78,7 @@ public class StatsViewController implements Initializable {
     @FXML
     private ComboBox<Year> yearPick;
     @FXML
-    private ComboBox monthPick;
+    private ComboBox<String> monthPick;
     @FXML
     private Label month;
     @FXML
@@ -108,7 +108,7 @@ public class StatsViewController implements Initializable {
 
         data.getInstance().addListener((ListChangeListener)(c -> {
         	statsModel.updateAllData(Year.now(), null);
-        	setComboBoxes();
+        	//setComboBoxes();
         	
         }));
         incomesBarChart = statsModel.setUpIncomesBarChart(incomesBarChart);
@@ -126,8 +126,10 @@ public class StatsViewController implements Initializable {
 			yearPick.getItems().add(y);
 		}
 		for (Month m : Month.values()){
-			monthPick.getItems().add(m.getDisplayName(TextStyle.FULL, Locale.getDefault()));
+			monthPick.getItems().add(m.toString());
+			//monthPick.getItems().add(m.getDisplayName(TextStyle.FULL, Locale.getDefault()));
 		}
+		
 		yearPick.setValue(Year.now());
 		monthPick.setValue(SHOW_ALL);
 		
@@ -205,7 +207,9 @@ public class StatsViewController implements Initializable {
     		statsModel.updateAllData(year, null);
     	}
     	else {
-    		Month month = (Month) monthPick.getSelectionModel().getSelectedItem();
+    		System.out.println(monthPick.getSelectionModel().getSelectedItem());
+    		Month month;
+    		month = Month.valueOf(monthPick.getSelectionModel().getSelectedItem());
 	    	statsModel.updateAllData(year, month);
     	}
     }
