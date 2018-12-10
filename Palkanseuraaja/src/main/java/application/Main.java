@@ -26,7 +26,7 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage stage) throws IOException {
-        Locale.setDefault(new Locale("fi"));
+        Locale.setDefault(new Locale("is"));
         stage.getIcons().add(new Image("/img/salarypal.png"));
         stage.setTitle(ResourceBundle.getBundle("MessagesBundle").getString("welcome"));
 

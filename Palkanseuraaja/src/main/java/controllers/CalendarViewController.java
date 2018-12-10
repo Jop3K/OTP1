@@ -310,8 +310,10 @@ public class CalendarViewController implements Initializable {
 
     @FXML
     public void createGoogleCalendar() throws IOException, GeneralSecurityException {
-        GoogleCalendar.createCalendar(newGoogleCalendarField.getText());
-        loadGoogleCalendarsToCombobox();
+        if (!newGoogleCalendarField.getText().isEmpty()) {
+            GoogleCalendar.createCalendar(newGoogleCalendarField.getText());
+            loadGoogleCalendarsToCombobox();
+        }
     }
 
     public void setLabels() {
@@ -491,7 +493,7 @@ public class CalendarViewController implements Initializable {
 
     @FXML
     public void sendToGoogle() throws IOException {
-        if (GoogleCalendar.isConnected()) {
+        if (GoogleCalendar.isConnected() && eventTable.getSelectionModel().getSelectedItems() != null) {
 
             String calendarId;
 
@@ -520,7 +522,6 @@ public class CalendarViewController implements Initializable {
                 UserDAO.update(models.CurrentUserRefactored.INSTANCE.getUser());
             }
         }
-        System.out.println(models.CurrentUserRefactored.INSTANCE.getUser().getDefaultGoogleCalendarId());
     }
 
     /**
@@ -669,9 +670,11 @@ public class CalendarViewController implements Initializable {
             @Override
             public String toString(LocalDate object) {
 
-                if(object == null) return null;
+                if (object == null) {
+                    return null;
+                }
 
-                if(rangeStart != null && rangeStart.equals(rangeEnd)) {
+                if (rangeStart != null && rangeStart.equals(rangeEnd)) {
                     return rangeStart.format(formatter);
                 } else if (rangeStart != null) {
                     return rangeStart.format(formatter) + " - " + rangeEnd.format(formatter);
@@ -702,8 +705,9 @@ public class CalendarViewController implements Initializable {
                 DatePickerContent content = ControllerUtil.getDatePickerContent(eventDatePicker);
                 List<DateCell> cells = ControllerUtil.getDatePickerDateCells(content);
 
-                if (rangeStart != null && rangeEnd != null)
+                if (rangeStart != null && rangeEnd != null) {
                     ControllerUtil.formatRangeToSelected(cells, rangeStart, rangeEnd);
+                }
 
                 startCell = null;
                 endCell = null;
@@ -753,7 +757,6 @@ public class CalendarViewController implements Initializable {
         });
 
     }
-
 
     public FilteredList<EventModel> filterTableData() {
 
