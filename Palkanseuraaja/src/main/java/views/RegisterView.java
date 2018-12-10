@@ -11,9 +11,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 
 public class RegisterView {
 
+    private Label register;
     private Label fname;
     private TextField fnameField;
     private Label lname;
@@ -27,8 +29,19 @@ public class RegisterView {
     private Button create;
     private Button back;
     private Label required;
+    
+    ResourceBundle labels = ResourceBundle.getBundle("LabelsBundle");
+    ResourceBundle buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
 
     public RegisterView() {
+
+        labels = ResourceBundle.getBundle("LabelsBundle");
+        buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
+        
+        register = new Label();
+        register.setText(labels.getString("register"));
+        register.setFont(new Font("Arial", 18));
+        register.setUnderline(true);
         
         fname = new Label();
         fnameField = new TextField();
@@ -46,8 +59,7 @@ public class RegisterView {
     }
 
     public void setLabels() {
-        ResourceBundle labels = ResourceBundle.getBundle("LabelsBundle");
-        ResourceBundle buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
+       
 
         fname.setText(labels.getString("firstname") + ":");
         lname.setText(labels.getString("lastname") + ":");
@@ -63,6 +75,7 @@ public class RegisterView {
 
         // ruudukko asettelua varten
         GridPane grid = new GridPane();
+        //grid.setGridLinesVisible(true);
 
         // välit ja positiot
         grid.setAlignment(Pos.CENTER);
@@ -74,18 +87,20 @@ public class RegisterView {
         grid.setPadding(new Insets(10, 10, 10, 10));
 
         // asetetaan ne ruudukkoon
-        grid.addRow(0, fname, fnameField);
-        grid.addRow(1, lname, lnameField);
-        grid.addRow(2, uname, unameField);
-        grid.addRow(3, pword1, pword1Field);
-        grid.addRow(4, pword2, pword2Field);
-        grid.add(required, 0, 5);
-        grid.addRow(6, create, back);
+        grid.add(register ,0, 0, 2, 1);
+        grid.addRow(1, fname, fnameField);
+        grid.addRow(2, lname, lnameField);
+        grid.addRow(3, uname, unameField);
+        grid.addRow(4, pword1, pword1Field);
+        grid.addRow(5, pword2, pword2Field);
+        grid.add(required, 0, 6);
+        grid.addRow(7, create, back);
 
         // muokkaan nappien asettelua
         GridPane.setMargin(required, new Insets(20, 0, 0, 0));
         GridPane.setMargin(create, new Insets(20, 0, 0, 50));
         GridPane.setMargin(back, new Insets(20, 0, 0, 50));
+        GridPane.setMargin(register, new Insets(0,0,30,90));
 
         return grid; // Palautetaan ruudukkoolio
 

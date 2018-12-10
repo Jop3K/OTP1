@@ -86,7 +86,9 @@ public class StatsViewController implements Initializable {
     
     private EventObservableDataList data;
     private StatsModel statsModel;
-    private String NOT_CHOOSED;
+
+    private  String SHOW_ALL = "Näytä kaikki";
+
 
     public StatsViewController() {
         statsModel = new StatsModel();
@@ -119,7 +121,7 @@ public class StatsViewController implements Initializable {
     	yearPick.getItems().clear();
     	
 		List<Year> yearsFromEvents = Calculation.FindYearsFromEvents();
-		monthPick.getItems().add(NOT_CHOOSED);
+		monthPick.getItems().add(SHOW_ALL);
 		for (Year y : yearsFromEvents){
 			yearPick.getItems().add(y);
 		}
@@ -127,7 +129,7 @@ public class StatsViewController implements Initializable {
 			monthPick.getItems().add(m.getDisplayName(TextStyle.FULL, Locale.getDefault()));
 		}
 		yearPick.setValue(Year.now());
-		monthPick.setValue(NOT_CHOOSED);
+		monthPick.setValue(SHOW_ALL);
 		
 	}
 
@@ -151,7 +153,7 @@ public class StatsViewController implements Initializable {
         //currency.setText(labels.getString("currency"));
         month.setText(labels.getString("month"));
         year.setText(labels.getString("year"));
-        NOT_CHOOSED = labels.getString("notSelected");
+        SHOW_ALL = labels.getString("notSelected");
     }
 
     public void setButtons() {
@@ -181,15 +183,30 @@ public class StatsViewController implements Initializable {
      
     }
     
-    public void populateBarChart(){
-    	Year year = yearPick.getSelectionModel().getSelectedItem();
-    	System.out.println(monthPick.getSelectionModel().getSelectedItem());
-    	if(!monthPick.getSelectionModel().getSelectedItem().equals(NOT_CHOOSED)) {
-	    	Month month = (Month) monthPick.getSelectionModel().getSelectedItem();
-	    	statsModel.updateAllData(year, month);	
-	    }
-    	else{
-    	statsModel.updateAllData(year, null);
+    public void populateBarChartFromYearPick(){
+    	
+    		Year year =  yearPick.getSelectionModel().getSelectedItem();
+    	
+	    	if(!monthPick.getSelectionModel().getSelectedItem().equals(SHOW_ALL)) {
+	    		
+	    	monthPick.setValue(SHOW_ALL); //Reseting monthPick dropdown
+	    	statsModel.updateAllData(year, null);
+	    	}
+	    	else{
+	    		statsModel.updateAllData(year, null);
+	    	}
     	}
-     }
+     
+    
+    public void populateBarChartFromMonthPick(){
+    	Year year = (Year)yearPick.getSelectionModel().getSelectedItem();
+    	
+    	if(monthPick.getSelectionModel().getSelectedItem().equals(SHOW_ALL)) {
+    		statsModel.updateAllData(year, null);
+    	}
+    	else {
+    		Month month = (Month) monthPick.getSelectionModel().getSelectedItem();
+	    	statsModel.updateAllData(year, month);
+    	}
+    }
 }

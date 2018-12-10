@@ -96,7 +96,7 @@
                         <Font size="18.0" fx:id="x11" />
                     </font>
                 </Label>
-                <Button fx:id="connectToGoogle" disable="false" mnemonicParsing="false" onAction="#connectToGoogle" text="Connect to Google" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                <Button fx:id="connectToGoogle" disable="false" mnemonicParsing="false" onAction="#connectToGoogle" prefHeight="25.0" prefWidth="144.0" text="Connect to Google" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                     <GridPane.margin>
                         <Insets left="70.0" top="-50.0" />
                     </GridPane.margin>
@@ -216,13 +216,13 @@
                <GridPane.margin>
                   <Insets top="25.0" />
                </GridPane.margin></Text>
-            <ComboBox fx:id="googleCalendarsDropdown" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="TOP">
+            <ComboBox fx:id="googleCalendarsDropdown" prefHeight="25.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="TOP">
                <GridPane.margin>
-                  <Insets top="25.0" />
+                  <Insets right="10.0" top="25.0" />
                </GridPane.margin></ComboBox>
             <Button fx:id="sendToGoogleButton" mnemonicParsing="false" onAction="#sendToGoogle" text="Send selected events to Google Calendar" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
                <GridPane.margin>
-                  <Insets bottom="30.0" left="86.0" />
+                  <Insets bottom="30.0" left="20.0" />
                </GridPane.margin></Button>
             <TextField fx:id="descriptionTextField" prefHeight="25.0" prefWidth="393.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>
@@ -233,17 +233,17 @@
             <Text fx:id="createCalendarText" strokeType="OUTSIDE" strokeWidth="0.0" text="Create New Google Calendar" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="newGoogleCalendarField" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <GridPane.margin>
-                  <Insets left="217.0" right="131.0" />
+                  <Insets left="192.0" right="200.0" />
                </GridPane.margin>
             </TextField>
-            <Button fx:id="createNewCalendarButton" mnemonicParsing="false" onAction="#createGoogleCalendar" prefWidth="70.0" text="Create" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+            <Button fx:id="createNewCalendarButton" mnemonicParsing="false" onAction="#createGoogleCalendar" prefHeight="25.0" prefWidth="141.0" text="Create" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <GridPane.margin>
-                  <Insets right="30.0" />
+                  <Insets right="40.0" />
                </GridPane.margin>
             </Button>
-            <Button fx:id="setDefaultCalendarButton" mnemonicParsing="false" onAction="#setDefaultCalendar" text="Set as Default Calendar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="TOP">
+            <Button fx:id="setDefaultCalendarButton" mnemonicParsing="false" onAction="#setDefaultCalendar" prefHeight="25.0" prefWidth="140.0" text="Set as Default Calendar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="TOP">
                <GridPane.margin>
-                  <Insets right="50.0" top="25.0" />
+                  <Insets right="40.0" top="25.0" />
                </GridPane.margin>
             </Button>
             </children>

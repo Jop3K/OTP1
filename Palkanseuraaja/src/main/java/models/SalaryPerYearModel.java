@@ -19,18 +19,9 @@ public class SalaryPerYearModel implements ISalaryModel {
 		return year;
 	}
 
-	public void setYear(Year year) {
-		this.year = year;
-	}
 
 	public double getTotalSalary() {
 		return totalSalary;
 	}
 
-	public void setTotalSalary(double totalSalary) {
-		this.totalSalary = totalSalary;
-	}
-	public void addSalary(double salary){
-		totalSalary += salary;
-	}
 }

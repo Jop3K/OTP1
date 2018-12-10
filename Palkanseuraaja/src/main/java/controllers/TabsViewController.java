@@ -5,6 +5,8 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 
 /**
@@ -25,8 +27,6 @@ public class TabsViewController implements Initializable {
     @FXML
     private Button logoutButton;
 
-    @FXML
-
     /**
      * Initializes the controller class.
      */
@@ -37,6 +37,7 @@ public class TabsViewController implements Initializable {
         calendarTab.setText(labels.getString("calendar"));
         profileTab.setText(labels.getString("workProfile"));
         statsTab.setText(labels.getString("statistics"));
+
         logoutButton.setText(labels.getString("logout"));
     }
 
@@ -45,6 +46,8 @@ public class TabsViewController implements Initializable {
         models.CurrentUserRefactored.INSTANCE.setUser(null);
         models.ViewManager.INSTANCE.clearLoginViewFields();
         models.ViewManager.INSTANCE.switchToLoginView();
+
     }
+
 
 }

@@ -11,7 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 
-public class IncomesByDaysInMonthDataStrategy implements BarChartData {
+
+public class IncomesByDaysInMonthDataStrategy extends AbstractDataStrategy {
 
     /**
      * Strategy class that generate data for BarChart in StatsView.
@@ -26,15 +27,10 @@ public class IncomesByDaysInMonthDataStrategy implements BarChartData {
         yearMonth = YearMonth.of(year.getValue(), month);
     }
 
-    @Override
-    public void update() {
-        // TODO Auto-generated method stub
-
-    }
-
+ 
     @Override
     public ObservableList getData() {
-        update();
+      
         ObservableList<XYChart.Data<String, Double>> xyList = FXCollections.observableArrayList();
 
         for (int day = 1; day < yearMonth.lengthOfMonth() + 1; day++) {
@@ -58,14 +54,5 @@ public class IncomesByDaysInMonthDataStrategy implements BarChartData {
         return xyList;
 
     }
-
-    @Override
-    public ObservableList setBarChartData() {
-        ObservableList<XYChart.Series<String, Double>> IncomesByDaysInMonthBarChartData = FXCollections.observableArrayList();
-        XYChart.Series<String, Double> dayIncome = new XYChart.Series<String, Double>(getData());
-        IncomesByDaysInMonthBarChartData.add(dayIncome);
-
-        return IncomesByDaysInMonthBarChartData;
-    }
-
 }
+
