@@ -46,7 +46,7 @@
                         <Insets />
                     </GridPane.margin>
                 </Label>
-                <Label fx:id="revenue" text="Tulot">
+                <Label fx:id="revenue" text="Tulot" visible="false">
 
                     <GridPane.margin>
                         <Insets left="20.0" top="20.0" />
@@ -55,12 +55,12 @@
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Label>
-                <TextField fx:id="incomeStatsField" editable="false" promptText="TBD">
+                <TextField fx:id="incomeStatsField" editable="false" promptText="TBD" visible="false">
                     <GridPane.margin>
                         <Insets left="140.0" right="300.0" top="20.0" />
                     </GridPane.margin>
                 </TextField>
-                <Label fx:id="workShifts" layoutX="60.0" layoutY="327.0" text="Työvuorot">
+                <Label fx:id="workShifts" layoutX="60.0" layoutY="327.0" text="Työvuorot" visible="false">
 
                     <GridPane.margin>
                         <Insets left="20.0" top="100.0" />
@@ -69,12 +69,12 @@
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Label>
-                <Label layoutX="60.0" layoutY="327.0" text="€">
+                <Label layoutX="60.0" layoutY="327.0" text="€" visible="false">
                     <GridPane.margin>
                         <Insets left="400.0" top="20.0" />
                     </GridPane.margin>
                 </Label>
-                <TextField fx:id="workshiftStatsField" editable="false" layoutX="60.0" layoutY="348.0" promptText="TBD">
+                <TextField fx:id="workshiftStatsField" editable="false" layoutX="60.0" layoutY="348.0" promptText="TBD" visible="false">
                     <GridPane.margin>
                         <Insets left="140.0" right="300.0" top="100.0" />
                     </GridPane.margin>
