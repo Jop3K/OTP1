@@ -24,7 +24,11 @@ import javafx.scene.layout.GridPane;
 import models.ViewManager;
 import javafx.scene.text.Font;
 
-
+/**
+ * LoginView class is for creating the GUI for Login 
+ * @author Joni, Joonas, Artur
+ *
+ */
 public class LoginView {
 
     // tekstikentät
@@ -46,6 +50,9 @@ public class LoginView {
     private ImageView imgView;
     private Image salarypalImg;
 
+    /**
+     * Constructor for login
+     */
     public LoginView() {
         
         // tekstikentät
@@ -86,6 +93,9 @@ public class LoginView {
         setLabels();
     }
 
+    /**
+     * Localizing loginView with resourcebundles
+     */
     private void setLabels() {
         ResourceBundle labels = ResourceBundle.getBundle("LabelsBundle");
         ResourceBundle buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
@@ -106,7 +116,11 @@ public class LoginView {
         imgView.setFitWidth(130);
     }
 
-    // Luodaan rekisteröintinäkymä ja palautetaan se Parent oliona.
+    
+    /**
+     * Creates loginView and returns it as a parent object
+     * @return returns parent object
+     */
     public Parent getView() {
 
         // ruudukko asettelua varten
@@ -145,26 +159,49 @@ public class LoginView {
 
     }
 
+    /**
+     * OnClick event listener to register button
+     * @param event represents the action that happens
+     */
     public void addRegisterButtonEventListener(EventHandler event) {
         register.setOnAction(event);
     }
 
+    /**
+     * OnClick event listener to login button
+     * @param event represents the action that happens
+     */
     public void addLoginButtonEventListener(EventHandler event) {
         login.setOnAction(event);
     }
 
+    /**
+     * This is for showing an alert
+     * @param alert 
+     */
     public void showAlert(Alert alert) {
         alert.showAndWait();
     }
 
+    /**
+     * Getter for usernameField
+     * @return returns the usernameField text
+     */
     public String getUsernameField() {
         return usernameField.getText();
     }
 
+    /**
+     * Getter for passwordField
+     * @return returns the passwordField text
+     */
     public String getPasswordField() {
         return passwordField.getText();
     }
     
+    /**
+     * Empties usernameField and passwordField
+     */
     public void clearFields() {
         usernameField.clear();
         passwordField.clear();

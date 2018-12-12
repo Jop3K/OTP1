@@ -13,6 +13,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 
+/**
+ * Registerview class is for creating the GUI for Register
+ * @author Joni, Joonas, Artur
+ *
+ */
 public class RegisterView {
 
     private Label register;
@@ -31,6 +36,9 @@ public class RegisterView {
     private Label required;
 
 
+    /**
+     * Constructor for register
+     */
     public RegisterView() {
         
         register = new Label();
@@ -52,6 +60,9 @@ public class RegisterView {
         required = new Label();
     }
 
+    /**
+     * Localizing registerView with resourcebundles
+     */
     public void setLabels() {
         ResourceBundle labels = ResourceBundle.getBundle("LabelsBundle");
         ResourceBundle buttons = ResourceBundle.getBundle("ButtonLabelsBundle");
@@ -67,6 +78,10 @@ public class RegisterView {
         required.setText(labels.getString("required"));
     }
 
+    /**
+     * Creates registerView and returns it as a parent object
+     * @return returns parent object
+     */
     public Parent getView() {
 
         // ruudukko asettelua varten
@@ -102,34 +117,59 @@ public class RegisterView {
 
     }
 
+    /**
+     * OnClick event listener for back button
+     * @param event 
+     */
     public void addBackButtonEventHandler(EventHandler event) {
         back.setOnAction(event);
     }
-
+/**
+ * OnClick event listener for create button
+ * @param event
+ */
     public void addCreateButtonEventHandler(EventHandler event) {
         create.setOnAction(event);
     }
-
+/**
+ * For showing alerts
+ * @param alert
+ */
     public void showAlert(Alert alert) {
         alert.showAndWait();
     }
-
+/**
+ * Getter from form - get Firstname text
+ * @return field text
+ */
     public String getFname() {
         return fnameField.getText();
     }
-
+/**
+ * Getter from form - get Lastname text
+ * @return field text
+ */
     public String getLname() {
         return lnameField.getText();
     }
-
+/**
+ * Getter from form - getPassword1 text
+ * @return field text
+ */
     public String getPword1() {
         return pword1Field.getText();
     }
-
+/**
+ * Getter from form - getPassword2 text
+ * @return field text
+ */
     public String getPword2() {
         return pword2Field.getText();
     }
-
+/**
+ * Getter from form - get Username text
+ * @return field text
+ */
     public String getUname() {
         return unameField.getText();
     }
