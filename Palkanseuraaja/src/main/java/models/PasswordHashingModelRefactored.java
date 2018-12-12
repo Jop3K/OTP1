@@ -5,11 +5,12 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 
-public class PasswordHashing {
+public class PasswordHashingModelRefactored implements IPasswordSecurity {
 
-    public PasswordHashing() {
+    public PasswordHashingModelRefactored() {
     }
 
+    @Override
     public String get_SHA_256_SecurePassword(String password, byte[] salt) {
 
         String generatedPassword = null;
@@ -35,6 +36,7 @@ public class PasswordHashing {
     }
 
     //Add salt
+    @Override
     public byte[] generateSalt() throws NoSuchAlgorithmException, NoSuchProviderException {
         //Always use a SecureRandom generator
         SecureRandom sr = SecureRandom.getInstance("SHA1PRNG", "SUN");

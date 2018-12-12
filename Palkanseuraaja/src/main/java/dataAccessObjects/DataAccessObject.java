@@ -20,26 +20,24 @@ public class DataAccessObject {
     private static SessionFactory sessionFactory;
 
     public DataAccessObject() {
-
-    	Configuration con = new Configuration().configure().addAnnotatedClass(User.class)
-    	        .addAnnotatedClass(WorkProfile.class)
-    	        .addAnnotatedClass(ExtraPay.class)
-    	        .addAnnotatedClass(EventModel.class)
-    	        .addAnnotatedClass(WeekDays.class);
-    	        ServiceRegistry reg = new StandardServiceRegistryBuilder().applySettings(con.getProperties()).build();
-    	        sessionFactory = con.buildSessionFactory(reg);
-
+        Configuration con = new Configuration().configure().addAnnotatedClass(User.class)
+                .addAnnotatedClass(WorkProfile.class)
+                .addAnnotatedClass(ExtraPay.class)
+                .addAnnotatedClass(EventModel.class)
+                .addAnnotatedClass(WeekDays.class);
+        ServiceRegistry reg = new StandardServiceRegistryBuilder().applySettings(con.getProperties()).build();
+        sessionFactory = con.buildSessionFactory(reg);
     }
 
     private static SessionFactory getSessionFactory() {
 
-       return sessionFactory;
+        return sessionFactory;
     }
 
     public static Session openCurrentSession() {
         session = getSessionFactory().openSession();
+        
         return session;
-
     }
 
     public static void closeCurrentSession() {
@@ -54,7 +52,7 @@ public class DataAccessObject {
 
     public static Session openCurrentSessionWithTransaction() {
         session = getSessionFactory().openSession();
-       transaction = session.beginTransaction();
+        transaction = session.beginTransaction();
 
         return session;
     }
@@ -63,16 +61,16 @@ public class DataAccessObject {
         return session;
     }
 
-    public static void setCurrentSession(Session session) {
-        session = session;
+    public static void setCurrentSession(Session s) {
+        session = s;
     }
 
     public static Transaction getCurrentTransaction() {
         return transaction;
     }
 
-    public static void setCurrentTransaction(Transaction transaction) {
-        transaction = transaction;
+    public static void setCurrentTransaction(Transaction t) {
+        transaction = t;
     }
 
 }

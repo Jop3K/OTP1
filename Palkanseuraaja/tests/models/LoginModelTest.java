@@ -10,22 +10,24 @@ import de.saxsys.javafx.test.JfxRunner;
 import de.saxsys.javafx.test.TestInJfxThread;
 @RunWith(JfxRunner.class)
 public class LoginModelTest {
-	LoginModel fail;
+	LoginModelRefactored fail;
 	@Before
 	public void setUp() throws Exception {
-		fail = new LoginModel();
 	}
 
 	@Test
 	@TestInJfxThread
 	public void testLoginFieldValidation() {
-		assertFalse(fail.loginFieldValidation("", "password"));
-		assertEquals(fail.getAlert().getHeaderText(), "Syötä käyttäjätunnus ja salasana!");
+                fail = new LoginModelRefactored("", "password");
+		assertFalse(fail.loginFieldValidation());
+		assertEquals(fail.getAlert().getHeaderText(), "Syötä käyttäjätunnus ja salasana");
 		
-		assertFalse(fail.loginFieldValidation("username", ""));
-		assertEquals(fail.getAlert().getHeaderText(), "Syötä käyttäjätunnus ja salasana!");
+                fail = new LoginModelRefactored("username", "");
+		assertFalse(fail.loginFieldValidation());
+		assertEquals(fail.getAlert().getHeaderText(), "Syötä käyttäjätunnus ja salasana");
 		
-		assertTrue(fail.loginFieldValidation("username", "password"));
+                fail = new LoginModelRefactored("username", "password");
+		assertTrue(fail.loginFieldValidation());
 		
 	}
 

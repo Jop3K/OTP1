@@ -1,36 +1,26 @@
 package controllers;
 
-import models.ViewChanger;
 import dataAccessObjects.UserDAO;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import models.EventModel;
-import models.LoginModel;
-import models.RegisterModel;
+import models.LoginModelRefactored;
 import views.LoginView;
-import views.RegisterView;
 
-public class LoginController {
+public class LoginControllerRefactored {
 
-    
-    private ViewChanger viewChanger;
-    private LoginView loginView;
-    private LoginModel loginModel;
+    private final LoginView loginView;
 
     /**
      * The constructor for LoginController
-     * @param loginView 
-     * @param loginModel 
-     * @param viewChanger for changing the View when logging in successfully 
+     *
+     * @param loginView
      */
-    public LoginController(LoginView loginView, LoginModel loginModel, ViewChanger viewChanger) {
-        
-        this.viewChanger = viewChanger;
-        this.loginModel = loginModel;
+    public LoginControllerRefactored(LoginView loginView) {
         this.loginView = loginView;
         //Lisätään listenerit loginViewin buttoneille
         loginView.addRegisterButtonEventListener(new RegisterButtonListener());
@@ -40,6 +30,7 @@ public class LoginController {
 
     /**
      * The class we use for handling the register button onclick event
+     *
      * @author Joni, Artur, Joonas
      *
      */
@@ -48,11 +39,7 @@ public class LoginController {
         @Override
         //Ohjaa registerViewiin
         public void handle(Event event) {
-
-            RegisterView registerView = new RegisterView();
-            RegisterModel registerModel = new RegisterModel();
-            RegisterController registerViewController = new RegisterController(registerView, registerModel, viewChanger);
-            viewChanger.viewBuilder(registerView.getView());
+            models.ViewManager.INSTANCE.switchToRegisterView();
             //sulkee tietokantayhteyden
         }
 
@@ -61,18 +48,20 @@ public class LoginController {
 
     /**
      * The class we use for handling the "Login" button onclick event
+     *
      * @author Joni, Artur, Joonas
-     * 
+     *
      */
     class LoginButtonListener implements EventHandler {
 
-    	/**
-    	 * Method for handling the login event
-    	 */
+        /**
+         * Method for handling the login event
+         */
         @Override
         public void handle(Event arg0) {
+            LoginModelRefactored loginModel = new LoginModelRefactored(loginView.getUsernameField(), loginView.getPasswordField());
             //Varmistaa, että kumpikaan kentistä ei ole tyhjä
-            if (loginModel.loginFieldValidation(loginView.getUsernameField(), loginView.getPasswordField())) {
+            if (loginModel.loginFieldValidation()) {
                 try {
                     // new PasswordHashing(loginView.getPasswordField()).get_SHA_256_SecurePassword()
                     //Yritetään sisäänkirjaumista ottamalla yhteys tietokantaan
@@ -80,16 +69,13 @@ public class LoginController {
                         //Kirjautuminen onnistui ja luodaan ilmoitus siitä.
                         //loginView.showAlert(dao.getAlert());
                         //Ohjataan ohjelmaan
-                        EventModel eventModel = new EventModel();
-                        CalendarViewController calendarViewController = new CalendarViewController();
-                        viewChanger.switchStage("/fxml/TabsView.fxml", viewChanger);
-
+                        models.ViewManager.INSTANCE.switchToApplicationView();
                     } else {
                         //Kirjautuminen epäonnistui. Ilmoitetaan siitä
                         loginView.showAlert(UserDAO.getAlert());
                     }
-                } catch (NoSuchAlgorithmException | NoSuchProviderException ex) {
-                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NoSuchAlgorithmException | NoSuchProviderException | IOException ex) {
+                    Logger.getLogger(LoginControllerRefactored.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
                 //Jompikumpi tai molemmat kentät ovat tyhjät. Ilmoitetaan siitä

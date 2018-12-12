@@ -7,11 +7,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CalendarViewController">
 
@@ -71,17 +73,17 @@
                 <Label fx:id="timeFrame" text="Aikaväli(tunnit)" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <Label fx:id="hoursStart" text="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
-                        <Insets left="160.0" />
+                        <Insets left="155.0" />
                     </GridPane.margin>
                 </Label>
                 <Label fx:id="minutesStart" text="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
-                        <Insets left="250.0" />
+                        <Insets left="245.0" />
                     </GridPane.margin>
                 </Label>
                 <Label fx:id="hoursEnd" layoutX="455.0" layoutY="136.0" text="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
-                        <Insets left="395.0" />
+                        <Insets left="390.0" />
                     </GridPane.margin>
                 </Label>
                 <Label fx:id="minutesEnd" layoutX="490.0" layoutY="136.0" text="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -94,9 +96,9 @@
                         <Font size="18.0" fx:id="x11" />
                     </font>
                 </Label>
-                <Button fx:id="connectToGoogle" disable="false" mnemonicParsing="false" onAction="#connectToGoogle" text="Connect to Google" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                <Button fx:id="connectToGoogle" disable="false" mnemonicParsing="false" onAction="#connectToGoogle" prefHeight="25.0" prefWidth="144.0" text="Connect to Google" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                     <GridPane.margin>
-                        <Insets left="150.0" />
+                        <Insets left="70.0" top="-50.0" />
                     </GridPane.margin>
                 </Button>
                 <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveEvent" text="Tallenna" GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -114,22 +116,22 @@
                 </Label>
                 <ComboBox fx:id="startHour" editable="true" prefHeight="25.0" prefWidth="75.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
-                        <Insets left="127.0" top="50.0" />
+                        <Insets left="127.0" top="40.0" />
                     </GridPane.margin>
                 </ComboBox>
                 <ComboBox fx:id="startMinute" editable="true" layoutX="430.0" layoutY="157.0" prefHeight="25.0" prefWidth="75.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
-                        <Insets left="220.0" top="50.0" />
+                        <Insets left="220.0" top="40.0" />
                     </GridPane.margin>
                 </ComboBox>
                 <ComboBox fx:id="endHour" editable="true" layoutX="430.0" layoutY="157.0" prefHeight="25.0" prefWidth="75.0" promptText="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
-                        <Insets left="361.0" top="50.0" />
+                        <Insets left="361.0" top="40.0" />
                     </GridPane.margin>
                 </ComboBox>
                 <ComboBox fx:id="endMinute" editable="true" layoutX="590.0" layoutY="157.0" prefHeight="25.0" prefWidth="75.0" promptText="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
-                        <Insets left="450.0" top="50.0" />
+                        <Insets left="450.0" top="40.0" />
                     </GridPane.margin>
                 </ComboBox>
                 <Label layoutX="450.0" layoutY="136.0" text=":" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -155,8 +157,9 @@
                 <TableView fx:id="eventTable" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" GridPane.rowSpan="4">
                     <columns>
                         <TableColumn fx:id="workProfileColumn" prefWidth="146.0" resizable="false" text="Työprofiili" />
-                        <TableColumn fx:id="startColumn" minWidth="0.0" prefWidth="250.0" resizable="false" text="Alkaa" />
-                        <TableColumn fx:id="endColumn" prefWidth="259.0" resizable="false" text="Loppuu" />
+                        <TableColumn fx:id="startColumn" prefWidth="146.0" resizable="false" text="Alkaa" />
+                        <TableColumn fx:id="endColumn" prefWidth="146.0" resizable="false" text="Loppuu" />
+                  <TableColumn fx:id="descriptionColumn" prefWidth="234.0" text="Description" />
                     </columns>
                     <GridPane.margin>
                         <Insets left="20.0" right="20.0" />
@@ -196,6 +199,53 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
+            <Button fx:id="disconnectGoogle" disable="false" mnemonicParsing="false" onAction="#disconnectFromGoogle" text="Disconnect from Google" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+               <GridPane.margin>
+                  <Insets bottom="-70.0" left="70.0" top="-50.0" />
+               </GridPane.margin>
+            </Button>
+            <Text fx:id="connection" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Connected" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+               <GridPane.margin>
+                  <Insets bottom="20.0" left="70.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Text fx:id="chooseCalendarText" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Your Google Calendar" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.valignment="TOP">
+               <GridPane.margin>
+                  <Insets top="25.0" />
+               </GridPane.margin></Text>
+            <ComboBox fx:id="googleCalendarsDropdown" prefHeight="25.0" prefWidth="193.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="TOP">
+               <GridPane.margin>
+                  <Insets right="10.0" top="25.0" />
+               </GridPane.margin></ComboBox>
+            <Button fx:id="sendToGoogleButton" mnemonicParsing="false" onAction="#sendToGoogle" prefHeight="39.0" prefWidth="234.0" text="Send selected events to Google Calendar" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
+               <GridPane.margin>
+                  <Insets bottom="10.0" />
+               </GridPane.margin></Button>
+            <TextField fx:id="descriptionTextField" prefHeight="25.0" prefWidth="393.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+               <GridPane.margin>
+                  <Insets left="127.0" right="58.0" />
+               </GridPane.margin>
+            </TextField>
+            <Label fx:id="descriptionLabel" text="Description" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
+            <Text fx:id="createCalendarText" strokeType="OUTSIDE" strokeWidth="0.0" text="Create New Google Calendar" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="newGoogleCalendarField" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets left="192.0" right="200.0" />
+               </GridPane.margin>
+            </TextField>
+            <Button fx:id="createNewCalendarButton" mnemonicParsing="false" onAction="#createGoogleCalendar" prefHeight="25.0" prefWidth="141.0" text="Create" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+               <GridPane.margin>
+                  <Insets right="40.0" />
+               </GridPane.margin>
+            </Button>
+            <Button fx:id="setDefaultCalendarButton" mnemonicParsing="false" onAction="#setDefaultCalendar" prefHeight="25.0" prefWidth="140.0" text="Set as Default Calendar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="TOP">
+               <GridPane.margin>
+                  <Insets right="40.0" top="25.0" />
+               </GridPane.margin>
+            </Button>
             </children>
         </GridPane>
     </children>

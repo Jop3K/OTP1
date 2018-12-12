@@ -5,21 +5,38 @@
  */
 package controllers;
 
+import java.io.IOException;
 import java.net.URL;
+import java.time.Month;
+import java.time.Year;
+import java.time.format.TextStyle;
+import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
+import models.Calculation;
+import models.EventObservableDataList;
+import models.StatsModel;
 
 /**
  * FXML Controller class
  *
- * @author Artur
+ * @author Artur, Joni, Joonas
  */
 public class StatsViewController implements Initializable {
 
@@ -51,11 +68,31 @@ public class StatsViewController implements Initializable {
     @FXML
     private Button editButton;
     @FXML
-    private BarChart incomesByMonthsBarChart;
+    private Button statsSettingsBtn;
+    @FXML
+    private BarChart incomesBarChart;
     @FXML
     private ComboBox incomeDropdown;
     @FXML
     private ComboBox workshiftDropdown;
+    @FXML
+    private ComboBox<Year> yearPick;
+    @FXML
+    private ComboBox<String> monthPick;
+    @FXML
+    private Label month;
+    @FXML
+    private Label year;
+    
+    private EventObservableDataList data;
+    private StatsModel statsModel;
+
+    private  String SHOW_ALL = "Näytä kaikki";
+
+
+    public StatsViewController() {
+        statsModel = new StatsModel();
+    }
 
     /**
      * Initializes the controller class.
@@ -67,9 +104,44 @@ public class StatsViewController implements Initializable {
 
         setLabels();
         setButtons();
+        setComboBoxes();
+
+        data.getInstance().addListener((ListChangeListener)(c -> {
+        	statsModel.updateAllData(Year.now(), null);
+        	//setComboBoxes();
+        	
+        }));
+        incomesBarChart = statsModel.setUpIncomesBarChart(incomesBarChart);
+        
+      
     }
 
-    public void setLabels() {
+    /**
+     * For initializing statsView comboboxes
+     */
+    private void setComboBoxes() {
+    	monthPick.getItems().clear();
+    	yearPick.getItems().clear();
+    	
+		List<Year> yearsFromEvents = Calculation.FindYearsFromEvents();
+		monthPick.getItems().add(SHOW_ALL);
+		for (Year y : yearsFromEvents){
+			yearPick.getItems().add(y);
+		}
+		for (Month m : Month.values()){
+			monthPick.getItems().add(m.toString());
+			//monthPick.getItems().add(m.getDisplayName(TextStyle.FULL, Locale.getDefault()));
+		}
+		
+		yearPick.setValue(Year.now());
+		monthPick.setValue(SHOW_ALL);
+		
+	}
+
+    /**
+     * For localization of statsView labels using resourceBundles
+     */
+	public void setLabels() {
         stats.setText(labels.getString("stats"));
         revenue.setText(labels.getString("revenue"));
         incomeDropdown.getItems().add(labels.getString("today"));
@@ -83,14 +155,80 @@ public class StatsViewController implements Initializable {
         workshiftDropdown.getItems().add(labels.getString("month"));
         workshiftDropdown.getItems().add(labels.getString("year"));
         workShifts.setText(labels.getString("workShifts"));
-        incomesByMonthsBarChart.setTitle(labels.getString("yearlyIncome"));
-        settings.setText(labels.getString("settings"));
-        payLimit.setText(labels.getString("payLimit"));
-        currency.setText(labels.getString("currency"));
+        incomesBarChart.setTitle(labels.getString("yearlyIncome"));
+        //settings.setText(labels.getString("settings"));
+        //payLimit.setText(labels.getString("payLimit"));
+        //currency.setText(labels.getString("currency"));
+        month.setText(labels.getString("month"));
+        year.setText(labels.getString("year"));
+        SHOW_ALL = labels.getString("notSelected");
     }
 
+	/**
+	 * For localization of statsView buttons using resourceBundles
+	 */
     public void setButtons() {
-        saveButton.setText(buttons.getString("save"));
-        editButton.setText(buttons.getString("edit"));
+
+      
+      //  saveButton.setText(buttons.getString("save"));
+      //  editButton.setText(buttons.getString("edit"));
+      //  statsSettingsBtn.setText(buttons.getString("settings"));
+
+    }
+   
+    /**
+     * onClick method for settings button on statsView
+     * Opens a new window with FXML
+     * @param e
+     */
+    public void openSettings(ActionEvent e) {
+    	
+    	 try {
+    	        FXMLLoader fxmlLoader = new FXMLLoader();
+    	        fxmlLoader.setLocation(getClass().getResource("/fxml/StatsSettingsView.fxml"));
+    	        
+    	        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+    	        Stage stage = new Stage();
+    	        stage.setTitle(labels.getString("statsSettings"));
+    	        stage.setScene(scene);
+    	        stage.show();
+    	    } catch (IOException er) {
+    	        Logger logger = Logger.getLogger(getClass().getName());
+    	        logger.log(Level.SEVERE, "Failed to create new Window.", er);
+    	    }
+     
+    }
+    /**
+     * Method for updating BarChart when years are selected
+     */
+    public void populateBarChartFromYearPick(){
+    	
+    		Year year =  yearPick.getSelectionModel().getSelectedItem();
+    	
+	    	if(!monthPick.getSelectionModel().getSelectedItem().equals(SHOW_ALL)) {
+	    		
+	    	monthPick.setValue(SHOW_ALL); //Reseting monthPick dropdown
+	    	statsModel.updateAllData(year, null);
+	    	}
+	    	else{
+	    		statsModel.updateAllData(year, null);
+	    	}
+    	}
+     
+    /**
+     * Method for updating BarChart when months are selected
+     */
+    public void populateBarChartFromMonthPick(){
+    	Year year = (Year)yearPick.getSelectionModel().getSelectedItem();
+    	
+    	if(monthPick.getSelectionModel().getSelectedItem().equals(SHOW_ALL)) {
+    		statsModel.updateAllData(year, null);
+    	}
+    	else {
+    		System.out.println(monthPick.getSelectionModel().getSelectedItem());
+    		Month month;
+    		month = Month.valueOf(monthPick.getSelectionModel().getSelectedItem());
+	    	statsModel.updateAllData(year, month);
+    	}
     }
 }

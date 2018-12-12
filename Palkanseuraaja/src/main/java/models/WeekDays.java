@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "weekdays")
 
-public class WeekDays {
+public class WeekDays implements IWeekDays {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,9 +40,10 @@ public class WeekDays {
 
     public WeekDays() {
     }
-    
-        public boolean isDayOfWeek(DayOfWeek dow) {
-        switch(dow) {
+
+    @Override
+    public boolean isDayOfWeek(DayOfWeek dow) {
+        switch (dow) {
             case MONDAY:
                 return isMonday();
             case TUESDAY:
@@ -60,6 +61,14 @@ public class WeekDays {
             default:
                 return false;
         }
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public boolean isMonday() {
@@ -118,11 +127,11 @@ public class WeekDays {
         this.sunday = sunday;
     }
 
-    public ExtraPay getExtrapay() {
+    public ExtraPay getExtraPay() {
         return extrapay;
     }
 
-    public void setExtrapay(ExtraPay extrapay) {
+    public void setExtraPay(ExtraPay extrapay) {
         this.extrapay = extrapay;
     }
 

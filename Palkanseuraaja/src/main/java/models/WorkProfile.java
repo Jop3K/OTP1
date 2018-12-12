@@ -1,9 +1,7 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.*;
 
 @Entity
@@ -27,10 +25,13 @@ public class WorkProfile {
     private User user;
 
     @OneToMany(mappedBy = "workProfile")
-    private Set<ExtraPay> extrapays = new HashSet<>();
+    private List<ExtraPay> extrapays = new ArrayList<>();
 
     @OneToMany(mappedBy = "workProfile")
     private List<EventModel> events = new ArrayList<>();
+
+    @Column(name = "isDeleted", nullable = true)
+    private boolean isDeleted = false;
 
     public WorkProfile() {
     }
@@ -41,14 +42,6 @@ public class WorkProfile {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public double getPay() {
@@ -62,24 +55,32 @@ public class WorkProfile {
     public void calculateEventPays() {
         List<EventModel> events = EventObservableDataList.getInstance();
 
-        for(EventModel event : events) {
+        events.forEach((event) -> {
             event.calcPay();
-        }
+        });
     }
 
     public String getName() {
         return name;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public Set<ExtraPay> getExtraPays() {
+    public List<ExtraPay> getExtraPays() {
         return extrapays;
     }
 
-    public void setExtraPays(Set<ExtraPay> extrapays) {
+    public void setExtraPays(List<ExtraPay> extrapays) {
         this.extrapays = extrapays;
     }
 
@@ -90,10 +91,18 @@ public class WorkProfile {
     public void setEvents(List<EventModel> events) {
         this.events = events;
     }
-    
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
     @Override
-    public String toString(){
-    	return getName();
+    public String toString() {
+        return getName();
     }
 
 }

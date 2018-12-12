@@ -1,20 +1,13 @@
 package application;
 
-import models.ViewChanger;
-import controllers.LoginController;
 import dataAccessObjects.UserDAO;
 
 import java.io.IOException;
-
-import java.security.GeneralSecurityException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import models.LoginModel;
-import views.LoginView;
 
 /**
  *
@@ -29,28 +22,17 @@ public class Main extends Application {
      *
      * @param stage we give this parameter to start method for it to know what
      * we are starting
+     * @throws java.io.IOException
      */
     @Override
     public void start(Stage stage) throws IOException {
-        Locale.setDefault(new Locale("is"));
-//        stage.getIcons().add(new Image("/img/salarypal.png"));
+        Locale.setDefault(new Locale("fi"));
+        stage.getIcons().add(new Image("/img/salarypal.png"));
 
-        stage.setTitle(ResourceBundle.getBundle("MessagesBundle").getString("welcome"));
-
-        //Valjastetaan ensinmäin MVC-hommeli käyttöön. stage kulkee kokoajan mukana kirjautumisen
-        //ja rekisteröinnin välissä
-        ViewChanger viewChanger = new ViewChanger(stage);
-        LoginView loginView = new LoginView();
-        LoginModel loginModel = new LoginModel();
-        LoginController loginViewController = new LoginController(loginView, loginModel, viewChanger);
         UserDAO dao = new UserDAO();
 
-        Scene window = new Scene(loginView.getView(), 800, 800);
-
-        stage.setScene(window);
-
-        stage.show();
-
+        models.ViewManager.INSTANCE.setStage(stage);
+        models.ViewManager.INSTANCE.switchToLoginView();
     }
 
     /**
