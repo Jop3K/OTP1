@@ -73,17 +73,17 @@
                 <Label fx:id="timeFrame" text="Aikaväli(tunnit)" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <Label fx:id="hoursStart" text="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
-                        <Insets left="160.0" />
+                        <Insets left="155.0" />
                     </GridPane.margin>
                 </Label>
                 <Label fx:id="minutesStart" text="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
-                        <Insets left="250.0" />
+                        <Insets left="245.0" />
                     </GridPane.margin>
                 </Label>
                 <Label fx:id="hoursEnd" layoutX="455.0" layoutY="136.0" text="T" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
-                        <Insets left="395.0" />
+                        <Insets left="390.0" />
                     </GridPane.margin>
                 </Label>
                 <Label fx:id="minutesEnd" layoutX="490.0" layoutY="136.0" text="M" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -220,9 +220,9 @@
                <GridPane.margin>
                   <Insets right="10.0" top="25.0" />
                </GridPane.margin></ComboBox>
-            <Button fx:id="sendToGoogleButton" mnemonicParsing="false" onAction="#sendToGoogle" text="Send selected events to Google Calendar" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
+            <Button fx:id="sendToGoogleButton" mnemonicParsing="false" onAction="#sendToGoogle" prefHeight="39.0" prefWidth="234.0" text="Send selected events to Google Calendar" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
                <GridPane.margin>
-                  <Insets bottom="30.0" left="20.0" />
+                  <Insets bottom="10.0" />
                </GridPane.margin></Button>
             <TextField fx:id="descriptionTextField" prefHeight="25.0" prefWidth="393.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>

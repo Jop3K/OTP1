@@ -158,7 +158,7 @@
                 </Label>
                 <Label fx:id="chooseProfile" layoutX="400.0" layoutY="106.0" text="Valitse profiili :">
                     <GridPane.margin>
-                        <Insets left="300.0" top="50.0" />
+                        <Insets left="260.0" top="50.0" />
                     </GridPane.margin>
                 </Label>
                 <ComboBox fx:id="profileChooser" layoutX="630.0" layoutY="132.0" onAction="#handleProfileChooserClick" prefHeight="26.0" prefWidth="120.0">

@@ -345,8 +345,8 @@ public class CalendarViewController implements Initializable {
         hoursEnd.setText(labels.getString("hour"));
         minutesEnd.setText(labels.getString("minute"));
         createEvent.setText(labels.getString("createEvent"));
-        workProfile.setText(labels.getString("workProfile"));
-        eventsFound.setText(labels.getString("eventsFound"));
+        workProfile.setText(labels.getString("workProfile") + " :");
+        eventsFound.setText(labels.getString("eventsFound") + " :" );
         workProfileColumn.setText(labels.getString("workProfile"));
         descriptionColumn.setText(labels.getString("description"));
         startColumn.setText(labels.getString("starts"));
