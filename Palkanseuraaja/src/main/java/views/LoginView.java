@@ -63,7 +63,7 @@ public class LoginView {
         passwordField = new PasswordField();
 
         languageSelect = new ComboBox<>();
-        languageSelect.getItems().addAll("Suomi", "Íslensku");
+        languageSelect.getItems().addAll("Suomi", "Íslensku", "English");
 
         languageSelect.getSelectionModel().select(0);
 
@@ -77,6 +77,8 @@ public class LoginView {
                 Locale.setDefault(new Locale("fi"));
             } else if(t1.equals("Íslensku")) {
                 Locale.setDefault(new Locale("is"));
+            } else if(t1.equals("English")) {
+            	Locale.setDefault(new Locale("en"));
             }
 
             setLabels();
