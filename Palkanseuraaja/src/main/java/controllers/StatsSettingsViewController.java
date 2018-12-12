@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 /**
- *  FXML Controller class
+ *  FXML Controller class, NO FUNCTONALITY IN THE CURRENT BUILD
  *  @author Joni
  */
 public class StatsSettingsViewController implements Initializable {
@@ -28,6 +28,9 @@ public class StatsSettingsViewController implements Initializable {
     @FXML
     private Button statsSettingsBack;
 
+    /**
+     * For initializing and localizing StatsSettingsView
+     */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
             

@@ -14,7 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 /**
- * FXML Controller class
+ * FXML Controller class, NOT USED IN CURRENT BUILD
  *
  * @author Artur
  */

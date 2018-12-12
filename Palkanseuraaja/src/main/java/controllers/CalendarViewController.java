@@ -251,6 +251,11 @@ public class CalendarViewController implements Initializable {
         }
     }
 
+    /**
+     * onClick method for disconnecting google account
+     * @throws IOException
+     * @throws GeneralSecurityException
+     */
     @FXML
     public void disconnectFromGoogle() throws IOException, GeneralSecurityException {
         GoogleCalendar.disconnect();
@@ -259,6 +264,10 @@ public class CalendarViewController implements Initializable {
         googleCalendarsDropdown.getItems().clear();
     }
 
+    /**
+     * Load google calendars from the active account to combobox
+     * @throws IOException
+     */
     public void loadGoogleCalendarsToCombobox() throws IOException {
         googleCalendarsDropdown.getItems().clear();
 
@@ -308,6 +317,11 @@ public class CalendarViewController implements Initializable {
         });
     }
 
+    /**
+     * Method for creating a new calendar in the active google calendar account
+     * @throws IOException
+     * @throws GeneralSecurityException
+     */
     @FXML
     public void createGoogleCalendar() throws IOException, GeneralSecurityException {
         if (!newGoogleCalendarField.getText().isEmpty()) {
@@ -316,6 +330,9 @@ public class CalendarViewController implements Initializable {
         }
     }
 
+ /**
+ * For Localizing CalendarView labels using resourceBundles
+ */
     public void setLabels() {
         events.setText(labels.getString("events"));
         chooseDate1.setText(labels.getString("chooseDate"));
@@ -343,6 +360,9 @@ public class CalendarViewController implements Initializable {
         createCalendarText.setText(labels.getString("createCalendar"));
     }
 
+    /**
+     * For Localizing CalendarView buttons using resourceBundles
+     */
     public void setButtons() {
         saveButton.setText(buttons.getString("save"));
         cancelEventEditBtn.setText(buttons.getString("cancel"));
@@ -491,6 +511,10 @@ public class CalendarViewController implements Initializable {
 
     }
 
+    /**
+     * Method for sending selected events to active google account's calendar
+     * @throws IOException
+     */
     @FXML
     public void sendToGoogle() throws IOException {
         if (GoogleCalendar.isConnected() && eventTable.getSelectionModel().getSelectedItems() != null) {
@@ -514,6 +538,9 @@ public class CalendarViewController implements Initializable {
         }
     }
 
+    /**
+     * Method for choosing a default calendar on the active google account
+     */
     @FXML
     public void setDefaultCalendar() {
         if (GoogleCalendar.isConnected()) {
@@ -663,6 +690,9 @@ public class CalendarViewController implements Initializable {
         cancelEventEditBtn.setDisable(true);
     }
 
+    /**
+     * Method for formatting DatePicker for selected dates
+     */
     public void formatDatePickerForRangeSelect() {
 
         eventDatePicker.setConverter(new StringConverter<LocalDate>() {
@@ -683,6 +713,9 @@ public class CalendarViewController implements Initializable {
                 return object.format(formatter);
             }
 
+            /**
+             * 
+             */
             @Override
             public LocalDate fromString(String string) {
                 if (string.contains("-")) {
@@ -758,6 +791,10 @@ public class CalendarViewController implements Initializable {
 
     }
 
+    /**
+     * 
+     * @return
+     */
     public FilteredList<EventModel> filterTableData() {
 
         FilteredList<EventModel> filteredData = new FilteredList<>(EventObservableDataList.getInstance(), p -> true);

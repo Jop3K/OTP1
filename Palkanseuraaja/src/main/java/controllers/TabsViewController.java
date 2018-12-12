@@ -41,6 +41,9 @@ public class TabsViewController implements Initializable {
         logoutButton.setText(labels.getString("logout"));
     }
 
+    /**
+     * Event onClick for user log out
+     */
     @FXML
     public void logoutButtonHandler() {
         models.CurrentUserRefactored.INSTANCE.setUser(null);

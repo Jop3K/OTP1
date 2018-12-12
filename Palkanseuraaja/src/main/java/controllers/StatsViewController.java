@@ -116,6 +116,9 @@ public class StatsViewController implements Initializable {
       
     }
 
+    /**
+     * For initializing statsView comboboxes
+     */
     private void setComboBoxes() {
     	monthPick.getItems().clear();
     	yearPick.getItems().clear();
@@ -135,6 +138,9 @@ public class StatsViewController implements Initializable {
 		
 	}
 
+    /**
+     * For localization of statsView labels using resourceBundles
+     */
 	public void setLabels() {
         stats.setText(labels.getString("stats"));
         revenue.setText(labels.getString("revenue"));
@@ -158,6 +164,9 @@ public class StatsViewController implements Initializable {
         SHOW_ALL = labels.getString("notSelected");
     }
 
+	/**
+	 * For localization of statsView buttons using resourceBundles
+	 */
     public void setButtons() {
 
       
@@ -167,6 +176,11 @@ public class StatsViewController implements Initializable {
 
     }
    
+    /**
+     * onClick method for settings button on statsView
+     * Opens a new window with FXML
+     * @param e
+     */
     public void openSettings(ActionEvent e) {
     	
     	 try {
@@ -184,7 +198,9 @@ public class StatsViewController implements Initializable {
     	    }
      
     }
-    
+    /**
+     * Method for updating BarChart when years are selected
+     */
     public void populateBarChartFromYearPick(){
     	
     		Year year =  yearPick.getSelectionModel().getSelectedItem();
@@ -199,7 +215,9 @@ public class StatsViewController implements Initializable {
 	    	}
     	}
      
-    
+    /**
+     * Method for updating BarChart when months are selected
+     */
     public void populateBarChartFromMonthPick(){
     	Year year = (Year)yearPick.getSelectionModel().getSelectedItem();
     	

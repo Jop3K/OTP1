@@ -50,6 +50,12 @@ public class ControllerUtil {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Method for selecting multiple dates from DatePicker
+     * @param cells one date selected is one cell
+     * @param start where selecting starts
+     * @param end where selecting ends
+     */
     public static void formatRangeToSelected(List<DateCell> cells, LocalDate start, LocalDate end) {
 
         // Set style of cells in range to selected
@@ -60,6 +66,11 @@ public class ControllerUtil {
                 .forEach(ce -> ce.getStyleClass().add("selected"));
     }
 
+    /**
+     * Checking if current cell is a DayCell
+     * @param c
+     * @return
+     */
     public static boolean isDayCell(DateCell c) {
         return c != null && c.getStyleClass().contains("day-cell");
     }

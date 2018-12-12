@@ -138,6 +138,9 @@ public class WorkProfileViewController implements Initializable {
         deleteExtraPayButton.setDisable(true);
     }
 
+    /**
+     * Localization for WorkProfileView labels using resourcebundles
+     */
     public void setLabels() {
         workInfo.setText(labels.getString("workInfo"));
         chooseProfile.setText(labels.getString("chooseProfile"));
@@ -167,6 +170,9 @@ public class WorkProfileViewController implements Initializable {
         chooseProfileLabel.setText(labels.getString("chooseProfile"));
     }
 
+    /**
+     * Localization for WorkProfileView buttons using resourcebundles
+     */
     public void setButtons() {
         newProfile.setText(buttons.getString("newProfile"));
         extrapayChooser.promptTextProperty().set(buttons.getString("createOrChoose"));
@@ -279,6 +285,10 @@ public class WorkProfileViewController implements Initializable {
         }
     }
 
+    /**
+     * Validation check for workProfile
+     * @return false if empty and true if not
+     */
     public boolean workProfileValidation() {
         if (profileName.getText().isEmpty() || tuntipalkka.getText().isEmpty()) {
             return false;
@@ -449,6 +459,9 @@ public class WorkProfileViewController implements Initializable {
 
     }
 
+    /**
+     * onClick of new ExtraPay -Button, enbales extrapay fields and clears text
+     */
     @FXML
     private void newExtraPayButtonHandler() {
         extrapayChooser.getSelectionModel().clearSelection();
@@ -458,6 +471,10 @@ public class WorkProfileViewController implements Initializable {
         editExtraPayButton.setDisable(false);
     }
 
+    /**
+     * onClick event of editing ExtraPay. 
+     * Change button label to cancel if edit labeled button is clicked
+     */
     @FXML
     private void editExtraPayButtonHandler() {
         if (editExtraPayButton.getText().equals(buttons.getString("edit"))) {
@@ -472,6 +489,9 @@ public class WorkProfileViewController implements Initializable {
         }
     }
 
+    /**
+     * Enables extrapay fields. To be able to edit
+     */
     private void enableExtraPayFields() {
         extraPayNameField.setDisable(false);
         monday.setDisable(false);
@@ -490,6 +510,9 @@ public class WorkProfileViewController implements Initializable {
         editExtraPayButton.setDisable(false);
     }
 
+    /**
+     * Disables extrapay fields. To disable the editing of the fields
+     */
     private void disableExtraPayFields() {
         extraPayNameField.setDisable(true);
         monday.setDisable(true);
@@ -509,6 +532,10 @@ public class WorkProfileViewController implements Initializable {
         editExtraPayButton.setDisable(true);
     }
 
+    /**
+     * Validation method for weekdays
+     * @return true if selected
+     */
     private boolean weekdaysValidation() {
         if (!monday.isSelected() && !tuesday.isSelected() && !wednesday.isSelected()
                 && !thursday.isSelected() && !friday.isSelected() && !saturday.isSelected() && !sunday.isSelected()) {
@@ -517,6 +544,9 @@ public class WorkProfileViewController implements Initializable {
         return true;
     }
 
+    /**
+     * Method for deleting a work profile
+     */
     @FXML
     void deleteWorkProfile() {
         if (profileChooser.getSelectionModel().getSelectedItem() != null) {
@@ -531,6 +561,9 @@ public class WorkProfileViewController implements Initializable {
         }
     }
 
+    /**
+     * Method for deleting an extrapay
+     */
     @FXML
     private void deleteExtraPay() {
         if (extrapayChooser.getSelectionModel().getSelectedItem() != null) {
