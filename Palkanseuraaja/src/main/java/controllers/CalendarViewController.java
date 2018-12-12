@@ -713,9 +713,6 @@ public class CalendarViewController implements Initializable {
                 return object.format(formatter);
             }
 
-            /**
-             * 
-             */
             @Override
             public LocalDate fromString(String string) {
                 if (string.contains("-")) {
@@ -792,8 +789,9 @@ public class CalendarViewController implements Initializable {
     }
 
     /**
+     * Filters table event list to only include events in the given date range
      * 
-     * @return
+     * @return filtered table data
      */
     public FilteredList<EventModel> filterTableData() {
 
