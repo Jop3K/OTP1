@@ -19,6 +19,11 @@ import java.util.stream.Collectors;
  */
 public class ControllerUtil {
 
+    /**
+     *
+     * Format TableColumn to dd.mm.yyyy HH.mm format
+     *
+     */
     public static void formatColumnDate(TableColumn<EventModel, Date> tableColumn) {
         tableColumn.setCellFactory(column -> {
             TableCell<EventModel, Date> cell = new TableCell<EventModel, Date>() {
@@ -40,10 +45,25 @@ public class ControllerUtil {
         });
     }
 
+    /**
+     *
+     * Extracts DatePickerContent object from DatePicker
+     *
+     *
+     * @param datePicker DatePicker to extract
+     * @return DatePickerContent for the given DatePicker
+     */
     public static DatePickerContent getDatePickerContent(DatePicker datePicker) {
         return (DatePickerContent)((DatePickerSkin)datePicker.getSkin()).getPopupContent();
     }
 
+    /**
+     *
+     * Extracts a list of DateCells from DatePickerContent object
+     *
+     * @param content DatePickerContent to extract
+     * @return list of DateCells
+     */
     public static List<DateCell> getDatePickerDateCells(DatePickerContent content) {
         return content.lookupAll(".day-cell").stream()
                 .map(n->(DateCell)n)
@@ -68,13 +88,20 @@ public class ControllerUtil {
 
     /**
      * Checking if current cell is a DayCell
-     * @param c
-     * @return
+     * @param c DateCell to check
+     * @return true if is a day-cell (has day-cell style class), false otherwise
      */
     public static boolean isDayCell(DateCell c) {
         return c != null && c.getStyleClass().contains("day-cell");
     }
 
+    /**
+     * Extracts LocalDate from the DateCell that comes earlier in time
+     *
+     * @param c1 DateCell to compare to c2
+     * @param c2 DateCell to compare to c1
+     * @return LocalDate of the earlier DateCell
+     */
     public static LocalDate extractEarlierDate(DateCell c1, DateCell c2) {
         if(c1.getItem().isBefore(c2.getItem())) {
             return c1.getItem();
@@ -83,6 +110,13 @@ public class ControllerUtil {
         }
     }
 
+    /**
+     * Extracts LocalDate from the DateCell that comes later in time
+     *
+     * @param c1 DateCell to compare to c2
+     * @param c2 DateCell to compare to c1
+     * @return LocalDate of the later DateCell
+     */
     public static LocalDate extractLaterDate(DateCell c1, DateCell c2) {
         if(c1.getItem().isBefore(c2.getItem())) {
             return c2.getItem();
@@ -94,6 +128,15 @@ public class ControllerUtil {
     public static boolean filterSingleDateSelection(LocalDate eventDate, LocalDate selectedDate) {
         return eventDate.equals(selectedDate);
     }
+
+    /**
+     * Checks if eventDate is inside date range between rangeStart and rangEnd
+     *
+     * @param eventDate date of the event to check
+     * @param rangeStart start of the date range
+     * @param rangeEnd end of the date range
+     * @return true if is inside date range, false otherwise
+     */
     public static boolean filterRangeDateSelection(LocalDate eventDate, LocalDate rangeStart, LocalDate rangeEnd) {
         return (eventDate.equals(rangeStart) || eventDate.isAfter(rangeStart)) && (eventDate.equals(rangeEnd) || eventDate.isBefore(rangeEnd));
     }
